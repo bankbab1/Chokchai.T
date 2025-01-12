@@ -46,6 +46,23 @@
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+    <script>
+      // When a navbar link is clicked, collapse the navbar
+      const navbarLinks = document.querySelectorAll('.navbar-nav .nav-link');
+
+      navbarLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          const navbarToggle = document.querySelector('.navbar-toggler');
+          const navbarCollapse = document.querySelector('.navbar-collapse');
+          
+          // Collapse the navbar after link is clicked
+          if (navbarCollapse.classList.contains('show')) {
+            navbarToggle.click();
+          }
+        });
+      });
+    </script>
   </body>
 </html>
 
