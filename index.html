@@ -102,16 +102,184 @@
 
 
 
-    <!-- Hero or Showcase Section -->
-    <section class="hero d-flex flex-column align-items-center justify-content-center">
-      <div class="text-center">
-        
-        <h2>SENIOR BUSINESS ANALYST</h2>
-        <a href="#workexperience" class="btn btn-lg fs-6 fw-medium mt-5 btn-primary p-3">TELL ME MORE</a>
-      </div>
-    </section>
-    
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="container py-5" id="binance-data">
+  <div class="row mt-4 py-3">
+    <div class="col-12 d-flex flex-column text-center justify-content-center">
+      <div id="crypto-prices" class="d-flex flex-wrap justify-content-center"></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .btc-usdt-card {
+    background-color: #2C2F38; /* Dark theme background */
+    color: #ffffff; /* White text */
+    border-radius: 20px; /* Smooth rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 20rem;
+    margin: 1rem;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .btc-usdt-card h5 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .btc-usdt-card .price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btc-usdt-card .price img {
+    width: 24px; /* Set the size of the Bitcoin logo */
+    margin-right: 8px; /* Space between the logo and price text */
+  }
+
+  .btc-usdt-card .change {
+    font-size: 1.2rem;
+    margin: 0; /* Reduced margin to decrease line spacing */
+  }
+
+  .btc-usdt-card .change-header {
+    color: #8993A1; /* 24h Change text color */
+    font-size: 1rem;
+    margin-bottom: 0.5rem; /* Space between change header and value */
+  }
+
+  .price-positive {
+    color: #2EBD85; /* Green for positive change */
+  }
+
+  .price-negative {
+    color: #F6465D; /* Red for negative change */
+  }
+
+  /* Reduce space between the Bitcoin section and the hero section */
+  #binance-data {
+    margin-bottom: 0; /* Remove margin from bottom */
+    padding-bottom: 1rem; /* Reduce padding */
+  }
+
+  .hero {
+    padding-top: 2rem; /* Adjust padding at the top of hero section */
+    padding-bottom: 2rem; /* Adjust padding at the bottom of hero section */
+  }
+</style>
+
+<script>
+  let lastPrice = null; // Track the last price to compare with the new one
+
+  async function fetchBinanceData() {
+    const endpoint = 'https://api.binance.com/api/v3/ticker/24hr';
+    try {
+      const response = await fetch(endpoint);
+      const data = await response.json();
+      displayCryptoPrices(data);
+    } catch (error) {
+      console.error('Error fetching Binance data:', error);
+    }
+  }
+
+  function displayCryptoPrices(prices) {
+    const container = document.getElementById('crypto-prices');
+    container.innerHTML = ''; // Clear existing data
+
+    prices.forEach(price => {
+      if (price.symbol === 'BTCUSDT') {
+        const currentPrice = parseFloat(price.lastPrice); // Latest price
+        const priceChange = parseFloat(price.priceChange); // Absolute change
+        const priceChangePercentage = parseFloat(price.priceChangePercent); // Percentage change
+
+        // Format the price with commas
+        const formattedPrice = currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        // Determine price color based on comparison with the last price
+        let priceColor = '#ffffff'; // Default color (white)
+        if (lastPrice !== null) {
+          if (currentPrice > lastPrice) {
+            priceColor = '#2EBD85'; // Green if price has increased
+          } else if (currentPrice < lastPrice) {
+            priceColor = '#F6465D'; // Red if price has decreased
+          }
+        }
+
+        // Update lastPrice to the current price for next comparison
+        lastPrice = currentPrice;
+
+        // Determine the color for 24h change (percentage)
+        let changeColor = priceChangePercentage >= 0 ? '#2EBD85' : '#F6465D';
+
+        // Format the change with 2 decimal places
+        const formattedChange = priceChange.toFixed(2);
+        const formattedPercentage = priceChangePercentage.toFixed(2);
+
+        const priceCard = document.createElement('div');
+        priceCard.className = 'btc-usdt-card';
+
+        priceCard.innerHTML = `
+          <h5>${price.symbol}</h5>
+          <p class="price" style="color: ${priceColor}">
+            <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt="Bitcoin Logo"> 
+            $${formattedPrice}
+          </p>
+         <p class="change-header" style="display: inline; margin-right: 10px;">24h Change</p>
+<p class="change" style="display: inline; color: ${changeColor}; font-size: 0.9rem;">${formattedChange} (${formattedPercentage}%)</p>
+
+
+
+        `;
+
+        container.appendChild(priceCard);
+      }
+    });
+  }
+
+  // Fetch data every 1 seconds
+  setInterval(fetchBinanceData, 1000);
+
+  // Fetch data on page load
+  fetchBinanceData();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Hero or Showcase Section -->
+<section class="hero d-flex flex-column align-items-center justify-content-center">
+  <div class="text-center">
+    <h2>SENIOR BUSINESS ANALYST</h2>
+    <a href="#workexperience" class="btn btn-lg fs-6 fw-medium mt-5 btn-primary p-3">TELL ME MORE</a>
+  </div>
+</section>
 
 
 
