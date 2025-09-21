@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chokchai.T - Welcome</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .landing-card {
+      background: #ffffff;
+      color: #2c3e50;
+      border-radius: 16px;
+      padding: 40px 30px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+      max-width: 480px;
+      width: 90%;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .profile-img {
+      overflow: hidden;
+      width: 140px;
+      height: 190px;
+      border-radius: 12px;
+      margin: 0 auto 20px auto;
+    }
+
+    .profile-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .landing-card h1 {
+      font-size: 1.8rem;
+      margin: 10px 0 15px 0;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .landing-btn {
+      display: inline-block;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: #fff;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .landing-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="landing-card">
+    <!-- Profile Image -->
+    <div class="profile-img">
+      <img src="chok.jpg" alt="Profile Image">
+    </div>
+
+    <h1>Chokchai.T</h1>
+
+    <p style="font-size:0.9rem; color:#555; margin-bottom:25px;">
+      Welcome to my portfolio. Explore my CV, skills, and projects by visiting my full profile.
+    </p>
+
+    <button id="viewProfileBtn" class="landing-btn">
+      <i class="fa-solid fa-id-card"></i> View Profile
+    </button>
+  </div>
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+  const apiUrl = "https://script.google.com/macros/s/AKfycbxHYbCJNaLoVR3Q5mOruOA5lt15xoNwGWknsWbSlKzcwL_T-wtOJv6wnWzxWVCKAzxqEg/exec"; 
+
+  // Create/reuse visitor ID
+  let visitorId = localStorage.getItem("visitor_id");
+  if (!visitorId) {
+    visitorId = Math.random().toString(36).substring(2) + Date.now().toString(36);
+    localStorage.setItem("visitor_id", visitorId);
+  }
+
+  // Detect browser + OS
+  function parseUserAgent() {
+    const ua = navigator.userAgent;
+    let browser = "Unknown", os = "Unknown";
+
+    if (/chrome|crios|crmo/i.test(ua)) browser = "Chrome";
+    else if (/firefox|fxios/i.test(ua)) browser = "Firefox";
+    else if (/safari/i.test(ua) && !/chrome/i.test(ua)) browser = "Safari";
+    else if (/edg/i.test(ua)) browser = "Edge";
+
+    if (/windows/i.test(ua)) os = "Windows";
+    else if (/mac os/i.test(ua)) os = "MacOS";
+    else if (/android/i.test(ua)) os = "Android";
+    else if (/iphone|ipad|ipod/i.test(ua)) os = "iOS";
+
+    return { browser, os };
+  }
+
+  // Send log to Google Sheets
+  function sendEvent(eventName) {
+    const { browser, os } = parseUserAgent();
+    fetch(apiUrl, {
+      method: "POST",
+      mode: "no-cors",   // 👈 bypass CORS issue
+      body: JSON.stringify({
+        event: eventName,
+        visitorId: visitorId,
+        page: "index.html",
+        browser: browser,
+        os: os
+      }),
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+
+  // SweetAlert popup + redirect
+  document.getElementById("viewProfileBtn").addEventListener("click", () => {
+    Swal.fire({
+      title: 'Proceed to Profile?',
+      text: 'Click below to view Chokchai.T\'s portfolio.',
+      icon: 'info',
+      confirmButtonText: 'Yes, View Profile'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        sendEvent("View Profile Clicked");
+        window.location.href = "profile.html";
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
