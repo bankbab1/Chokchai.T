@@ -1,1426 +1,1198 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chokchai.T - CV Portfolio</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Link external CSS -->
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chokchai.T — Senior Digital Solution</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* ============== DESIGN TOKENS ============== */
+:root{
+  --font-display:'Syne',sans-serif;
+  --font-serif:'DM Serif Display',serif;
+  --font-body:'DM Sans',system-ui,sans-serif;
+  --nav-w:268px;
+  --radius:16px; --radius-sm:10px; --radius-lg:22px;
+  --transition:.3s cubic-bezier(.4,0,.2,1);
+}
+html[data-theme="dark"]{
+  --bg:#0a0b0f; --bg2:#0f1117; --surface:#13151d; --surface2:#1a1d28;
+  --border:rgba(255,255,255,.07); --border2:rgba(255,255,255,.13);
+  --text:#e8eaf0; --text2:#9399aa; --text3:#5c6070;
+  --accent:#5b8def; --accent2:#3dd6c2; --accent3:#f0b06a;
+  --accent-dim:rgba(91,141,239,.14);
+  --shadow:0 1px 3px rgba(0,0,0,.4), 0 16px 48px rgba(0,0,0,.35);
+  --noise-opacity:.5;
+}
+html[data-theme="light"]{
+  --bg:#f6f5f0; --bg2:#ffffff; --surface:#ffffff; --surface2:#faf9f4;
+  --border:rgba(15,17,28,.08); --border2:rgba(15,17,28,.14);
+  --text:#15161c; --text2:#5b6072; --text3:#8a8f9e;
+  --accent:#2563eb; --accent2:#0d9488; --accent3:#c2742a;
+  --accent-dim:rgba(37,99,235,.09);
+  --shadow:0 1px 2px rgba(15,17,28,.04), 0 12px 32px rgba(15,17,28,.08);
+  --noise-opacity:.2;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:var(--font-body); font-weight:400; line-height:1.65;
+  overflow-x:hidden; -webkit-font-smoothing:antialiased;
+  transition:background var(--transition), color var(--transition);
+}
+body::before{
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:9999;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:var(--noise-opacity);
+}
+a{color:inherit; text-decoration:none}
+img{max-width:100%; display:block}
+ul{list-style:none}
+::-webkit-scrollbar{width:6px; height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2); border-radius:6px}
+::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+
+/* ============== SIDEBAR ============== */
+.sidebar{
+  position:fixed; top:0; left:0; width:var(--nav-w); height:100vh;
+  background:var(--bg2); border-right:1px solid var(--border);
+  display:flex; flex-direction:column; z-index:100;
+  overflow-y:auto; transition:transform var(--transition);
+}
+.sidebar-logo{padding:28px 24px 22px; border-bottom:1px solid var(--border)}
+.logo-name{font-family:var(--font-serif); font-size:1.45rem; color:var(--text); letter-spacing:-.01em}
+.logo-title{
+  font-size:.7rem; color:var(--accent); letter-spacing:.16em;
+  text-transform:uppercase; font-weight:600; margin-top:4px; display:block;
+}
+.nav-section{padding:14px 0}
+.nav-label{
+  font-size:.62rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--text3); padding:10px 24px 6px; display:block; font-weight:600;
+}
+.nav-link{
+  display:flex; align-items:center; gap:12px; padding:10px 24px;
+  color:var(--text2); font-size:.85rem; font-weight:400;
+  border-left:2px solid transparent; cursor:pointer; transition:all .2s;
+}
+.nav-link:hover{color:var(--text); background:var(--surface); border-left-color:var(--border2)}
+.nav-link.active{color:var(--accent); background:var(--accent-dim); border-left-color:var(--accent); font-weight:500}
+.nav-link i{width:16px; font-size:.9rem; opacity:.75}
+.nav-link.active i{opacity:1}
+
+.sidebar-footer{margin-top:auto; padding:18px 24px; border-top:1px solid var(--border); display:flex; gap:10px; align-items:center; justify-content:space-between}
+.sidebar-foot-meta{font-size:.7rem; color:var(--text3); letter-spacing:.05em}
+.theme-toggle{
+  width:42px; height:42px; border-radius:50%; border:1px solid var(--border2);
+  background:var(--surface); color:var(--text); cursor:pointer; display:inline-flex;
+  align-items:center; justify-content:center; transition:all var(--transition);
+  font-size:1.05rem; line-height:1; padding:0;
+}
+.theme-toggle:hover{border-color:var(--accent); color:var(--accent); transform:rotate(15deg)}
+.theme-toggle .tt-ic{display:none}
+html[data-theme="dark"] .theme-toggle .tt-sun{display:inline}
+html[data-theme="light"] .theme-toggle .tt-moon{display:inline}
+
+/* mobile sidebar toggle */
+.mobile-bar{
+  display:none; position:fixed; top:0; left:0; right:0; height:60px; z-index:90;
+  background:color-mix(in oklab, var(--bg2) 88%, transparent);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border); padding:0 18px;
+  align-items:center; justify-content:space-between;
+}
+.mobile-bar .logo-name{font-size:1.1rem}
+.menu-btn{
+  width:42px; height:42px; border-radius:12px; border:1px solid var(--border2);
+  background:var(--surface); color:var(--text); cursor:pointer; display:flex;
+  flex-direction:column; align-items:center; justify-content:center; gap:5px;
+  padding:0; transition:var(--transition);
+}
+.menu-btn span{
+  display:block; width:20px; height:2px; background:var(--text);
+  border-radius:2px; transition:transform .35s cubic-bezier(.4,0,.2,1), opacity .2s ease;
+  transform-origin:center;
+}
+.menu-btn.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+.menu-btn.open span:nth-child(2){ opacity:0; transform:scaleX(0); }
+.menu-btn.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+/* ============== MAIN ============== */
+.main{margin-left:var(--nav-w); min-height:100vh}
+.wrap{max-width:1100px; margin:0 auto; padding:48px 56px}
+
+/* ============== HERO ============== */
+.hero{position:relative; padding:32px 0 56px; border-bottom:1px solid var(--border); margin-bottom:48px}
+.hero-grid{display:grid; grid-template-columns:200px 1fr; gap:40px; align-items:center}
+.avatar{
+  position:relative; width:200px; height:240px; border-radius:20px; overflow:hidden;
+  background:linear-gradient(135deg, var(--accent), var(--accent2));
+  padding:2px; box-shadow:var(--shadow);
+}
+.avatar img{width:100%; height:100%; object-fit:cover; border-radius:18px}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:5px 12px; border-radius:999px;
+  background:var(--accent-dim); color:var(--accent);
+  font-size:.72rem; font-weight:600; letter-spacing:.16em; text-transform:uppercase;
+  border:1px solid color-mix(in oklab, var(--accent) 30%, transparent);
+}
+.hero h1{
+  font-family:var(--font-display); font-weight:700;
+  font-size:clamp(2.2rem, 4.6vw, 3.4rem); line-height:1.05;
+  margin:16px 0 6px; letter-spacing:-.02em;
+}
+.hero .role{font-family:var(--font-serif); font-style:italic; color:var(--text2); font-size:1.2rem; margin-bottom:18px}
+.hero .summary{max-width:640px; color:var(--text2); font-size:.95rem}
+.hero .summary p{margin-bottom:8px}
+.contact-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:22px}
+.chip{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:7px 14px; border-radius:999px;
+  background:var(--surface); border:1px solid var(--border);
+  font-size:.82rem; color:var(--text2); transition:all .2s;
+}
+.chip:hover{transform:translateY(-2px); border-color:var(--accent); color:var(--text)}
+.chip i{color:var(--accent)}
+
+@media (max-width:780px){
+  .hero{padding:24px 0 40px}
+  .hero-grid{grid-template-columns:1fr; gap:24px; text-align:center}
+  .avatar{margin:0 auto; width:160px; height:200px}
+  .hero .summary{margin-left:auto; margin-right:auto}
+  .contact-row{justify-content:center}
+}
+
+/* ============== SECTION ============== */
+.section{margin-bottom:64px; scroll-margin-top:32px}
+#home{scroll-margin-top:0}
+@media (max-width:960px){
+  .section{scroll-margin-top:76px}
+  #home{scroll-margin-top:60px}
+}
+.section-head{display:flex; align-items:baseline; gap:16px; margin-bottom:28px}
+.section-num{
+  font-family:var(--font-display); font-weight:600;
+  font-size:.85rem; color:var(--accent); letter-spacing:.1em;
+}
+.section-title{
+  font-family:var(--font-serif); font-weight:400;
+  font-size:clamp(1.6rem, 3vw, 2.2rem); letter-spacing:-.01em;
+  flex:1;
+}
+.section-rule{flex:0 0 60px; height:1px; background:var(--border2)}
+.subhead{
+  font-family:var(--font-display); font-size:.78rem; font-weight:600;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--accent2);
+  margin:36px 0 16px; padding-bottom:8px; border-bottom:1px dashed var(--border);
+}
+.sub-role{
+  display:inline-block; margin:18px 0 10px; padding:6px 12px; border-radius:8px;
+  background:var(--surface); border:1px solid var(--border);
+  font-size:.82rem; font-weight:500; color:var(--text);
+}
+
+/* ============== KEY SKILLS GRID ============== */
+.grid{display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card{
+  position:relative; padding:20px;
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  transition:all var(--transition); overflow:hidden;
+}
+.card::after{
+  content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+  background:linear-gradient(135deg, color-mix(in oklab, var(--accent) 20%, transparent), transparent 50%);
+  opacity:0; transition:opacity var(--transition);
+}
+.card:hover{transform:translateY(-3px); border-color:var(--border2); box-shadow:var(--shadow)}
+.card:hover::after{opacity:1}
+.card-icon{
+  width:38px; height:38px; border-radius:10px;
+  background:var(--accent-dim); color:var(--accent);
+  display:inline-flex; align-items:center; justify-content:center;
+  font-size:1rem; margin-bottom:14px;
+}
+.card h3{font-family:var(--font-display); font-size:.95rem; font-weight:600; margin-bottom:6px; letter-spacing:-.005em}
+.card p{font-size:.84rem; color:var(--text2); line-height:1.55}
+
+/* ============== TIMELINE ============== */
+.timeline{position:relative; padding-left:38px}
+.timeline::before{
+  content:""; position:absolute; left:13px; top:8px; bottom:8px; width:1px;
+  background:linear-gradient(180deg,
+    color-mix(in oklab, var(--accent) 55%, transparent) 0%,
+    color-mix(in oklab, var(--accent2) 45%, transparent) 55%,
+    transparent 100%);
+}
+.tl-item{
+  position:relative; margin-bottom:22px; padding:22px 24px;
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg);
+  transition:all var(--transition);
+}
+.tl-item:hover{border-color:var(--border2); box-shadow:var(--shadow); transform:translateY(-2px)}
+.tl-item:last-child{margin-bottom:0}
+/* Connector arrow from rail into the card */
+.tl-item::before{
+  content:""; position:absolute; left:-15px; top:28px; width:14px; height:1px;
+  background:color-mix(in oklab, var(--accent) 45%, transparent);
+}
+/* Marker — square tile aligned to the date chip */
+.tl-dot{
+  position:absolute; left:-32px; top:18px; width:26px; height:26px; border-radius:8px;
+  background:var(--bg2); border:1px solid color-mix(in oklab, var(--accent) 35%, transparent);
+  display:flex; align-items:center; justify-content:center; z-index:2;
+}
+.tl-dot::after{
+  content:""; width:6px; height:6px; border-radius:50%;
+  background:color-mix(in oklab, var(--accent) 70%, transparent);
+}
+.tl-dot.current{
+  background:linear-gradient(135deg, var(--accent), var(--accent2));
+  border-color:transparent;
+  box-shadow:0 6px 18px -4px color-mix(in oklab, var(--accent) 55%, transparent);
+}
+.tl-dot.current::after{background:#fff; width:7px; height:7px}
+.tl-dot.current::before{
+  content:""; position:absolute; inset:-4px; border-radius:11px;
+  border:1px solid color-mix(in oklab, var(--accent) 30%, transparent);
+}
+.tl-date{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--font-display); font-weight:600;
+  font-size:.7rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--text2); padding:0; background:transparent;
+  margin-bottom:6px; border:0;
+}
+.tl-date::before{
+  content:""; width:14px; height:1px; background:var(--border2);
+}
+.tl-title{font-family:var(--font-serif); font-size:1.3rem; line-height:1.2; margin-top:4px; font-weight:500}
+.tl-company{font-weight:600; font-size:.95rem; color:var(--text); margin-top:6px}
+.tl-industry{font-size:.78rem; color:var(--text3); margin-bottom:4px; letter-spacing:.04em}
+.tl-role{
+  display:flex; align-items:center; gap:10px;
+  font-family:var(--font-display); font-size:.74rem; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--accent2);
+  margin:22px 0 10px; padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
+.tl-role::before{
+  content:""; width:6px; height:6px; border-radius:50%; background:var(--accent2);
+  box-shadow:0 0 0 3px color-mix(in oklab, var(--accent2) 18%, transparent);
+}
+.tl-intro{
+  color:var(--text2); font-style:italic; font-family:var(--font-serif);
+  font-size:.95rem; margin-bottom:14px; padding-left:12px;
+  border-left:2px solid color-mix(in oklab, var(--accent) 40%, transparent);
+}
+
+/* Topic groups + bullets */
+.tl-content{display:flex; flex-direction:column; gap:14px}
+.tl-content ul{list-style:none; display:flex; flex-direction:column; gap:8px; margin:0; padding:0}
+.tl-content li{position:relative; font-size:.9rem; line-height:1.55}
+.tl-content li:not(.dot){
+  font-family:var(--font-display); font-size:.82rem; font-weight:600;
+  color:var(--text); letter-spacing:.02em;
+  padding:8px 12px 8px 14px; margin-top:6px;
+  background:color-mix(in oklab, var(--accent) 8%, transparent);
+  border-left:3px solid var(--accent); border-radius:0 8px 8px 0;
+}
+.tl-content li:not(.dot):first-child{margin-top:0}
+.tl-content li.dot{padding-left:22px; color:var(--text2); font-weight:400}
+.tl-content li.dot::before{
+  content:""; position:absolute; left:6px; top:.62em;
+  width:6px; height:6px; border-radius:50%;
+  background:var(--accent); opacity:.7;
+  box-shadow:0 0 0 3px color-mix(in oklab, var(--accent) 14%, transparent);
+}
+
+/* ============== PROJECTS ============== */
+.proj{
+  padding:24px; background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius-lg); margin-bottom:18px; transition:all var(--transition);
+}
+.proj:hover{border-color:var(--border2); box-shadow:var(--shadow)}
+.proj-head{display:flex; gap:22px; align-items:flex-start; flex-wrap:wrap}
+.proj-thumb{
+  flex:0 0 180px; aspect-ratio:1/1; border-radius:14px; overflow:hidden;
+  border:1px solid var(--border); background:var(--bg2);
+}
+.proj-thumb img{width:100%; height:100%; object-fit:cover}
+.proj-body{flex:1; min-width:240px}
+.proj-title{font-family:var(--font-serif); font-size:1.4rem; line-height:1.2}
+.proj-year{
+  display:inline-block; margin:8px 0; font-family:var(--font-display);
+  font-size:.7rem; letter-spacing:.16em; color:var(--accent); font-weight:600;
+}
+.proj-desc{color:var(--text2); font-size:.92rem}
+.gallery{
+  margin-top:18px; display:grid; gap:10px;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+}
+.gallery img{
+  width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:10px;
+  border:1px solid var(--border); transition:transform var(--transition);
+}
+.gallery img:hover{transform:scale(1.03)}
+
+/* ============== INFO CARDS ============== */
+.info-grid{display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(310px,1fr))}
+.info-card{
+  padding:24px; background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+}
+.info-card .tl-role{margin-top:0}
+.info-row{display:flex; align-items:center; gap:12px; padding:8px 0; font-size:.9rem; color:var(--text2)}
+.info-row i{width:22px; text-align:center; color:var(--accent)}
+.info-row strong{color:var(--text); font-weight:500}
+
+/* ============== FOOTER ============== */
+.btc-card{
+  display:inline-block; padding:18px 22px; min-width:260px; text-align:left;
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+}
+.btc-card h5{font-family:var(--font-display); font-size:.95rem; font-weight:600; margin-bottom:6px}
+footer{margin-top:48px; padding:32px 0; border-top:1px solid var(--border); text-align:center; color:var(--text3); font-size:.85rem}
+
+/* ============== REVEAL ============== */
+.reveal{opacity:1; transform:none; transition:opacity .7s ease, transform .7s ease}
+.js .reveal:not(.show){opacity:0; transform:translateY(20px)}
+.reveal.show{opacity:1; transform:translateY(0)}
+@media (prefers-reduced-motion:reduce){.js .reveal{opacity:1!important; transform:none!important} *{animation:none!important; transition:none!important}}
+
+/* ============== RESPONSIVE ============== */
+@media (max-width:960px){
+  .sidebar{transform:translateX(-100%); width:280px; z-index:120}
+  .sidebar.open{transform:translateX(0); box-shadow:0 0 60px rgba(0,0,0,.45)}
+  .main{margin-left:0; padding-top:60px}
+  .mobile-bar{display:flex}
+  .wrap{padding:32px 22px}
+}
+/* sidebar backdrop overlay */
+.sidebar-backdrop{
+  position:fixed; inset:0; z-index:110; opacity:0; pointer-events:none;
+  background:rgba(5,7,12,.55); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  transition:opacity var(--transition);
+}
+.sidebar-backdrop.show{opacity:1; pointer-events:auto}
+body.no-scroll{overflow:hidden}
+
+/* ============== LIGHTBOX ============== */
+.lightbox{
+  position:fixed; inset:0; z-index:200; display:none;
+  background:rgba(5,7,12,.92); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  align-items:center; justify-content:center; padding:40px;
+  animation:lbFade .25s ease;
+}
+.lightbox.open{display:flex}
+@keyframes lbFade{from{opacity:0}to{opacity:1}}
+.lightbox img{max-width:92vw; max-height:88vh; border-radius:12px; box-shadow:0 30px 80px rgba(0,0,0,.6); object-fit:contain}
+.lb-btn{
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:54px; height:54px; border-radius:50%; border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.08); color:#fff; cursor:pointer; font-size:1.3rem;
+  display:flex; align-items:center; justify-content:center; transition:all .2s;
+}
+.lb-btn:hover{background:rgba(255,255,255,.18); border-color:rgba(255,255,255,.4)}
+.lb-prev{left:24px} .lb-next{right:24px}
+.lb-close{top:24px; right:24px; transform:none; width:46px; height:46px; font-size:1.1rem}
+.lb-counter{position:absolute; bottom:24px; left:50%; transform:translateX(-50%); color:rgba(255,255,255,.7); font-size:.85rem; letter-spacing:.06em}
+.gallery img{cursor:zoom-in}
+@media (max-width:780px){
+  .lb-btn{width:44px; height:44px; font-size:1rem}
+  .lb-prev{left:10px} .lb-next{right:10px}
+}
+
+@media print{
+  .sidebar,.mobile-bar,footer,.btc-card,.sidebar-backdrop,.lightbox{display:none}
+  .main{margin-left:0}
+  .card,.info-card,.proj{box-shadow:none; break-inside:avoid}
+}
+</style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-<nav class="navbar">
-  <div class="nav-container">
-    <!-- ✅ Make logo clickable -->
-    <a href="#home" class="nav-logo">Chokchai.T</a>
 
-    <ul class="nav-menu">
-      <li class="nav-item">
-        <a href="#home" class="nav-link">Home</a>
-      </li>
-      <li class="nav-item">
-        <a href="#key-skills" class="nav-link">Key Skills</a>
-      </li>
-      <li class="nav-item">
-        <a href="#experience" class="nav-link">Experience</a>
-      </li>
-      <li class="nav-item">
-        <a href="#education" class="nav-link">Education</a>
-      </li>
-      <li class="nav-item">
-        <a href="#skills" class="nav-link">Skills</a>
-      </li>
-      <li class="nav-item">
-        <a href="#projects" class="nav-link">Projects</a>
-      </li>
-      <li class="nav-item">
-        <a href="#personal" class="nav-link">Personal</a>
-      </li>
-    </ul>
-
-    <div class="hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
+<!-- MOBILE BAR -->
+<div class="mobile-bar">
+  <div>
+    <span class="logo-name">Chokchai.T</span>
   </div>
-</nav>
-
-
-    <div class="container">
-<!-- Header Section -->
-<div id="home" class="header animate-on-scroll">
-
-  <!-- Profile Image -->
-  <div class="profile-img" style="overflow:hidden; width:160px; height:220px; border-radius:12px; margin:0 auto 20px auto;">
-    <img src="chok.jpg" 
-         alt="Profile Image" 
-         style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
-  </div>
-
-  <h1 class="name">Chokchai.T</h1>
-  <p class="title">Senior Digital Solution</p>
-
-  <!-- New professional summary (small & centered) -->
-  <!-- <div style="max-width:700px; margin:0 auto 20px auto; text-align:center; color:#666; font-size:0.9rem; line-height:1.5;">
-    <p>I believe effective solutions start with understanding, built on active listening and clear communication to align user needs with business objectives.</p>
-    <p>Analytical and logical thinker, skilled at simplifying complexity, identifying risks, and delivering technically sound, strategically aligned solutions.</p>
-    <p>Comfortable across teams and functions, I bridge business and technical perspectives through collaboration, communication, and negotiation.</p>
-    <p>Focused on detail, process improvement, and long-term impact while staying adaptable, fast-learning, and calm under pressure.</p>
-  </div> -->
-
-  <div style="max-width:700px; margin:0 auto 20px auto; text-align:center; color:#666; font-size:0.9rem; line-height:1.5;">
-  <p>
-    Senior Digital Solution professional specializing in workflow automation, system integration,
-    and enterprise digital transformation.
-  </p>
-  <p>
-    Experienced in designing end-to-end automation pipelines using n8n, API integrations,
-    and data orchestration across HRM, Active Directory, ITSM, and enterprise platforms.
-  </p>
-  <p>
-    Strong bridge between business and technology — translating operational challenges into scalable,
-    automated digital solutions with measurable impact.
-  </p>
-  <p>
-    Hands-on developer with experience in React, Python, mobile applications, and modern web technologies,
-    delivering practical tools that improve productivity and reduce manual workloads.
-  </p>
-</div>
-
-  <div class="contact-info">
-    <div class="contact-item">
-      <i class="fa-solid fa-envelope"></i> 
-      <a href="mailto:ct_chok@hotmail.com" style="color:#667eea; text-decoration:none;">ct_chok@hotmail.com</a>
-    </div>
-    <div class="contact-item">
-      <i class="fa-solid fa-phone"></i> 
-      <a href="tel:+66859941717" style="color:#667eea; text-decoration:none;">+66 85 994 1717</a>
-    </div>
-    <div class="contact-item">
-      <i class="fa-solid fa-globe"></i> 
-      <a href="https://linkedin.com/in/chokchait" target="_blank" style="color:#667eea; text-decoration:none;">linkedin.com/in/chokchait</a>
-    </div>
-    <div class="contact-item"><i class="fa-solid fa-location-dot"></i> Bangkok, Thailand</div>
+  <div style="display:flex; gap:8px">
+    <button class="theme-toggle" id="themeToggleMobile" aria-label="Toggle theme">
+      <span class="tt-ic tt-sun">☀</span><span class="tt-ic tt-moon">☾</span>
+    </button>
+    <button class="menu-btn" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
 </div>
 
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <span class="logo-name">Chokchai.T</span>
+    <span class="logo-title">Senior Digital Solution</span>
+  </div>
+  <nav class="nav-section">
+    <span class="nav-label">Portfolio</span>
+    <a class="nav-link active" href="#home"><i class="fa-solid fa-house"></i> Home</a>
+    <a class="nav-link" href="#key-skills"><i class="fa-solid fa-bolt"></i> Key Skills</a>
+    <a class="nav-link" href="#experience"><i class="fa-solid fa-briefcase"></i> Experience</a>
+    <a class="nav-link" href="#education"><i class="fa-solid fa-graduation-cap"></i> Education</a>
+    <a class="nav-link" href="#skills"><i class="fa-solid fa-code"></i> Technical</a>
+    <a class="nav-link" href="#projects"><i class="fa-solid fa-rocket"></i> Projects</a>
+    <a class="nav-link" href="#personal"><i class="fa-solid fa-user"></i> Personal</a>
+  </nav>
+  <nav class="nav-section">
+    <span class="nav-label">Connect</span>
+    <a class="nav-link" href="#contact"><i class="fa-solid fa-paper-plane"></i> Contact</a>
+  </nav>
+  <div class="sidebar-footer">
+    <span class="sidebar-foot-meta">© 2025</span>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <span class="tt-ic tt-sun">☀</span><span class="tt-ic tt-moon">☾</span>
+    </button>
+  </div>
+</aside>
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
+<!-- MAIN -->
+<main class="main">
+  <div class="wrap">
 
+  <!-- HERO -->
+  <header id="home" class="hero reveal">
+    <div class="hero-grid">
+      <div class="avatar"><img src="chok.jpg" alt="Chokchai Thawatcharaporn"></div>
+      <div>
+        <span class="eyebrow"><i class="fa-solid fa-sparkles"></i> Available · Bangkok</span>
+        <h1>Chokchai<br>Thawatcharaporn.</h1>
+        <p class="role">Senior Digital Solution — automation, integration & transformation</p>
+        <div class="summary">
+          <p>Senior Digital Solution professional specializing in workflow automation, system integration, and enterprise digital transformation.</p>
+          <p>Designing end-to-end automation pipelines using n8n, API integrations, and data orchestration across HRM, Active Directory, ITSM and enterprise platforms.</p>
+          <p>A bridge between business and technology — translating operational challenges into scalable, measurable digital solutions.</p>
+        </div>
+        <div class="contact-row">
+          <a class="chip" href="mailto:ct_chok@hotmail.com"><i class="fa-solid fa-envelope"></i> ct_chok@hotmail.com</a>
+          <a class="chip" href="tel:+66859941717"><i class="fa-solid fa-phone"></i> +66 85 994 1717</a>
+          <a class="chip" href="https://linkedin.com/in/chokchait" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> linkedin.com/in/chokchait</a>
+          <span class="chip"><i class="fa-solid fa-location-dot"></i> Bangkok, Thailand</span>
+        </div>
+      </div>
+    </div>
+  </header>
 
-        <!-- Main Content Grid -->
-        <div class="main-content">
-            <!-- Key Skills Section -->
-            <div id="key-skills" class="section full-width animate-on-scroll">
-                <h2 class="section-title">KEY SKILLS</h2>
-                <div class="key-skills-grid">
-                    <div class="skill-card">
-                        <i class="fa-solid fa-search"></i>
-                        <h3>Problem Analysis & Resolution</h3>
-                        <p>Strong analytical skills in identifying root causes and developing innovative solutions to complex challenges.</p>
-                    </div>
-                    <div class="skill-card">
-                        <i class="fa-solid fa-lightbulb"></i>
-                        <h3>Strategic, Logical and Critical Thinking</h3>
-                        <p>Applies logical and critical thinking to support informed decisions and long-term planning. This involves analyzing situations, evaluating evidence, identifying risks, and developing well-reasoned strategies.</p>
-                    </div>
-                    <div class="skill-card">
-                        <i class="fa-solid fa-cogs"></i>
-                        <h3>Process Improvement</h3>
-                        <p>Expertise in identifying inefficiencies and implementing enhancements to streamline workflows and increase overall productivity.</p>
-                    </div>
-                    <div class="skill-card">
-                        <i class="fa-solid fa-arrows-rotate"></i>
-                        <h3>Adaptability & Flexibility</h3>
-                        <p>Highly adaptable to dynamic environments with a rapid learning curve, integrating new concepts and technologies seamlessly into workflows.</p>
-                    </div>
-                    <div class="skill-card">
-                        <i class="fa-solid fa-check-circle"></i>
-                        <h3>Decision-Making</h3>
-                        <p>Proven ability to make well-informed, timely decisions under pressure, balancing both short-term needs and long-term goals.</p>
-                    </div>
-                    <div class="skill-card">
-                        <i class="fa-solid fa-comments"></i>
-                        <h3>Effective Communication</h3>
-                        <p>Articulating ideas with clarity and precision, ensuring messages are effectively understood across all levels of an organization. Experienced in collaborating with diverse stakeholders and facilitating productive discussions to foster alignment and achieve shared goals.</p>
-                    </div>
-                    <div class="skill-card">
-                        <i class="fa-solid fa-ear-listen"></i>
-                        <h3>Active Listening</h3>
-                        <p>Practiced in empathetic and active listening, ensuring thorough understanding of perspectives, enabling informed and relevant responses that build trust and foster collaboration.</p>
-                    </div>
-                    <div class="skill-card">
-                        <i class="fa-solid fa-users"></i>
-                        <h3>Stakeholder Collaboration</h3>
-                        <p>Highly skilled in bridging communication gaps by presenting complex concepts in an accessible manner for both technical and non-technical audiences, ensuring shared understanding and effective decision-making.</p>
-                    </div>
-                    <div class="skill-card">
-                        <i class="fa-solid fa-handshake"></i>
-                        <h3>Collaboration & Negotiation</h3>
-                        <p>Experienced in working cross-functionally, building partnerships, and negotiating mutually beneficial solutions.</p>
-                    </div>
-                    <div class="skill-card">
-                        <i class="fa-solid fa-clock"></i>
-                        <h3>Time Management & Prioritization</h3>
-                        <p>Strong organizational skills, able to manage multiple priorities and deadlines without compromising quality or attention to detail.</p>
-                    </div>
-                    <div class="skill-card">
-                        <i class="fa-solid fa-brain"></i>
-                        <h3>Creative Problem-Solving & Fast Learning</h3>
-                        <p>Quick to adapt and apply creative solutions to new problems while continuously learning and growing in both technical and business areas.</p>
-                    </div>
-                    <div class="skill-card">
-                        <i class="fa-solid fa-people-group"></i>
-                        <h3>Relationship Building & Stakeholder Engagement</h3>
-                        <p>Skilled in approaching and building rapport with individuals across various organizational levels, ensuring effective collaboration, and fostering strong working relationships.</p>
-                    </div>
-                    <div class="skill-card">
-                        <i class="fa-solid fa-magnifying-glass-plus"></i>
-                        <h3>Keen Attention to Detail</h3>
-                        <p>Strong focus on precision and accuracy in all aspects of work, ensuring high-quality deliverables and the successful completion of tasks while minimizing errors. Able to identify potential issues or inconsistencies before they become problems, ensuring thoroughness and a commitment to excellence.</p>
-                    </div>
-                </div>
-            </div>
+  <!-- KEY SKILLS -->
+  <section id="key-skills" class="section reveal">
+    <div class="section-head">
+      <span class="section-num">/ 01</span>
+      <h2 class="section-title">Key Skills</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-search"></i></div><h3>Problem Analysis & Resolution</h3><p>Strong analytical skills in identifying root causes and developing innovative solutions to complex challenges.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-lightbulb"></i></div><h3>Strategic & Critical Thinking</h3><p>Logical reasoning to support informed decisions and long-term planning — analyzing, evaluating evidence, identifying risks.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-cogs"></i></div><h3>Process Improvement</h3><p>Identifying inefficiencies and implementing enhancements to streamline workflows and increase productivity.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-arrows-rotate"></i></div><h3>Adaptability & Flexibility</h3><p>Rapid learning curve, integrating new concepts and technologies seamlessly into existing workflows.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-check-circle"></i></div><h3>Decision-Making</h3><p>Well-informed, timely decisions under pressure, balancing short-term needs and long-term goals.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-comments"></i></div><h3>Effective Communication</h3><p>Articulating ideas with clarity and precision across all levels of an organization.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-ear-listen"></i></div><h3>Active Listening</h3><p>Empathetic listening for thorough understanding, enabling informed responses that build trust.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-users"></i></div><h3>Stakeholder Collaboration</h3><p>Bridging communication gaps — making complex concepts accessible for technical and non-technical audiences.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-handshake"></i></div><h3>Collaboration & Negotiation</h3><p>Cross-functional partnership building and negotiating mutually beneficial solutions.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-clock"></i></div><h3>Time Management</h3><p>Managing multiple priorities and deadlines without compromising quality.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-brain"></i></div><h3>Creative Problem-Solving</h3><p>Quick to adapt and apply creative solutions while continuously learning and growing.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-people-group"></i></div><h3>Relationship Building</h3><p>Building rapport across organizational levels, fostering strong working relationships.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-magnifying-glass-plus"></i></div><h3>Keen Attention to Detail</h3><p>Precision and accuracy, identifying potential issues before they become problems.</p></div>
+    </div>
+  </section>
 
-            
+  <!-- EXPERIENCE -->
+  <section id="experience" class="section reveal">
+    <div class="section-head">
+      <span class="section-num">/ 02</span>
+      <h2 class="section-title">Work Experience</h2>
+      <div class="section-rule"></div>
+    </div>
 
-            <!-- Work Experience Section -->
-<div id="experience" class="section full-width animate-on-scroll">
-  <h2 class="section-title">WORK EXPERIENCE</h2>
-  <div class="timeline-container">
-    <div class="timeline-line"></div>
+    <div class="timeline">
 
-    <!-- Job 1 - Current -->
-    <div class="timeline-item">
-      <div class="timeline-dot current"></div>
-      <div class="timeline-date">Apr, 2024 – Present</div>
-      <div class="timeline-title">Senior Digital Solution</div>
-      <div class="timeline-company">JASPAL PUBLIC COMPANY LIMITED</div>
-      <div class="timeline-industry">Lifestyle and Fashion Retail</div>
+      <!-- Job 1 -->
+      <div class="tl-item">
+        <div class="tl-dot current" aria-hidden="true"></div>
+        <span class="tl-date">Apr 2024 — Present</span>
+        <h3 class="tl-title">Senior Digital Solution</h3>
+        <div class="tl-company">JASPAL Public Company Limited</div>
+        <div class="tl-industry">Lifestyle & Fashion Retail</div>
 
-      <div class="timeline-role">Digital Solution, Automation and Transformation</div>
-<p style="color: #8497B0; font-style: italic; margin-bottom: 15px;">
-  Lead enterprise-wide digital solution initiatives focused on workflow automation,
-  system integration, and digital transformation, delivering scalable solutions that
-  support organizational efficiency, data consistency, and operational excellence.
-</p>
+        <div class="tl-role">Digital Solution, Automation and Transformation</div>
+        <p class="tl-intro">Lead enterprise-wide digital initiatives in workflow automation, system integration, and digital transformation.</p>
+        <div class="tl-content"><ul>
+          <li>Enterprise Integration & Automation:</li>
+          <li class="dot">End-to-end integration workflows connecting enterprise systems with reliable data synchronization across platforms.</li>
+          <li class="dot">Automation workflows: file monitoring, data validation, transformation logic, scheduled execution.</li>
+          <li class="dot">Orchestration logic for retries, error handling, conditional routing and monitoring.</li>
+          <li class="dot">API-driven services for secure communication between internal platforms and external systems.</li>
+          <li class="dot">API integrations for enterprise tools — automation triggers, status updates, data sync.</li>
+          <li class="dot">PostgreSQL schema design, relational modeling, indexing and performance optimization.</li>
+          <li class="dot">Staging & transformation layers to normalize incoming data and ensure governance.</li>
+          <li class="dot">Internal React.js portals for monitoring automation execution and self-service workflows.</li>
+          <li class="dot">Frontend components simplifying complex technical operations.</li>
+          <li class="dot">Continuous optimization of pipelines, API performance and integration logic.</li>
+          <li class="dot">Ongoing monitoring, troubleshooting and enhancement of digital solutions.</li>
+        </ul></div>
 
-<div class="timeline-content">
-  <ul>
-
-    <li>Enterprise Integration & Automation Execution:</li>
-
-    <li class="empty-circle" data-icon="integration">
-      Design and develop end-to-end integration workflows connecting enterprise systems,
-      enabling reliable data synchronization and automated information exchange across
-      multiple platforms and business functions.
-    </li>
-
-    <li class="empty-circle" data-icon="process">
-      Architect and implement automation workflows covering file monitoring, data validation,
-      transformation logic, and scheduled execution, reducing manual operations and improving
-      process consistency across departments.
-    </li>
-
-    <li class="empty-circle" data-icon="integration">
-      Develop workflow orchestration logic to handle retries, error handling, conditional routing,
-      and monitoring to ensure automation reliability and production stability.
-    </li>
-
-    <li class="empty-circle" data-icon="coding">
-      Develop and maintain API-driven services enabling secure communication between
-      internal platforms and external enterprise systems, supporting both real-time
-      and batch-based automation scenarios.
-    </li>
-
-    <li class="empty-circle" data-icon="coding">
-      Implement API integrations for enterprise tools and operational systems,
-      including automation triggers, status updates, and data synchronization processes.
-    </li>
-
-    <li class="empty-circle" data-icon="data">
-      Design and manage PostgreSQL database structures supporting automation workflows,
-      including schema design, relational modeling, indexing strategy, and performance optimization
-      for scalable data processing.
-    </li>
-
-    <li class="empty-circle" data-icon="data">
-      Develop staging and transformation layers to normalize incoming data before integration,
-      ensuring data quality, consistency, and governance across enterprise platforms.
-    </li>
-
-    <li class="empty-circle" data-icon="coding">
-      Develop internal web portals using React.js to provide user-friendly interfaces
-      for monitoring automation execution, managing workflow operations, and supporting
-      business users with self-service capabilities.
-    </li>
-
-    <li class="empty-circle" data-icon="coding">
-      Design frontend components and interaction flows that simplify complex technical
-      operations, improving usability and reducing dependency on technical teams.
-    </li>
-
-    <li class="empty-circle" data-icon="analysis">
-      Continuously optimize automation pipelines, API performance, and integration logic
-      to improve scalability, system stability, and long-term maintainability.
-    </li>
-
-    <li class="empty-circle" data-icon="support">
-      Provide ongoing monitoring, troubleshooting, and enhancement of digital solutions,
-      ensuring smooth operation and alignment with evolving business requirements.
-    </li>
-
-  </ul>
-</div>
-
-      <div class="timeline-title">Senior Business Analyst</div>
-
-      <div class="timeline-role">Business Analyst | Project Manager | System Analyst</div>
-      <p style="color: #8497B0; font-style: italic; margin-bottom: 15px;">
-        Hold full responsibility for all projects related to the Business Unit, Distribution Center (DC),
-        Warehouse Management, the Product Lifecycle Management (PLM) system and Digital Transformation.
-      </p>
-
-      <div class="timeline-content">
-        <ul>
+        <h3 class="tl-title" style="margin-top:24px">Senior Business Analyst</h3>
+        <div class="tl-role">Business Analyst · Project Manager · System Analyst</div>
+        <p class="tl-intro">Full ownership of Business Unit, DC, WMS, PLM and Digital Transformation projects.</p>
+        <div class="tl-content"><ul>
           <li>Requirement Management & Analysis:</li>
-          <li class="empty-circle" data-icon="analysis">Lead end-to-end business requirement gathering through structured interviews,
-            workshops, and document reviews, applying effective communication and analytical techniques to capture
-            a holistic view of operational workflows and system logic.</li>
-          <li class="empty-circle" data-icon="process">Analyze current business processes to identify inefficiencies, pain points, and
-            root causes, recommending practical and technically aligned solutions that fit within the existing system
-            architecture and integration framework.</li>
-          <li class="empty-circle" data-icon="communication">Apply active listening and critical questioning techniques to accurately extract
-            and validate stakeholder needs, ensuring that documented requirements reflect true business intent and
-            operational priorities.</li>
+          <li class="dot">Lead end-to-end gathering via interviews, workshops, document reviews.</li>
+          <li class="dot">Analyze current processes for inefficiencies; recommend technically aligned solutions.</li>
+          <li class="dot">Apply active listening and critical questioning to validate stakeholder needs.</li>
 
           <li>Stakeholder Engagement:</li>
-          <li class="empty-circle" data-icon="collaboration">Collaborate closely with project sponsors, business owners, and subject matter
-            experts (SMEs) to define project objectives, gather inputs, and develop comprehensive Business Requirement
-            Documents (BRDs) that serve as a clear foundation for project delivery.</li>
-          <li class="empty-circle" data-icon="communication">Facilitate alignment between business needs and technical capabilities, negotiating
-            where necessary to manage expectations, prioritize features, and deliver solutions that add measurable
-            value.</li>
+          <li class="dot">Collaborate with sponsors, owners and SMEs to develop comprehensive BRDs.</li>
+          <li class="dot">Align business needs with technical capabilities; negotiate priorities for measurable value.</li>
 
           <li>Process Understanding & Solution Design:</li>
-          <li class="empty-circle" data-icon="design">Translate complex business requirements into user-centric solutions by applying UX/UI
-            principles and usability best practices, ensuring solutions are not only functional but intuitive and easy
-            to adopt.</li>
-          <li class="empty-circle" data-icon="analysis">Utilize structured analysis and logical problem-solving techniques to evaluate and
-            redesign processes, ensuring scalability, maintainability, and alignment with long-term business goals.</li>
-          <li class="empty-circle" data-icon="solution">Balance user needs, business objectives, and technical constraints through a
-            systematic, collaborative solution design approach.</li>
+          <li class="dot">Translate complex requirements into user-centric solutions with UX/UI best practices.</li>
+          <li class="dot">Structured analysis to redesign processes for scalability and long-term goals.</li>
+          <li class="dot">Balance user needs, business objectives and technical constraints.</li>
 
           <li>Documentation & Alignment:</li>
-          <li class="empty-circle" data-icon="documentation">Produce detailed functional specifications, workflow diagrams, user journey maps,
-            and AS-IS/TO-BE models to ensure all stakeholders and project team members have a shared understanding of
-            the proposed solution.</li>
-          <li class="empty-circle" data-icon="project">Define project scope, conduct comprehensive impact analyses, and support internal
-            project registration processes to maintain transparency, mitigate risks, and secure approvals from
-            governance bodies.</li>
+          <li class="dot">Functional specs, workflow diagrams, user journey maps, AS-IS/TO-BE models.</li>
+          <li class="dot">Define scope, conduct impact analyses, support internal registration processes.</li>
 
-          <li>Vendor Management & Solution Evaluation:</li>
-          <li class="empty-circle" data-icon="vendor">Work closely with external vendors for off-the-shelf solutions, ensuring alignment
-            with project goals and system requirements.</li>
-          <li class="empty-circle" data-icon="analysis">Assess multiple solution options, comparing the pros and cons of off-the-shelf
-            solutions versus system customization, considering factors such as cost, scalability, implementation time,
-            and long-term support.</li>
-          <li class="empty-circle" data-icon="collaboration">Leverage experience in negotiating and collaborating with vendors to customize
-            solutions or integrate off-the-shelf products effectively into the project.</li>
-          <li class="empty-circle" data-icon="analysis">Evaluate system customization options to ensure that tailored solutions align with
-            business processes, offering flexibility and potential for future growth.</li>
+          <li>Vendor Management & Evaluation:</li>
+          <li class="dot">Work with vendors for off-the-shelf solutions aligned with project goals.</li>
+          <li class="dot">Compare off-the-shelf vs customization across cost, scalability, support.</li>
+          <li class="dot">Negotiate with vendors to integrate or customize products effectively.</li>
+          <li class="dot">Evaluate customization for flexibility and future growth.</li>
 
           <li>Project Planning & Execution:</li>
-          <li class="empty-circle" data-icon="project">Lead end-to-end project planning and execution, managing timelines, scope, budgets,
-            and resources to ensure projects are delivered on time and aligned with business objectives.</li>
-          <li class="empty-circle" data-icon="collaboration">Coordinate cross-functional teams, including internal stakeholders and external
-            vendors, to maintain alignment, resolve dependencies, and drive progress throughout the project lifecycle.</li>
-          <li class="empty-circle" data-icon="documentation">Conduct requirement-gathering sessions, finalize and document user requirements,
-            and secure formal sign-off to ensure clarity and stakeholder commitment.</li>
-          <li class="empty-circle" data-icon="documentation">Initiate project kick-offs with clearly defined milestones, success metrics, and
-            communication plans to set a strong foundation for execution and stakeholder engagement.</li>
+          <li class="dot">Lead planning and execution — timelines, scope, budgets, resources.</li>
+          <li class="dot">Coordinate cross-functional teams; resolve dependencies.</li>
+          <li class="dot">Run requirement sessions, document and secure formal sign-off.</li>
+          <li class="dot">Project kick-offs with milestones, success metrics, communication plans.</li>
 
           <li>Testing & Validation:</li>
-          <li class="empty-circle" data-icon="testing">Develop test cases, perform functional testing, and validate results during SIT and
-            UAT to ensure system integrity and alignment with business needs and user expectations.</li>
-          <li class="empty-circle" data-icon="system">Monitor Go-live and post-implementation phases to ensure smooth transitions.</li>
+          <li class="dot">Develop test cases, perform SIT and UAT for system integrity.</li>
+          <li class="dot">Monitor Go-live and post-implementation phases.</li>
 
           <li>Communication & Reporting:</li>
-          <li class="empty-circle" data-icon="reporting">Maintained regular communication with stakeholders, providing updates on project
-            status, challenges, and milestones. Supported smooth transitions during Go-live and post-implementation
-            phases.</li>
-        </ul>
+          <li class="dot">Regular stakeholder updates on status, challenges and milestones.</li>
+        </ul></div>
 
-        <div class="timeline-role">Cross-Functional Collaboration</div>
-        <ul>
+        <div class="tl-role">Cross-Functional Collaboration</div>
+        <div class="tl-content"><ul>
           <li>Solution Consultation & Support:</li>
-          <li class="empty-circle" data-icon="solution">Delivered expert consultation on solution architecture and integration design,
-            ensuring seamless UX/UI alignment to drive user satisfaction and operational efficiency.</li>
-          <li class="empty-circle" data-icon="support">Supported cross-functional projects by advising on system integration strategies,
-            data mapping, and field alignment to ensure consistency and scalability across platforms.</li>
+          <li class="dot">Expert consultation on solution architecture and integration design with UX/UI alignment.</li>
+          <li class="dot">Advised on system integration strategies, data mapping and field alignment.</li>
 
           <li>Data Management:</li>
-          <li class="empty-circle" data-icon="data">Data cleansing and preparation activities, focusing on taxonomy, master data
-            management, and system migration to ensure data accuracy and consistency. Handle the import and export of
-            data using native methods, ensuring smooth integration.</li>
+          <li class="dot">Data cleansing, taxonomy, master data management, system migration.</li>
 
           <li>Integration & Testing:</li>
-          <li class="empty-circle" data-icon="integration">Validate integration data, refine system logic, and support API testing, Trigger API
-            calls to interact with external systems, to ensure seamless data flows and optimal system performance.</li>
-          <li class="empty-circle" data-icon="integration">Finalize system integration flows and data mappings to deliver robust, cohesive
-            solutions.</li>
+          <li class="dot">Validate integration data, refine system logic, support API testing.</li>
+          <li class="dot">Finalize integration flows and data mappings.</li>
 
           <li>Coding & Development:</li>
-          <li class="empty-circle" data-icon="coding">Design, develop, and maintain applications and tools that empower internal IT teams
-            and business users to create, update, or manage data within the PLM (Product Lifecycle Management) system
-            through secure and well-documented APIs. Ensure that these applications are user-friendly, reliable, and
-            aligned with business workflows, enabling efficient data handling, minimizing manual errors, and supporting
-            integration with other enterprise systems.</li>
-          <li class="empty-circle" data-icon="data">As the PLM system serves as the master source for product data, ensure smooth,
-            accurate, and timely data handoff to downstream systems such as ERP (Enterprise Resource Planning). Develop
-            integration logic and automation scripts to synchronize data between PLM and ERP, supporting end-to-end data
-            consistency across the organization’s core platforms.</li>
-          <li class="empty-circle" data-icon="process">In addition, develop and deploy automation solutions such as file monitoring tools,
-            scripted processes, and automated file transfers to streamline repetitive tasks and improve operational
-            efficiency. Implement automated ticketing flows and API-driven updates, including features like delay
-            mechanisms to enforce rate limits and prevent system overload. Continuously enhance code quality, adopt best
-            practices, and collaborate with stakeholders to gather requirements and deliver scalable, resilient
-            solutions that meet evolving business needs.</li>
-          <li class="empty-circle" data-icon="support">Develop practical solutions and internal apps/tools that simplify daily tasks for the
-            IT team, reduce manual workloads, and provide clear, reliable processes. Build custom utilities, dashboards, or scripts that improve 
-            monitoring, troubleshooting, and support activities, helping the team work more efficiently and comfortably in a dynamic environment.</li>
-          <li class="empty-circle" data-icon="coding">Designed and implemented custom scripts within the Zoho ITSM platform to meet
-            strategic business requirements, integrating complex calculation logic and dynamic field behaviors to support advanced workflow automation.</li>
-          <li class="empty-circle" data-icon="coding">Customized modules, forms, and approval flows to align with organizational processes,
-            improving system proficiency, reducing manual effort, and ensuring seamless alignment with business goals.</li>
-          <li class="empty-circle" data-icon="coding">Developed a lightweight web application using Python and simple HTML to assist
-            business users in preparing and managing documentation required for customs declarations in foreign countries,
-            streamlining compliance and reducing manual workload.</li>
-          <li class="empty-circle" data-icon="coding">Built a custom VPN auto-connect monitoring tool to automate connection checks and
-            reconnections, significantly reducing reliance on expensive third-party VPN software and cutting recurring
-            licensing costs.</li>
-        </ul>
+          <li class="dot">Apps/tools empowering IT and business users to manage PLM data via APIs.</li>
+          <li class="dot">Integration logic and scripts syncing PLM with ERP and other enterprise systems.</li>
+          <li class="dot">Automation: file monitoring, ticketing flows, API updates with rate-limit delays.</li>
+          <li class="dot">Internal apps, dashboards, utilities improving monitoring and support efficiency.</li>
+          <li class="dot">Zoho ITSM custom scripts with calculation logic and dynamic field behaviors.</li>
+          <li class="dot">Customized modules, forms and approval flows aligned with organizational processes.</li>
+          <li class="dot">Python + HTML web app assisting customs declaration documentation.</li>
+          <li class="dot">VPN auto-connect monitor reducing reliance on costly third-party software.</li>
+        </ul></div>
       </div>
-    </div>
 
-    <!-- Job 2 -->
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-      <div class="timeline-date">Aug, 2021 – Mar, 2024</div>
-      <div class="timeline-title">IT & Software Solutions Expertise</div>
-      <div class="timeline-company">PRIME SELECTION (THAILAND) CO., LTD.</div>
-      <div class="timeline-industry">Consultant Service & Software Solution</div>
-      <div class="timeline-role">Software Solution Consultant | SAP Consultant | CEGID Retail System Owner (Non-SAP)</div>
-      <p style="color: #8497B0; font-style: italic; margin-bottom: 15px;">
-        Hold full responsibility in System Design, Business process and Technical Consultant.
-      </p>
+      <!-- Job 2 -->
+      <div class="tl-item">
+        <div class="tl-dot" aria-hidden="true"></div>
+        <span class="tl-date">Aug 2021 — Mar 2024</span>
+        <h3 class="tl-title">IT & Software Solutions Expertise</h3>
+        <div class="tl-company">Prime Selection (Thailand) Co., Ltd.</div>
+        <div class="tl-industry">Consultant Service & Software Solution</div>
+        <div class="tl-role">Software Solution Consultant · SAP Consultant · CEGID Retail System Owner</div>
+        <p class="tl-intro">Full responsibility in System Design, Business Process and Technical Consultancy.</p>
 
-      <div class="sub-role">Role 1: IT & Software Solutions Expertise</div>
-      <div class="timeline-content">
-        <ul>
+        <div class="sub-role">Role 1 — IT & Software Solutions Expertise</div>
+        <div class="tl-content"><ul>
           <li>Warehouse Management System (WMS):</li>
-          <li class="empty-circle" data-icon="process">Acquired in-depth knowledge of WMS software and WH inventory operation processes,
-            enabling effective analysis and troubleshooting of operational inefficiencies.</li>
-          <li class="empty-circle" data-icon="collaboration">Collaborated with WH teams to identify process gaps and proposed customized solutions
-            to streamline workflows and improve system performance.</li>
-          <li class="empty-circle" data-icon="integration">Supported system integration, including AS2, SFTP, and API interfaces, ensuring
-            smooth data exchanges across platforms.</li>
+          <li class="dot">In-depth WMS and inventory ops knowledge for analysis and troubleshooting.</li>
+          <li class="dot">Collaborated with WH teams to identify gaps and propose customized solutions.</li>
+          <li class="dot">Supported AS2, SFTP and API integrations.</li>
 
-          <li>Requirements Gathering and Solution Design:</li>
-          <li class="empty-circle" data-icon="analysis">Gathered and analyzed customer requirements, designing tailored solutions to meet
-            their unique business needs.</li>
-          <li class="empty-circle" data-icon="documentation">Created system and process flow diagrams to align with stakeholders and ensure mutual
-            understanding of workflows.</li>
+          <li>Requirements & Solution Design:</li>
+          <li class="dot">Analyzed customer requirements; designed tailored solutions.</li>
+          <li class="dot">Created system and process flow diagrams.</li>
 
-          <li>Process Automation and Optimization:</li>
-          <li class="empty-circle" data-icon="analysis">Automated repetitive processes using Python, Excel VBA, and macros, reducing manual
-            intervention and improving efficiency.</li>
-          <li class="empty-circle" data-icon="integration">Developed scripts for simulating end-to-end transactional interfaces using raw XML
-            files, enabling comprehensive testing and validation.</li>
-          <li class="empty-circle" data-icon="integration">Utilize a systematic approach to solution design, balancing user needs with technical
-            feasibility and business objectives.</li>
+          <li>Automation & Optimization:</li>
+          <li class="dot">Automated processes using Python, Excel VBA and macros.</li>
+          <li class="dot">Scripts simulating end-to-end transactional interfaces via raw XML.</li>
+          <li class="dot">Systematic solution design balancing user needs, feasibility, objectives.</li>
 
-          <li>System Integration and Troubleshooting:</li>
-          <li class="empty-circle" data-icon="analysis">Conducted root cause analyses for issues in system integrations, including WMS-to-SAP
-            or WMS-to-Ecommerce platforms (e.g., Lazada, Shopee, COL). Until the product master data and the sales transaction to the POS system.</li>
-          <li class="empty-circle" data-icon="integration">Monitored and resolved data exchange issues involving APIs and file formats like JSON
-            and XML.</li>
+          <li>Integration & Troubleshooting:</li>
+          <li class="dot">Root cause analysis for WMS-to-SAP and WMS-to-Ecommerce (Lazada, Shopee, COL).</li>
+          <li class="dot">Resolved data exchange issues across APIs, JSON, XML.</li>
 
-          <li>Collaboration with WH Teams:</li>
-          <li class="empty-circle" data-icon="analysis">CondWorked closely with GR/GI, Inventory, Transport, and Ecommerce teams to address
-            operational challenges and implement solutions that enhanced day-to-day activities.</li>
+          <li>Collaboration:</li>
+          <li class="dot">Worked with GR/GI, Inventory, Transport and Ecommerce teams.</li>
+        </ul></div>
 
-        </ul>
-      </div>
+        <div class="sub-role">Role 2 — SAP Consultant & Support (L1) — Shiseido Thailand</div>
+        <div class="tl-content"><ul>
+          <li>Master Data Governance:</li>
+          <li class="dot">Lead Material Master Data prep including standard costs, statuses, collaborative data.</li>
+          <li class="dot">SAP S/4 HANA, GUI and Fiori for material-related tasks.</li>
+          <li class="dot">Cross-functional communication with Demand, Logistics, Accounting, Finance.</li>
 
-      <div class="sub-role">Role 2: SAP Consultant & Supports (L1) – SHISEIDO THAILAND</div>
-      <div class="timeline-content">
-        <ul>
-          <li>Master Data Governance (MDG):</li>
-          <li class="empty-circle" data-icon="data">Lead Material Master Data preparation, ensuring accuracy and readiness for
-            operational use, including standard costs, material statuses, and collaborative data.</li>
-          <li class="empty-circle" data-icon="system">Used SAP S/4 HANA, SAP GUI, and SAP Fiori extensively for material-related tasks,
-            such as data creation, updates, and monitoring.</li>
-          <li class="empty-circle" data-icon="communication">Facilitated cross-functional communication with business users from Demand,
-            Logistics, Accounting, Financial, and other teams to resolve data-related issues effectively.</li>
+          <li>Testing & Implementation:</li>
+          <li class="dot">Prepared and executed SIT, UAT, regression tests with global/regional/local teams.</li>
 
-          <li>Testing and Implementation:</li>
-          <li class="empty-circle" data-icon="system">Prepared and executed SIT, UAT, and regression tests for system changes, coordinating
-            with global, regional, and local teams to ensure seamless rollouts.</li>
+          <li>Issue Resolution:</li>
+          <li class="dot">CPI solutions ensuring smooth SAP-to-surrounding-systems data flow.</li>
+          <li class="dot">Resolved PO/STO, SO, invoices, stock movements, IDOC issues.</li>
 
-          <li>Issue Resolution and Workflow Improvement:</li>
-          <li class="empty-circle" data-icon="solution">Designed innovative solutions to close system gaps, particularly in CPI (Cloud
-            Platform Integration) scenarios, ensuring smooth data flow between SAP and surrounding systems.</li>
-          <li class="empty-circle" data-icon="process">Resolved critical issues in processes such as PO/STO, SO, invoices, stock movements,
-            and IDOC transactions. Escalated unresolved issues to Level 2 teams while providing detailed root cause
-            analyses.</li>
+          <li>Reporting:</li>
+          <li class="dot">Daily progress reports on master data activities.</li>
+          <li class="dot">Improved workflows for material data management.</li>
+        </ul></div>
 
-          <li>Reporting and Documentation:</li>
-          <li class="empty-circle" data-icon="communication">Prepared daily progress reports on material master data activities, enabling
-            transparency and efficient tracking of operational readiness.</li>
-          <li class="empty-circle" data-icon="system">Designed and implemented improved workflows for material data management to enhance
-            productivity and accuracy.</li>
-
-        </ul>
-      </div>
-
-      <div class="sub-role">Role 3: CEGID Retail POS System Owner & CRM – SHISEIDO THAILAND</div>
-      <div class="timeline-content">
-        <ul>
-
+        <div class="sub-role">Role 3 — CEGID Retail POS Owner & CRM — Shiseido Thailand</div>
+        <div class="tl-content"><ul>
           <li>System Administration:</li>
-          <li class="empty-circle" data-icon="system">Managed CEGID Retail POS systems and CRM loyalty platform (Shiseido – Beauty
-            Connect), overseeing daily operations, system performance, and resolving technical issues.</li>
-          <li class="empty-circle" data-icon="integration">Monitored interface file transfers between CEGID and external systems (e.g., SAP,
-            CRM) via SFTP, addressing exceptions and special case scenarios effectively.</li>
+          <li class="dot">Managed CEGID Retail POS and CRM (Beauty Connect).</li>
+          <li class="dot">Monitored interface file transfers between CEGID, SAP and CRM via SFTP.</li>
 
           <li>Process Improvements:</li>
-          <li class="empty-circle" data-icon="analysis">Identified inefficiencies in current processes and designed solutions to enhance
-            system performance, data accuracy, and operational workflows.</li>
-          <li class="empty-circle" data-icon="communication">Collaborated with software owners and stakeholders to implement service requests,
-            change requests, and incident resolutions.</li>
+          <li class="dot">Identified inefficiencies and designed solutions.</li>
+          <li class="dot">Collaborated on service/change requests with stakeholders.</li>
 
-          <li>Testing and Support:</li>
-          <li class="empty-circle" data-icon="data">Prepared and executed SIT/UAT scenarios for system changes, including data
-            simulations for interface files.</li>
-          <li class="empty-circle" data-icon="analysis">Supported key operational tasks, such as creating new stores/registers, editing DN
-            interfaces, and managing item-level data merges.</li>
+          <li>Testing & Support:</li>
+          <li class="dot">Prepared SIT/UAT including data simulations.</li>
+          <li class="dot">Supported store/register creation, DN interfaces, data merges.</li>
 
-          <li>Event Support and Reconciliation:</li>
-          <li class="empty-circle" data-icon="data">Handled high-pressure scenarios during special sales events (e.g., Friends & Family
-            Sales, Product Roadshows), ensuring system readiness and smooth execution.</li>
-          <li class="empty-circle" data-icon="data">Performed data reconciliation between CEGID, CRM, and other systems, ensuring
-            consistency and accuracy.</li>
+          <li>Event Support & Reconciliation:</li>
+          <li class="dot">Handled F&F sales and Roadshows ensuring system readiness.</li>
+          <li class="dot">Reconciled CEGID, CRM and other systems.</li>
 
-          <li>Documentation and Training:</li>
-          <li class="empty-circle" data-icon="communication">Developed comprehensive user manuals and system documentation to facilitate training
-            and onboarding for new users.</li>
-          <li class="empty-circle" data-icon="communication">Provided training to end-users on best practices for using CEGID POS and CRM systems
-            effectively.</li>
-        </ul>
+          <li>Documentation & Training:</li>
+          <li class="dot">User manuals and system documentation for onboarding.</li>
+          <li class="dot">End-user training on best practices for CEGID POS and CRM.</li>
+        </ul></div>
       </div>
-    </div>
 
-    <!-- Job 3 -->
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-      <div class="timeline-date">Aug, 2017 – Feb, 2021</div>
-      <div class="timeline-title">Application Engineer</div>
-      <div class="timeline-company">ENGINEERING COMPUTER SERVICES (THAILAND) CO., LTD.</div>
-      <div class="timeline-industry">CAD/CAM/CAE Solution Provider</div>
-
-      <div class="timeline-content">
-        <ul>
+      <!-- Job 3 -->
+      <div class="tl-item">
+        <div class="tl-dot" aria-hidden="true"></div>
+        <span class="tl-date">Aug 2017 — Feb 2021</span>
+        <h3 class="tl-title">Application Engineer</h3>
+        <div class="tl-company">Engineering Computer Services (Thailand) Co., Ltd.</div>
+        <div class="tl-industry">CAD/CAM/CAE Solution Provider</div>
+        <div class="tl-content"><ul>
           <li>Technical Support & Training:</li>
-          <li class="empty-circle">Provided expert-level technical support to resolve customers' software usage
-            challenges, ensuring minimal downtime and high satisfaction.</li>
-          <li class="empty-circle">Delivered structured, in-depth training programs tailored to customers’ needs,
-            adhering to specified course designs and industry best practices.</li>
-          <li class="empty-circle">Collaborated with customers to analyze and optimize workflows, enhancing their
-            proficiency in using CAD/CAM/CAE software effectively.</li>
+          <li class="dot">Expert technical support resolving customers' software challenges.</li>
+          <li class="dot">Structured training programs tailored to customer needs.</li>
+          <li class="dot">Optimized CAD/CAM/CAE workflows with customers.</li>
 
-          <li>Pre-sales and Software Demonstration:</li>
-          <li class="empty-circle">Engaged in presales activities, presenting live demonstrations of software
-            capabilities to prospective clients, ensuring alignment with their technical and business requirements.</li>
-          <li class="empty-circle">Worked closely with the sales team to provide detailed technical insights, enabling
-            the successful acquisition of new clients.</li>
-          <li class="empty-circle">Conducted comparative analyses of software capabilities against competitor products,
-            highlighting key differentiators to position company solutions as the optimal choice.</li>
+          <li>Pre-sales & Demonstration:</li>
+          <li class="dot">Live demos to prospective clients aligned with technical/business requirements.</li>
+          <li class="dot">Provided technical insights to the sales team to win new clients.</li>
+          <li class="dot">Comparative analyses positioning company solutions vs competitors.</li>
 
+          <li>Solution Design & Vendor Coordination:</li>
+          <li class="dot">Tailored solutions for customer engineering challenges.</li>
+          <li class="dot">Worked with FEA/CAE vendors for stress and fluid flow analyses.</li>
 
-          <li>Solution Design and Vendor Coordination:</li>
-          <li class="empty-circle">Analyzed customer requirements and recommended tailored solutions to address their
-            specific engineering challenges.</li>
-          <li class="empty-circle">Worked with vendors specializing in Finite Element Analysis (FEA) and Computer-Aided
-            Engineering (CAE) to deliver advanced solutions for static stress analysis, fluid flow simulations, and
-            more.</li>
+          <li>Installation & Setup:</li>
+          <li class="dot">Installed and configured CAD/CAM/CAE solutions.</li>
+          <li class="dot">Designed DNC and MDC systems including database setup.</li>
 
-          <li>Software Installation and System Setup:</li>
-          <li class="empty-circle">Installed and configured a variety of CAD/CAM/CAE software solutions, ensuring
-            seamless integration into customers’ environments.</li>
-          <li class="empty-circle">Designed and implemented DNC (Direct Numerical Control) and MDC (Machine Data
-            Collection) systems, including database setup for production plants, streamlining manufacturing operations.
-          </li>
+          <li>Presentation:</li>
+          <li class="dot">Delivered seminars and industry events.</li>
+          <li class="dot">Created marketing materials, training videos and promotional content.</li>
 
-          <li>Presentation and Communication:</li>
-          <li class="empty-circle">Delivered compelling lectures at seminars and industry events, enhancing brand
-            presence and educating audiences on the latest software innovations.</li>
-          <li class="empty-circle">Created high-quality marketing materials, including presentations, training videos,
-            and promotional content, leveraging video editing and animation skills.</li>
+          <li>Optimization & Engagement:</li>
+          <li class="dot">Improved customers' working files and best practices.</li>
+          <li class="dot">Site visits for post-sales support.</li>
 
-          <li>Process Optimization and Customer Engagement:</li>
-          <li class="empty-circle">Enhanced customer working files by improving designs, providing guidance, and
-            implementing best practices to boost efficiency and accuracy.</li>
-          <li class="empty-circle">Conducted site visits to maintain strong client relationships, offering post-sales
-            support and identifying opportunities for further improvements.</li>
+          <li>3D Modeling & Analysis:</li>
+          <li class="dot">3D animations and motion analysis of complex assemblies.</li>
+          <li class="dot">Reverse Engineering and Generative Design.</li>
 
-          <li>Advanced 3D Modeling and Analysis:</li>
-          <li class="empty-circle">Generated 3D animations and conducted motion analysis for complex assemblies,
-            providing visualizations of design functionality and performance.</li>
-          <li class="empty-circle">Performed Reverse Engineering and Generative Design, enabling innovative solutions
-            for customer projects and product development.</li>
+          <li>Postprocessing:</li>
+          <li class="dot">Customized postprocessors via NX Postbuilder for CNC machines.</li>
 
-          <li>Postprocessing Customization:</li>
-          <li class="empty-circle">Edited and customized postprocessors using NX Postbuilder, ensuring compatibility and
-            optimal performance for various CNC machines.</li>
+          <li>Impact:</li>
+          <li class="dot">Improved engineering and manufacturing with customized solutions.</li>
+          <li class="dot">Enhanced cross-departmental collaboration.</li>
+          <li class="dot">Enabled clients to adopt cutting-edge CAD/CAM/CAE technologies.</li>
+        </ul></div>
+      </div>
 
-          <li>Impact and Value Delivered:</li>
-          <li class="empty-circle">Improved customers’ engineering and manufacturing processes through customized
-            software solutions and expert guidance.</li>
-          <li class="empty-circle">Enhanced team collaboration and cross-departmental communication to provide seamless
-            support throughout the customer journey.</li>
-          <li class="empty-circle">Enabled clients to adopt cutting-edge CAD/CAM/CAE technologies, ensuring they
-            remained competitive in their respective industries requests, and incident resolutions.</li>
-        </ul>
+      <!-- Job 4 -->
+      <div class="tl-item">
+        <div class="tl-dot" aria-hidden="true"></div>
+        <span class="tl-date">May 2016 — Oct 2016</span>
+        <h3 class="tl-title">Service Engineer Trainee</h3>
+        <div class="tl-company">Automation Service Co., Ltd.</div>
+        <div class="tl-industry">Industrial & Office Automation · Internship</div>
+        <div class="tl-content"><ul>
+          <li>Installation & Setup:</li>
+          <li class="dot">Assisted installing mechanical, electrical and automation systems.</li>
+          <li class="dot">Equipment setup and calibration.</li>
+
+          <li>Maintenance & Troubleshooting:</li>
+          <li class="dot">Routine maintenance and repairs hands-on support.</li>
+          <li class="dot">Diagnosed mechanical/electrical issues and corrective actions.</li>
+          <li class="dot">Performance testing and system diagnostics.</li>
+
+          <li>Customer Support & Training:</li>
+          <li class="dot">Basic technical support on operation and maintenance.</li>
+          <li class="dot">On-site training for minor maintenance.</li>
+          <li class="dot">Documented common issues and solutions.</li>
+
+          <li>Collaboration:</li>
+          <li class="dot">Worked with product development, design and QA.</li>
+          <li class="dot">Assisted in technical documentation and manuals.</li>
+        </ul></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education" class="section reveal">
+    <div class="section-head">
+      <span class="section-num">/ 03</span>
+      <h2 class="section-title">Education</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot" aria-hidden="true"></div>
+        <span class="tl-date">2019 — 2020</span>
+        <h3 class="tl-title">M.Eng. · Computer Engineering & Financial Technology</h3>
+        <div class="tl-company">University of the Thai Chamber of Commerce</div>
+        <div class="tl-industry">GPA 3.85</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" aria-hidden="true"></div>
+        <span class="tl-date">2012 — 2017</span>
+        <h3 class="tl-title">B.Eng. · Automotive Engineering</h3>
+        <div class="tl-company">Thai – Nichi Institute of Technology</div>
+        <div class="tl-industry">GPA 2.53</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" aria-hidden="true"></div>
+        <span class="tl-date">2006 — 2012</span>
+        <h3 class="tl-title">High School · Science & Mathematics</h3>
+        <div class="tl-company">Lasalle College Bangkok</div>
+        <div class="tl-industry">GPA 3.19</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" aria-hidden="true"></div>
+        <span class="tl-date">2000 — 2006</span>
+        <h3 class="tl-title">Primary School</h3>
+        <div class="tl-company">Prasartwuti Chinese School</div>
+        <div class="tl-industry">GPA 3.74</div>
       </div>
     </div>
+  </section>
 
-    <!-- Job 4 -->
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-      <div class="timeline-date">May, 2016 – Oct, 2016</div>
-      <div class="timeline-title">Service Engineer Trainee</div>
-      <div class="timeline-company">AUTOMATION SERVICE CO., LTD.</div>
-      <div class="timeline-industry">Industrial Automation and Office Automation</div>
-
-      <p style="color: #8497B0; font-style: italic; margin-bottom: 15px;">INTERNSHIP</p>
-
-      <div class="timeline-content">
-        <ul>
-          <li>Installation and Setup:</li>
-          <li class="empty-circle">Assisted senior engineers in installing and setting up a variety of equipment,
-            including mechanical, electrical, and automation systems, ensuring that all components were properly
-            configured to meet customer requirements.</li>
-          <li class="empty-circle">Supported the setup and calibration of machinery, ensuring the equipment operated at
-            optimal performance levels.</li>
-
-          <li>Maintenance and Troubleshooting:</li>
-          <li class="empty-circle">Provided hands-on support during routine maintenance checks and repairs for a range
-            of machinery and systems, troubleshooting and resolving technical issues to minimize downtime.</li>
-          <li class="empty-circle">Diagnosed mechanical and electrical issues, performed fault-finding procedures, and
-            implemented corrective actions under the guidance of senior engineers.</li>
-          <li class="empty-circle">Conducted performance testing and system diagnostics to ensure the efficient
-            operation of equipment after repairs or maintenance activities.</li>
-
-
-          <li>Customer Support and Training:</li>
-          <li class="empty-circle">Delivered basic technical support to customers, assisting them in understanding the
-            operation and maintenance of equipment.</li>
-          <li class="empty-circle">Provided on-site training to clients, ensuring they were able to operate machinery
-            effectively and carry out minor maintenance procedures.</li>
-          <li class="empty-circle">Documented common issues and solutions for future reference, enhancing the support
-            process for customers.</li>
-
-          <li>Collaboration with Engineering Teams:</li>
-          <li class="empty-circle">Collaborated with cross-functional teams including product development, design, and
-            quality assurance to provide feedback on system performance and suggest improvements.</li>
-          <li class="empty-circle">Assisted in the development of technical documentation and manuals for newly
-            installed equipment to ensure ease of use and maintenance.</li>
-        </ul>
-      </div>
+  <!-- TECHNICAL SKILLS -->
+  <section id="skills" class="section reveal">
+    <div class="section-head">
+      <span class="section-num">/ 04</span>
+      <h2 class="section-title">Technical Skills</h2>
+      <div class="section-rule"></div>
     </div>
-  </div>
-</div>
 
-            
-
-            <!-- Education Section -->
-            <div id="education" class="section full-width animate-on-scroll">
-                <h2 class="section-title">EDUCATION</h2>
-                <div class="timeline-container">
-                    <div class="timeline-line"></div>
-                    
-                    <!-- Education 1 -->
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-date">2019 – 2020</div>
-                        <div class="timeline-title">M.Eng. | Computer Engineering and Financial Technology</div>
-                        <div class="timeline-company">University of the Thai Chamber of Commerce</div>
-                        <div class="timeline-industry">GPA 3.85</div>
-                    </div>
-
-                    <!-- Education 2 -->
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-date">2012 – 2017</div>
-                        <div class="timeline-title">B.Eng. | Automotive Engineering</div>
-                        <div class="timeline-company">Thai – Nichi Institute of Technology</div>
-                        <div class="timeline-industry">GPA 2.53</div>
-                    </div>
-
-                    <!-- Education 3 -->
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-date">2006 – 2012</div>
-                        <div class="timeline-title">High School | Science and Mathematics Program</div>
-                        <div class="timeline-company">Lasalle College Bangkok</div>
-                        <div class="timeline-industry">GPA 3.19</div>
-                    </div>
-
-                    <!-- Education 4 -->
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-date">2000 – 2006</div>
-                        <div class="timeline-title">Primary School</div>
-                        <div class="timeline-company">Prasartwuti Chinese School</div>
-                        <div class="timeline-industry">GPA 3.74</div>
-                    </div>
-                </div>
-            </div>
-
-
-<!-- Key Skills Section -->
-<div id="skills" class="section full-width animate-on-scroll">
-  <h2 class="section-title">KEY SKILLS</h2>
-
-  <!-- Technical & Software Skills -->
-<div class="timeline-role">TECHNICAL AND SOFTWARE SKILLS</div>
-  <div class="key-skills-grid">
-    <div class="skill-card">
-      <i class="fa-solid fa-tools"></i>
-      <h3>Centric PLM Implementation & Migration</h3>
-      <p>Expertise in implementing and migrating Centric PLM systems, optimizing UX/UI, and integrating with surrounding systems to ensure seamless data exchange and process automation. Skilled in managing complex migrations with data integrity and scalability.</p>
+    <div class="subhead">Technical & Software</div>
+    <div class="grid">
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-tools"></i></div><h3>Centric PLM</h3><p>Implementation and migration of Centric PLM with UX/UI optimization and complex data migrations.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-warehouse"></i></div><h3>WMS</h3><p>WH/Inventory systems aligned with physical operations for efficiency.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-cogs"></i></div><h3>Zoho ITSM</h3><p>Custom forms, workflows, scripting and integrations for IT service delivery.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-database"></i></div><h3>SAP S/4 HANA</h3><p>MM, SD, ITD, OTC modules and IDOC integration.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-database"></i></div><h3>SAP MDG</h3><p>Master Data Governance for consistency and compliance.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-store"></i></div><h3>CEGID Retail</h3><p>POS and CRM systems for retail operations and order management.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-project-diagram"></i></div><h3>Bitnami Redmine</h3><p>Ticket and project management with multi-level approval workflows.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-network-wired"></i></div><h3>System Integration</h3><p>API/EDI middleware and eCommerce platform connections.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-sitemap"></i></div><h3>Flow Drafting</h3><p>Clear process flows and diagrams aligning stakeholders.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-compass"></i></div><h3>System Navigation</h3><p>Quickly adapt to new systems and unfamiliar platforms.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-robot"></i></div><h3>AI Prompt Engineering</h3><p>Crafting and optimizing prompts for accuracy and objective alignment.</p></div>
     </div>
-    <div class="skill-card">
-      <i class="fa-solid fa-warehouse"></i>
-      <h3>Warehouse Management Systems (WMS)</h3>
-      <p>Expertise in WH/Inventory system implementation, designing solutions aligned with physical operations to improve efficiency and productivity.</p>
+
+    <div class="subhead">Programming Languages & Tools</div>
+    <div class="grid">
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-diagram-project"></i></div><h3>n8n Workflow Automation</h3><p>Production-ready workflows with API orchestration, transformation, schedules and error handling.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-brands fa-react"></i></div><h3>React.js</h3><p>Responsive interfaces, reusable components, hooks and REST/GraphQL integrations.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-brands fa-react"></i></div><h3>React Native</h3><p>Cross-platform Android apps with responsive UI and API integration.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-cart-shopping"></i></div><h3>Shopify</h3><p>Theme customization, app integrations and API-based extensions.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-pen-ruler"></i></div><h3>UX/UI Design</h3><p>Hierarchy, accessibility, responsive design, wireframing and prototyping.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-code"></i></div><h3>Python</h3><p>Automation, Flask web apps, REST APIs, authentication and database integration.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-microchip"></i></div><h3>Arduino & IoT</h3><p>ESP32 IoT with wireless modules, TFT displays and real-time visualization.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-file-code"></i></div><h3>Excel VBA</h3><p>Advanced macros automating repetitive tasks for accuracy.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-comments"></i></div><h3>Chatbot Development</h3><p>Dialogflow + LINE chatbots with booking/payment and Flex Messages.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-database"></i></div><h3>PostgreSQL & SQL</h3><p>Schema modeling, queries, stored procedures with Flask/Django/React.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-exchange-alt"></i></div><h3>API & File Transfers</h3><p>REST APIs, EDI workflows and SFTP for secure system-to-system communication.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-bezier-curve"></i></div><h3>Postman</h3><p>Collections, automated tests and integration validation.</p></div>
     </div>
-    <div class="skill-card">
-      <i class="fa-solid fa-cogs"></i>
-      <h3>Zoho ITSM Development</h3>
-      <p>Design and develop customized Zoho ITSM forms and workflows with automation, scripting, and integrations that improve IT service delivery and efficiency.</p>
+
+    <div class="subhead">Engineering Software</div>
+    <div class="sub-role">CAD · CAM · CAE</div>
+    <div class="grid">
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-cube"></i></div><h3>Solid Edge</h3><p>3D CAD, sheet metal, assembly, drafting, simulation, wiring harness.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-drafting-compass"></i></div><h3>Siemens NX</h3><p>Advanced product design, CAM machining, mold design.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-cogs"></i></div><h3>Dassault CATIA</h3><p>3D modeling, assembly and surface modeling.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-toolbox"></i></div><h3>SolidWorks</h3><p>Parametric modeling, assemblies and simulation.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-industry"></i></div><h3>ZW3D CAD & CAM</h3><p>CAD design and CAM manufacturing.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-chart-line"></i></div><h3>Femap CAE</h3><p>FEA for structural and thermal simulations.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-wind"></i></div><h3>Simcenter 3D</h3><p>Performance simulation and fluid dynamics.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-tools"></i></div><h3>Forming Suite (FTI)</h3><p>Sheet metal forming simulation.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-eye"></i></div><h3>3DViewstation</h3><p>3D visualization and analysis of CAD files.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-network-wired"></i></div><h3>Cimco Edit</h3><p>CNC programming and machine data communication.</p></div>
     </div>
-    <div class="skill-card">
-      <i class="fa-solid fa-database"></i>
-      <h3>SAP S/4 HANA</h3>
-      <p>Proficient in MM, SD, ITD, OTC modules and IDOC integration for seamless data exchange between SAP systems and external applications.</p>
+
+    <div class="sub-role">3D Printing & Sculpting</div>
+    <div class="grid">
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-monument"></i></div><h3>ZBrush</h3><p>Digital sculpting, character design and detailing.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-blender"></i></div><h3>Blender</h3><p>Basic 3D modeling, rendering and animation.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-print"></i></div><h3>Chitubox</h3><p>Slicing and preparing 3D resin prints.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-cube"></i></div><h3>Cura</h3><p>FDM slicing optimization.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-paint-brush"></i></div><h3>Keyshot</h3><p>High-quality visualizations and renders.</p></div>
+      <div class="card"><div class="card-icon"><i class="fa-solid fa-shapes"></i></div><h3>Mold Design & Resin Casting</h3><p>Designing molds and casting resin parts with precision.</p></div>
     </div>
-    <div class="skill-card">
-      <i class="fa-solid fa-database"></i>
-      <h3>SAP MDG (Master Data Governance)</h3>
-      <p>Lead in SAP MDG for maintaining data consistency, quality, and compliance across modules, ensuring accurate and reliable master data.</p>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="section reveal">
+    <div class="section-head">
+      <span class="section-num">/ 05</span>
+      <h2 class="section-title">My Projects</h2>
+      <div class="section-rule"></div>
     </div>
-    <div class="skill-card">
-      <i class="fa-solid fa-store"></i>
-      <h3>CEGID Retail</h3>
-      <p>In-depth knowledge of CEGID POS and CRM systems, enhancing retail operations, promotions, and stock/order management.</p>
-    </div>
-    <div class="skill-card">
-      <i class="fa-solid fa-project-diagram"></i>
-      <h3>Bitnami Redmine Adoption</h3>
-      <p>Configured and implemented Redmine for ticket and project management, customizing multi-level approval workflows for efficiency and scalability.</p>
-    </div>
-    <div class="skill-card">
-      <i class="fa-solid fa-network-wired"></i>
-      <h3>System Integration & Solution Design</h3>
-      <p>Experienced in API/EDI middleware integration, ensuring data flow between systems and connecting with eCommerce platforms like Lazada and Shopee.</p>
-    </div>
-    <div class="skill-card">
-      <i class="fa-solid fa-sitemap"></i>
-      <h3>Effective Flow Drafting</h3>
-      <p>Creating clear process flows and diagrams to align technical and business stakeholders with diverse backgrounds.</p>
-    </div>
-    <div class="skill-card">
-      <i class="fa-solid fa-compass"></i>
-      <h3>System Navigation & Adaptability</h3>
-      <p>Quickly adapts to new systems, identifying key features and efficiently navigating unfamiliar platforms.</p>
-    </div>
-    <div class="skill-card">
-      <i class="fa-solid fa-robot"></i>
-      <h3>AI Prompt Engineering</h3>
-      <p>Skilled in crafting, refining, and optimizing AI prompts to maximize accuracy, relevance, and alignment with objectives.</p>
-    </div>
-  </div>
 
-  <!-- Programming Languages & Tools -->
-<div class="timeline-role">PROGRAMMING LANGUAGES AND TOOLS</div>
-  <div class="key-skills-grid">
-
-    <div class="skill-card">
-  <i class="fa-solid fa-diagram-project"></i>
-  <h3>n8n Workflow Automation</h3>
-  <p>
-    Experienced in designing and developing workflow automation using n8n,
-    including orchestration of APIs, data transformation, scheduled processes,
-    and event-driven integrations. Skilled in building production-ready workflows
-    with retry logic, error handling, monitoring, and scalable automation design
-    across enterprise systems.
-  </p>
-</div>
-
-  
-
-<div class="skill-card">
-  <i class="fa-brands fa-react"></i>
-  <h3>React.js Development</h3>
-  <p>
-    Proficient in building responsive and interactive user interfaces with React.js.  
-    Skilled in creating reusable components, managing application state with hooks and context API, and integrating REST APIs/GraphQL for dynamic content.  
-    Experienced in ensuring cross-browser compatibility, mobile responsiveness, and optimizing performance for modern single-page applications (SPAs).
-  </p>
-</div>
-
-<div class="skill-card">
-  <i class="fa-brands fa-react"></i>
-  <h3>React Native (Mobile App Development)</h3>
-  <p>
-    Experienced in developing cross-platform mobile applications using React Native,
-    primarily for Android environments. Skilled in building responsive mobile UI,
-    integrating APIs, managing application state, and delivering lightweight
-    business-focused mobile solutions aligned with enterprise workflows.
-  </p>
-</div>
-
-<div class="skill-card">
-  <i class="fa-solid fa-cart-shopping"></i>
-  <h3>Shopify Development</h3>
-  <p>
-    Experience customizing Shopify themes and implementing eCommerce enhancements,
-    including storefront customization, app integrations, workflow automation,
-    and API-based extensions to support digital commerce operations and business needs.
-  </p>
-</div>
-
-    <div class="skill-card">
-  <i class="fa-solid fa-microchip"></i>
-  <h3>UX/UI Design</h3>
-  <p>
-    Experienced in crafting intuitive, user-centric interfaces that balance aesthetics and functionality.  
-    Skilled in visual hierarchy, accessibility, responsive design, and usability testing to enhance efficiency and satisfaction.  
-    Proficient in wireframing, prototyping, and interaction design for practical workflows.  
-    Collaborates with frontend (HTML, CSS, React.js) and backend (Flask, APIs, databases) teams for seamless integration.  
-    Adept at iterative design, refining with user feedback to drive adoption and scalability.
-  </p>
-</div>
-
-  <div class="skill-card">
-  <i class="fa-solid fa-code"></i>
-  <h3>Python Development</h3>
-  <p>
-    Experienced in Python for automation, custom applications, data analysis, and API integration with external systems and services.  
-    Skilled in building web applications using Flask, creating RESTful APIs, integrating authentication flows, and connecting with databases for dynamic solutions.  
-    Proficient in designing backend logic that interacts seamlessly with front-end interfaces and third-party platforms, ensuring scalability and performance.
-  </p>
-</div>
-
-    <div class="skill-card">
-      <i class="fa-solid fa-microchip"></i>
-      <h3>Arduino IDE & IoT Integration</h3>
-      <p>Building IoT systems with Arduino ESP32, integrating wireless modules, TFT displays, and APIs for real-time visualization.</p>
-    </div>
-    <div class="skill-card">
-      <i class="fa-solid fa-file-code"></i>
-      <h3>Excel VBA / Macros</h3>
-      <p>Automating repetitive Excel tasks with advanced VBA macros, improving accuracy, efficiency, and workflows.</p>
-    </div>
-    <div class="skill-card">
-      <i class="fa-solid fa-comments"></i>
-      <h3>Chatbot Development</h3>
-      <p>Developed Dialogflow + LINE chatbots with booking/payment systems and interactive Flex Messages via JSON.</p>
-    </div>
-    <div class="skill-card">
-  <i class="fa-solid fa-database"></i>
-  <h3>Database Design & SQL (incl. PostgreSQL)</h3>
-  <p>
-    Skilled in relational database design, schema modeling, and SQL for data management. Experienced in writing queries, stored procedures, and triggers, with focus on performance and reliability. Practical experience includes PostgreSQL integration with Flask, Django, and React.js, plus knowledge of backup, replication, and monitoring.
-  </p>
-</div>
-
-
-
-    <div class="skill-card">
-      <i class="fa-solid fa-exchange-alt"></i>
-      <h3>API Integration & File Transfers</h3>
-      <p>Implemented REST APIs, EDI workflows, and SFTP transfers for secure, automated system-to-system communication.</p>
-    </div>
-    <div class="skill-card">
-      <i class="fa-solid fa-bezier-curve"></i>
-      <h3>Postman & API Testing</h3>
-      <p>Proficient in Postman for creating collections, testing APIs, automating tests, and validating integrations.</p>
-    </div>
-  </div>
-
-  <!-- Engineering Software Skills -->
-<div class="timeline-role">ENGINEERING SOFTWARE SKILLS</div>
-<div class="sub-role">CAD | CAM | CAE Solutions</div>
-  <div class="key-skills-grid">
-    <div class="skill-card"><i class="fa-solid fa-cube"></i><h3>Solid Edge</h3><p>3D CAD part design, sheet metal, assembly modeling, 2D drafting, simulation, and wiring harness design.</p></div>
-    <div class="skill-card"><i class="fa-solid fa-drafting-compass"></i><h3>Siemens NX</h3><p>Advanced product design, CAM machining, mold design, and machine-ready code generation.</p></div>
-    <div class="skill-card"><i class="fa-solid fa-cogs"></i><h3>Dassault CATIA</h3><p>3D modeling, assembly design, and complex surface modeling.</p></div>
-    <div class="skill-card"><i class="fa-solid fa-toolbox"></i><h3>SolidWorks</h3><p>Parametric modeling, assemblies, and simulation expertise.</p></div>
-    <div class="skill-card"><i class="fa-solid fa-industry"></i><h3>ZW3D CAD & CAM</h3><p>Proficient in CAD design and CAM manufacturing processes.</p></div>
-    <div class="skill-card"><i class="fa-solid fa-chart-line"></i><h3>Femap CAE</h3><p>Finite element analysis (FEA) for structural and thermal simulations.</p></div>
-    <div class="skill-card"><i class="fa-solid fa-wind"></i><h3>Siemens Simcenter 3D</h3><p>Product performance simulation and fluid dynamics analysis.</p></div>
-    <div class="skill-card"><i class="fa-solid fa-tools"></i><h3>Forming Suite (FTI)</h3><p>Sheet metal forming simulation and optimization.</p></div>
-    <div class="skill-card"><i class="fa-solid fa-eye"></i><h3>3DViewstation</h3><p>3D visualization and analysis of CAD files.</p></div>
-    <div class="skill-card"><i class="fa-solid fa-network-wired"></i><h3>Cimco Edit</h3><p>CNC programming, editing, and machine data communication.</p></div>
-  </div>
-
-  <!-- 3D Printing & Sculpturing -->
-<div class="sub-role">3D PRINTING & SCULPTURING</div>
-  <div class="key-skills-grid">
-    <div class="skill-card"><i class="fa-solid fa-monument"></i><h3>ZBrush</h3><p>Digital sculpting for 3D models, character design, and detailing.</p></div>
-    <div class="skill-card"><i class="fa-solid fa-blender"></i><h3>Blender</h3><p>Basic 3D modeling, rendering, and animation skills.</p></div>
-    <div class="skill-card"><i class="fa-solid fa-print"></i><h3>Chitubox Slicer</h3><p>Slicing and preparing 3D resin prints with optimized settings.</p></div>
-    <div class="skill-card"><i class="fa-solid fa-cube"></i><h3>Cura</h3><p>Optimizing FDM slicing for better print quality and efficiency.</p></div>
-    <div class="skill-card"><i class="fa-solid fa-paint-brush"></i><h3>Keyshot Render</h3><p>Creating high-quality visualizations and renders of 3D models.</p></div>
-    <div class="skill-card"><i class="fa-solid fa-shapes"></i><h3>Mold Design & Resin Casting</h3><p>Designing molds and casting resin parts with precision.</p></div>
-  </div>
-</div>
-
-
-            <!-- My Projects Section -->
-<div id="projects" class="section full-width animate-on-scroll">
-  <h2 class="section-title">MY PROJECTS</h2>
-
-  <!-- Project 1 -->
-  <div class="project-item">
-    <div style="display: flex; align-items: flex-start; gap: 20px; flex-wrap: wrap;">
-      <div style="flex: 0 0 200px; text-align: center;">
-        <img src="project1_thumbnail_img.jpg" alt="Bitcoin & Crypto Ticker Thumbnail" style="max-width: 100%; border-radius: 10px;">
-      </div>
-      <div style="flex: 1;">
-        <div class="item-title">Bitcoin & Crypto Ticker (ESP32)</div>
-        <div class="item-period">2024</div>
-        <div class="item-description">
-          Displays real-time cryptocurrency prices using Binance API, shown on a TFT display with color-coded indicators.  
-          Built on ESP32, fully standalone (no external server). Demonstrates skills in API integration, embedded systems,  
-          and real-time data visualization.
+    <article class="proj">
+      <div class="proj-head">
+        <div class="proj-thumb"><img src="project1_thumbnail_img.jpg" alt=""></div>
+        <div class="proj-body">
+          <h3 class="proj-title">Bitcoin & Crypto Ticker (ESP32)</h3>
+          <span class="proj-year">2024 — Embedded · API</span>
+          <p class="proj-desc">Real-time cryptocurrency prices via Binance API on a TFT display with color-coded indicators. ESP32-based and fully standalone — demonstrating API integration, embedded systems and real-time data visualization.</p>
         </div>
       </div>
-    </div>
-    <!-- Additional images -->
-    <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr; gap: 15px;">
-
-      <img src="project1_v2_img0.jpeg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project1_v2_img1.jpeg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project1_v2_img2.jpeg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project1_v2_img3.jpeg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project1_v2_img4.jpeg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project1_v2_img5.jpeg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project1_v2_img6.jpeg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project1_v2_img7.jpeg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project1_v2_img8.jpeg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project1_v2_img9.jpeg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project1_v2_img10.jpeg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      
-        
-      <img src="project1_img0.jpg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project1_img1.jpg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project1_img2.jpg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project1_img3.jpg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project1_img4.jpg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project1_img5.jpg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project1_img6.jpg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project1_img7.jpg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project1_img8.jpg" alt="Project 1 Screenshot" style="width:100%; border-radius:8px;">
-
-      <!-- add more as needed -->
-    </div>
-  </div>
-
-  <!-- Project 2 -->
-  <div class="project-item">
-    <div style="display: flex; align-items: flex-start; gap: 20px; flex-wrap: wrap;">
-      <div style="flex: 0 0 200px; text-align: center;">
-        <img src="project2_thumbnail_img.jpg" alt="PromptPay QR Generator Thumbnail" style="max-width: 100%; border-radius: 10px;">
+      <div class="gallery">
+        <img src="project1_v2_img0.jpeg" alt=""><img src="project1_v2_img1.jpeg" alt=""><img src="project1_v2_img2.jpeg" alt="">
+        <img src="project1_v2_img3.jpeg" alt=""><img src="project1_v2_img4.jpeg" alt=""><img src="project1_v2_img5.jpeg" alt="">
+        <img src="project1_v2_img6.jpeg" alt=""><img src="project1_v2_img7.jpeg" alt=""><img src="project1_v2_img8.jpeg" alt="">
+        <img src="project1_v2_img9.jpeg" alt=""><img src="project1_v2_img10.jpeg" alt="">
+        <img src="project1_img0.jpg" alt=""><img src="project1_img1.jpg" alt=""><img src="project1_img2.jpg" alt="">
+        <img src="project1_img3.jpg" alt=""><img src="project1_img4.jpg" alt=""><img src="project1_img5.jpg" alt="">
+        <img src="project1_img6.jpg" alt=""><img src="project1_img7.jpg" alt=""><img src="project1_img8.jpg" alt="">
       </div>
-      <div style="flex: 1;">
-        <div class="item-title">PromptPay QR Generator</div>
-        <div class="item-period">2024</div>
-        <div class="item-description">
-          Generates fixed-amount PromptPay QR codes for SCB and KBANK. Supports phone number / Thai national ID (SCB)  
-          and reference account with optional fields (KBANK). Encodes data into scannable QR for personal and business use.
+    </article>
+
+    <article class="proj">
+      <div class="proj-head">
+        <div class="proj-thumb"><img src="project2_thumbnail_img.jpg" alt=""></div>
+        <div class="proj-body">
+          <h3 class="proj-title">PromptPay QR Generator</h3>
+          <span class="proj-year">2024 — Web · FinTech</span>
+          <p class="proj-desc">Generates fixed-amount PromptPay QR codes for SCB and KBANK. Supports phone / Thai national ID (SCB) and reference account (KBANK), encoding scannable QRs for personal and business use.</p>
         </div>
       </div>
-    </div>
-    <!-- Additional images -->
-    <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr; gap: 15px;">
-
-      <img src="project2_v2_img0.jpeg" alt="Project 2 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project2_v2_img1.jpeg" alt="Project 2 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project2_v2_img2.jpeg" alt="Project 2 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project2_v2_img3.jpeg" alt="Project 2 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project2_v2_img4.jpeg" alt="Project 2 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project2_v2_img5.jpeg" alt="Project 2 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project2_v2_img6.jpeg" alt="Project 2 Screenshot" style="width:100%; border-radius:8px;">
-
-      <img src="project2_img0.jpg" alt="project 2 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project2_img1.jpg" alt="project 2 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project2_img2.jpg" alt="project 2 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project2_img3.jpg" alt="project 2 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project2_img4.jpg" alt="project 2 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project2_img5.jpg" alt="project 2 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project2_img6.jpg" alt="project 2 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project2_img7.jpg" alt="project 2 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project2_img8.jpg" alt="project 2 Screenshot" style="width:100%; border-radius:8px;">
-
-    </div>
-  </div>
-
-  <!-- Project 3 -->
-  <div class="project-item">
-    <div style="display: flex; align-items: flex-start; gap: 20px; flex-wrap: wrap;">
-      <div style="flex: 0 0 200px; text-align: center;">
-        <img src="project3_thumbnail_img.jpg" alt="TOTP Authenticator Tool Thumbnail" style="max-width: 100%; border-radius: 10px;">
+      <div class="gallery">
+        <img src="project2_v2_img0.jpeg" alt=""><img src="project2_v2_img1.jpeg" alt=""><img src="project2_v2_img2.jpeg" alt="">
+        <img src="project2_v2_img3.jpeg" alt=""><img src="project2_v2_img4.jpeg" alt=""><img src="project2_v2_img5.jpeg" alt="">
+        <img src="project2_v2_img6.jpeg" alt="">
+        <img src="project2_img0.jpg" alt=""><img src="project2_img1.jpg" alt=""><img src="project2_img2.jpg" alt="">
+        <img src="project2_img3.jpg" alt=""><img src="project2_img4.jpg" alt=""><img src="project2_img5.jpg" alt="">
+        <img src="project2_img6.jpg" alt=""><img src="project2_img7.jpg" alt=""><img src="project2_img8.jpg" alt="">
       </div>
-      <div style="flex: 1;">
-        <div class="item-title">TOTP Authenticator Tool (ESP32)</div>
-        <div class="item-period">2025</div>
-        <div class="item-description">
-          ESP32-based tool replicating Google Authenticator for secure 2FA. Supports QR import/export, manual key entry,  
-          local account storage, and OTP generation. Built-in display + UI provide a reliable backup to smartphone-only solutions.
+    </article>
+
+    <article class="proj">
+      <div class="proj-head">
+        <div class="proj-thumb"><img src="project3_thumbnail_img.jpg" alt=""></div>
+        <div class="proj-body">
+          <h3 class="proj-title">TOTP Authenticator Tool (ESP32)</h3>
+          <span class="proj-year">2025 — Embedded · Security</span>
+          <p class="proj-desc">ESP32 tool replicating Google Authenticator for secure 2FA. QR import/export, manual entry, local account storage and OTP generation — a reliable backup to smartphone-only solutions.</p>
         </div>
       </div>
-    </div>
-    <!-- Additional images -->
-    <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr; gap: 15px;">
-
-      <img src="project3_img0.jpg" alt="project 3 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project3_img1.jpg" alt="project 3 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project3_img2.jpg" alt="project 3 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project3_img3.jpg" alt="project 3 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project3_img4.jpg" alt="project 3 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project3_img5.jpg" alt="project 3 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project3_img6.jpg" alt="project 3 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project3_img7.jpg" alt="project 3 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project3_img8.jpg" alt="project 3 Screenshot" style="width:100%; border-radius:8px;">
-
-    </div>
-  </div>
-
-  <!-- Project 4 -->
-  <div class="project-item">
-    <div style="display: flex; align-items: flex-start; gap: 20px; flex-wrap: wrap;">
-      <div style="flex: 0 0 200px; text-align: center;">
-        <img src="project4_thumbnail_img.png" alt="Chok App" style="max-width: 100%; border-radius: 10px;">
+      <div class="gallery">
+        <img src="project3_img0.jpg" alt=""><img src="project3_img1.jpg" alt=""><img src="project3_img2.jpg" alt="">
+        <img src="project3_img3.jpg" alt=""><img src="project3_img4.jpg" alt=""><img src="project3_img5.jpg" alt="">
+        <img src="project3_img6.jpg" alt=""><img src="project3_img7.jpg" alt=""><img src="project3_img8.jpg" alt="">
       </div>
-      <div style="flex: 1;">
-        <div class="item-title">Centric PLM API App</div>
-        <div class="item-period">2025</div>
-        <div class="item-description">
-          A Python-based web application built on Flask to streamline interactions with the Centric PLM platform. It automates key operations such as importing and editing taxonomy structures, managing product master data, triggering outbound API processes, and retrieving targeted information via RESTful endpoints.
-          The platform provides a secure web interface for business users and an API layer for IT integration, enabling seamless collaboration across teams. Application version control ensures that every release of the tool is tracked, with full transparency into new features, configuration updates, and workflow revisions. This allows rollback to earlier builds when needed and supports consistent, well-governed release management across environments.
-          Security is embedded at every layer: LDAP authentication validates user credentials against Active Directory and dynamically adapts permissions based on department, title, and group membership. Additional safeguards include domain suffix validation, time-based OTP for sensitive operations, and AES encryption to protect stored credentials, API tokens, and business-critical data.
-          By reducing manual effort, improving governance, and ensuring real-time access to accurate information, the tool empowers business users to achieve greater efficiency while enabling IT teams to manage scalable, secure, and version-controlled operations. Together, it enhances productivity, consistency, and confidence across the organization.
+    </article>
+
+    <article class="proj">
+      <div class="proj-head">
+        <div class="proj-thumb"><img src="project4_thumbnail_img.png" alt=""></div>
+        <div class="proj-body">
+          <h3 class="proj-title">Centric PLM API App</h3>
+          <span class="proj-year">2025 — Python · Flask · Enterprise</span>
+          <p class="proj-desc">Python/Flask web app streamlining Centric PLM: taxonomy import/edit, master data management, outbound API processes and REST retrieval. Secure web UI, API layer for IT, version control with rollback, LDAP/AD auth with dynamic permissions, domain validation, TOTP for sensitive ops and AES encryption for credentials/tokens.</p>
         </div>
       </div>
-    </div>
-    <!-- Additional images -->
-    <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr; gap: 15px;">
-
-      <img src="project4_img1.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img1_1.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img2.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img3.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img4.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img5.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img6.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img7.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img8.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img9.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img10.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img11.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img12.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img13.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img14.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img15.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img16.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img17.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;"> 
-      <img src="project4_img18.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img19.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img20.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img21.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      <img src="project4_img22.png" alt="project 4 Screenshot" style="width:100%; border-radius:8px;">
-      
-    </div>
-  </div>
-
-</div>
-
-
-
-       <!-- Personal Information Section -->
-<div id="personal" class="section full-width animate-on-scroll">
-  <h2 class="section-title">PERSONAL INFORMATION</h2>
-
-  <!-- Card Container -->
-  <div style="display: flex; flex-direction: column; gap: 20px;">
-
-    <!-- Card 1: Personality -->
-    <div class="info-card" style="padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); background:#fff;">
-
-      <!-- Title -->
-      <div class="timeline-role" style="margin-bottom:15px; font-size:1.2rem; font-weight:600;">
-        <i class="fa-solid fa-brain" style="color:#667eea; margin-right:8px;"></i> Personality
+      <div class="gallery">
+        <img src="project4_img1.png" alt=""><img src="project4_img1_1.png" alt=""><img src="project4_img2.png" alt="">
+        <img src="project4_img3.png" alt=""><img src="project4_img4.png" alt=""><img src="project4_img5.png" alt="">
+        <img src="project4_img6.png" alt=""><img src="project4_img7.png" alt=""><img src="project4_img8.png" alt="">
+        <img src="project4_img9.png" alt=""><img src="project4_img10.png" alt=""><img src="project4_img11.png" alt="">
+        <img src="project4_img12.png" alt=""><img src="project4_img13.png" alt=""><img src="project4_img14.png" alt="">
+        <img src="project4_img15.png" alt=""><img src="project4_img16.png" alt=""><img src="project4_img17.png" alt="">
+        <img src="project4_img18.png" alt=""><img src="project4_img19.png" alt=""><img src="project4_img20.png" alt="">
+        <img src="project4_img21.png" alt=""><img src="project4_img22.png" alt="">
       </div>
+    </article>
+  </section>
 
-      <!-- Top header image -->
-      <img src="16personalities_img.jpg" 
-           alt="16 Personalities Banner" 
-           style="width:60%; max-height:200px; object-fit:cover; border-radius:8px; margin:0 auto 20px auto; display:block;">
-
-      <!-- Content with thumbnail -->
-      <div style="display:flex; align-items:flex-start; gap:15px; margin-bottom:15px;">
-        <!-- Thumbnail -->
-        <img src="intj_img.jpg" 
-             alt="INTJ Thumbnail" 
-             style="width:35%; border-radius:8px; flex-shrink:0;">
-
-        <!-- Text -->
-        <div style="flex:1;">
-          <p><strong>Personality Type:</strong> Logician (INTJ-T)</p>
+  <!-- PERSONAL -->
+  <section id="personal" class="section reveal">
+    <div class="section-head">
+      <span class="section-num">/ 06</span>
+      <h2 class="section-title">Personal</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="tl-role"><i class="fa-solid fa-brain"></i> Personality</div>
+        <img src="16personalities_img.jpg" alt="" style="width:100%; max-height:200px; object-fit:cover; border-radius:12px; margin-bottom:14px">
+        <div style="display:flex; gap:14px; align-items:flex-start">
+          <img src="infp_img.jpg" alt="INFP-T" style="width:110px; border-radius:10px; border:1px solid var(--border)">
+          <div>
+            <p style="margin-bottom:8px"><strong>Type:</strong> Mediator (INFP-T)</p>
+            <a href="https://www.16personalities.com/infp-personality" target="_blank" rel="noopener" style="color:var(--accent); font-weight:500">Learn more →</a>
+          </div>
         </div>
       </div>
-
-      <!-- Learn More (separate row, centered) -->
-      <div style="text-align:center; margin-bottom:5px;">
-        <a href="https://www.16personalities.com/intj-personality" 
-           target="_blank" 
-           style="color:#667eea; font-weight:500; text-decoration:none; display:inline-block;">
-          Learn more about the INTJ Personalities type →
-        </a>
+      <div class="info-card" id="contact" style="scroll-margin-top:80px">
+        <div class="tl-role"><i class="fa-solid fa-id-card"></i> Contact</div>
+        <div class="info-row"><i class="fa-solid fa-user"></i><span><strong>Name:</strong>&nbsp;Chokchai Thawatcharaporn</span></div>
+        <div class="info-row"><i class="fa-solid fa-cake-candles"></i><span><strong>Age:</strong>&nbsp;<span id="ageVal">—</span> · 17 Apr 1994</span></div>
+        <div class="info-row"><i class="fa-solid fa-envelope"></i><span><strong>Email:</strong>&nbsp;<a href="mailto:ct_chok@hotmail.com" style="color:var(--accent)">ct_chok@hotmail.com</a></span></div>
+        <div class="info-row"><i class="fa-solid fa-phone"></i><span><strong>Phone:</strong>&nbsp;<a href="tel:+66859941717" style="color:var(--accent)">+66 85 994 1717</a></span></div>
+        <div class="info-row"><i class="fa-brands fa-linkedin"></i><span><strong>LinkedIn:</strong>&nbsp;<a href="https://linkedin.com/in/chokchait" target="_blank" rel="noopener" style="color:var(--accent)">linkedin.com/in/chokchait</a></span></div>
+        <div class="info-row"><i class="fa-solid fa-location-dot"></i><span><strong>Address:</strong>&nbsp;Bangkok, Thailand</span></div>
       </div>
-    </div> <!-- ✅ closes Card 1 -->
+    </div>
+  </section>
 
-    <!-- Contact Card -->
-<div class="info-card" style="padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); background:#fff;">
-  <div class="timeline-role" style="margin-bottom:15px; font-size:1.2rem; font-weight:600;">
-    <i class="fa-solid fa-id-card" style="color:#667eea; margin-right:8px;"></i> Contact
-  </div>
+  <footer>
+    <div id="crypto-prices" class="btc-card"></div>
+    <div style="margin-top:18px">© 2025 Chokchai Thawatcharaporn. All rights reserved.</div>
+  </footer>
 
-  <!-- Contact rows -->
-  <div style="display:flex; align-items:center; margin-bottom:10px;">
-    <i class="fa-solid fa-user" style="color:#667eea; width:20px; text-align:center; margin-right:8px;"></i>
-    <span><strong>Name:</strong> Chokchai Thawatcharaporn</span>
   </div>
+</main>
 
-  <div style="display:flex; align-items:center; margin-bottom:10px;">
-    <i class="fa-solid fa-cake-candles" style="color:#667eea; width:20px; text-align:center; margin-right:8px;"></i>
-    <span><strong>Age:</strong> 31 yrs | 17 Apr 1994 (Sun)</span>
-  </div>
-
-  <div style="display:flex; align-items:center; margin-bottom:10px;">
-    <i class="fa-solid fa-envelope" style="color:#667eea; width:20px; text-align:center; margin-right:8px;"></i>
-    <span><strong>Email:</strong> 
-      <a href="mailto:ct_chok@hotmail.com" style="color:#667eea; text-decoration:none;">
-        ct_chok@hotmail.com
-      </a>
-    </span>
-  </div>
-
-  <div style="display:flex; align-items:center; margin-bottom:10px;">
-    <i class="fa-solid fa-phone" style="color:#667eea; width:20px; text-align:center; margin-right:8px;"></i>
-    <span><strong>Phone:</strong> 
-      <a href="tel:+66859941717" style="color:#667eea; text-decoration:none;">
-        +66 85 994 1717
-      </a>
-    </span>
-  </div>
-
-  <div style="display:flex; align-items:center; margin-bottom:10px;">
-    <i class="fa-brands fa-linkedin" style="color:#0077b5; width:20px; text-align:center; margin-right:8px;"></i>
-    <span><strong>LinkedIn:</strong> 
-      <a href="https://linkedin.com/in/chokchait" target="_blank" style="color:#667eea; text-decoration:none;">
-        linkedin.com/in/chokchait
-      </a>
-    </span>
-  </div>
-
-  <div style="display:flex; align-items:center;">
-    <i class="fa-solid fa-location-dot" style="color:#667eea; width:20px; text-align:center; margin-right:8px;"></i>
-    <span><strong>Address:</strong> Bangkok, Thailand</span>
-  </div>
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="lb-btn lb-close" id="lbClose" aria-label="Close">✕</button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous">‹</button>
+  <img id="lbImg" alt="">
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Next">›</button>
+  <div class="lb-counter" id="lbCounter"></div>
 </div>
 
-
-
-<!-- ✅ Footer Section with BTCUSDT Card -->
-<footer style="margin-top:40px; padding:20px 0; text-align:center; font-size:0.9rem; color:#777; border-top:1px solid #ddd;">
-
-  <!-- BTCUSDT Price Card -->
-<div id="crypto-prices" class="btc-usdt-card">
-  <!-- Script will inject price here -->
-</div>
-
-
-  <!-- Copyright -->
-  <div>
-    © 2025 Chokchai Thawatcharaporn. All rights reserved.
-  </div>
-</footer>
-
-
-  </div>
-</div>
-
-
-
-    <script>
-        // Ensure page starts at top on load
-        window.addEventListener('load', () => {
-            window.scrollTo(0, 0);
-        });
-
-        // Also handle page refresh/reload
-        window.addEventListener('beforeunload', () => {
-            window.scrollTo(0, 0);
-        });
-
-        // Mobile menu toggle
-        const hamburger = document.querySelector('.hamburger');
-        const navMenu = document.querySelector('.nav-menu');
-
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navMenu.classList.toggle('active');
-        });
-
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
-            });
-        });
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Active navigation link highlighting
-        const sections = document.querySelectorAll('section, .header, .section');
-        const navLinks = document.querySelectorAll('.nav-link');
-
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (pageYOffset >= (sectionTop - 150)) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${current}`) {
-                    link.classList.add('active');
-                }
-            });
-        });
-
-        // Animate on scroll functionality
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animated');
-                }
-            });
-        }, observerOptions);
-
-        // Observe all animate-on-scroll elements
-        document.querySelectorAll('.animate-on-scroll').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Animate skill bars on scroll
-        const skillBars = document.querySelectorAll('.skill-progress');
-        const skillObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const width = entry.target.style.width;
-                    entry.target.style.width = '0%';
-                    setTimeout(() => {
-                        entry.target.style.width = width;
-                    }, 200);
-                }
-            });
-        }, observerOptions);
-
-        skillBars.forEach(bar => {
-            skillObserver.observe(bar);
-        });
-
-
-
-        let lastPrice = null; // Track the last price
-
-async function fetchBinanceData() {
-  const priceEndpoint = 'https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT';
-  const statsEndpoint = 'https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT';
-
-  try {
-    const [priceRes, statsRes] = await Promise.all([
-      fetch(priceEndpoint),
-      fetch(statsEndpoint)
-    ]);
-
-    const priceData = await priceRes.json();
-    const statsData = await statsRes.json();
-    displayCryptoPrice(priceData, statsData);
-
-  } catch (error) {
-    console.error('Error fetching Binance data:', error);
+<script>
+  // THEME TOGGLE
+  const root = document.documentElement;
+  const saved = localStorage.getItem('theme');
+  if (saved) root.setAttribute('data-theme', saved);
+  else if (window.matchMedia('(prefers-color-scheme: light)').matches) root.setAttribute('data-theme','light');
+  function toggleTheme(){
+    const cur = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', cur);
+    localStorage.setItem('theme', cur);
   }
-}
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  document.getElementById('themeToggleMobile').addEventListener('click', toggleTheme);
 
-function displayCryptoPrice(priceData, statsData) {
-  const container = document.getElementById('crypto-prices');
-  container.innerHTML = ''; // Clear existing
+  // MOBILE SIDEBAR + backdrop
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  const menuBtn = document.getElementById('menuBtn');
+  function openSidebar(){ sidebar.classList.add('open'); backdrop.classList.add('show'); menuBtn.classList.add('open'); document.body.classList.add('no-scroll'); }
+  function closeSidebar(){ sidebar.classList.remove('open'); backdrop.classList.remove('show'); menuBtn.classList.remove('open'); document.body.classList.remove('no-scroll'); }
+  menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+  backdrop.addEventListener('click', closeSidebar);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
 
-  const currentPrice = parseFloat(priceData.price);
-  const priceChange = parseFloat(statsData.priceChange);
-  const priceChangePercentage = parseFloat(statsData.priceChangePercent);
+  // Smooth scroll nav — fix mobile scroll positions, close sidebar first
+  document.querySelectorAll('.nav-link[href^="#"]').forEach(link => {
+    link.addEventListener('click', e => {
+      const id = link.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      closeSidebar();
+      // wait for sidebar transition + layout settle, then scroll with proper offset
+      setTimeout(() => {
+        const isMobile = window.innerWidth <= 960;
+        const offset = id === 'home' ? 0 : (isMobile ? 72 : 24);
+        const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }, 60);
+    });
+  });
 
-  const formattedPrice = currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  // ACTIVE NAV
+  const sections = document.querySelectorAll('section[id], header[id]');
+  const navLinks = document.querySelectorAll('.sidebar .nav-link[href^="#"]');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) cur = s.id; });
+    navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + cur));
+  });
 
-  let priceColor = '#2c3e50'; // default
-  if (lastPrice !== null) {
-    if (currentPrice > lastPrice) {
-      priceColor = '#2EBD85'; // Green
-    } else if (currentPrice < lastPrice) {
-      priceColor = '#F6465D'; // Red
-    }
-  }
-  lastPrice = currentPrice;
-
-  let changeColor = priceChangePercentage >= 0 ? '#2EBD85' : '#F6465D';
-  const formattedChange = priceChange.toFixed(2);
-  const formattedPercentage = priceChangePercentage.toFixed(2);
-
-  const priceCard = document.createElement('div');
-  priceCard.innerHTML = `
-    <h5 style="margin:0 0 8px 0; font-size:1rem; font-weight:600;">
-      <img src="bitcoin.png" alt="BTC" style="width:18px; vertical-align:middle; margin-right:6px;">
-      ${priceData.symbol}
-    </h5>
-    <p class="price" style="margin:5px 0; font-size:1.1rem; font-weight:700; color:${priceColor};">
-      $${formattedPrice}
-    </p>
-    <p style="margin:0; font-size:0.85rem; color:#555;">24h Change</p>
-    <p style="margin:0; font-size:0.85rem; color:${changeColor};">
-      ${formattedChange} (${formattedPercentage}%)
-    </p>
-  `;
-
-  container.appendChild(priceCard);
-}
-
-// Update every 5s (1s is too aggressive for Binance free API)
-setInterval(fetchBinanceData, 5000);
-fetchBinanceData();
-
-const apiUrl = "https://script.google.com/macros/s/AKfycbxHYbCJNaLoVR3Q5mOruOA5lt15xoNwGWknsWbSlKzcwL_T-wtOJv6wnWzxWVCKAzxqEg/exec"; 
-
-  // Reuse same visitorId across pages
-  let visitorId = localStorage.getItem("visitor_id");
-  if (!visitorId) {
-    visitorId = Math.random().toString(36).substring(2) + Date.now().toString(36);
-    localStorage.setItem("visitor_id", visitorId);
-  }
-
-  // Detect browser + OS
-  function parseUserAgent() {
-    const ua = navigator.userAgent;
-    let browser = "Unknown", os = "Unknown";
-
-    if (/chrome|crios|crmo/i.test(ua)) browser = "Chrome";
-    else if (/firefox|fxios/i.test(ua)) browser = "Firefox";
-    else if (/safari/i.test(ua) && !/chrome/i.test(ua)) browser = "Safari";
-    else if (/edg/i.test(ua)) browser = "Edge";
-
-    if (/windows/i.test(ua)) os = "Windows";
-    else if (/mac os/i.test(ua)) os = "MacOS";
-    else if (/android/i.test(ua)) os = "Android";
-    else if (/iphone|ipad|ipod/i.test(ua)) os = "iOS";
-
-    return { browser, os };
-  }
-
-  function sendEvent(eventName) {
-    const { browser, os } = parseUserAgent();
-    fetch(apiUrl, {
-      method: "POST",
-      mode: "no-cors",   // bypass CORS for Apps Script
-      body: JSON.stringify({
-        event: eventName,
-        visitorId: visitorId,
-        page: "profile.html",
-        browser: browser,
-        os: os
-      }),
-      headers: { "Content-Type": "application/json" }
+  // REVEAL
+  if ('IntersectionObserver' in window) {
+    document.documentElement.classList.add('js');
+    const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && e.target.classList.add('show')), {threshold:.06, rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.reveal').forEach(el => { io.observe(el); });
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.reveal').forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) el.classList.add('show');
+      });
     });
   }
 
-  // Log when profile page loads
-  window.addEventListener("load", () => {
-    sendEvent("Profile Page Viewed");
-  });
+  // AGE AUTO-CALC (DOB: 1994-04-17)
+  (function(){
+    const dob = new Date(1994, 3, 17);
+    const now = new Date();
+    let age = now.getFullYear() - dob.getFullYear();
+    const m = now.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) age--;
+    const el = document.getElementById('ageVal');
+    if (el) el.textContent = age + ' yrs';
+  })();
 
-  // Log first scroll only
-  let scrolled = false;
-  window.addEventListener("scroll", () => {
-    if (!scrolled) {
-      scrolled = true;
-      sendEvent("Profile Page Scrolled");
+  // LIGHTBOX (project galleries)
+  (function(){
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    const lbCounter = document.getElementById('lbCounter');
+    let group = []; let idx = 0;
+
+    function show(i){
+      if (!group.length) return;
+      idx = (i + group.length) % group.length;
+      lbImg.src = group[idx].src;
+      lbImg.alt = group[idx].alt || '';
+      lbCounter.textContent = (idx + 1) + ' / ' + group.length;
     }
-  });
+    function open(galleryEl, startEl){
+      group = Array.from(galleryEl.querySelectorAll('img'));
+      const i = group.indexOf(startEl);
+      show(i >= 0 ? i : 0);
+      lb.classList.add('open');
+      document.body.classList.add('no-scroll');
+    }
+    function close(){ lb.classList.remove('open'); document.body.classList.remove('no-scroll'); }
 
-  // Log when bottom of page is reached
-  let bottomReached = false;
-  window.addEventListener("scroll", () => {
-    if (!bottomReached) {
-      const scrollTop = window.scrollY;
-      const viewportHeight = window.innerHeight;
-      const fullHeight = document.body.offsetHeight;
+    document.querySelectorAll('.gallery').forEach(g => {
+      g.addEventListener('click', e => {
+        const img = e.target.closest('img');
+        if (img) open(g, img);
+      });
+    });
+    document.getElementById('lbClose').addEventListener('click', close);
+    document.getElementById('lbPrev').addEventListener('click', e => { e.stopPropagation(); show(idx - 1); });
+    document.getElementById('lbNext').addEventListener('click', e => { e.stopPropagation(); show(idx + 1); });
+    lb.addEventListener('click', e => { if (e.target === lb) close(); });
+    document.addEventListener('keydown', e => {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowLeft') show(idx - 1);
+      else if (e.key === 'ArrowRight') show(idx + 1);
+    });
+  })();
 
-      if (scrollTop + viewportHeight >= fullHeight - 50) { // 50px threshold
-        bottomReached = true;
-        sendEvent("Profile Page Bottom Reached");
+  // BTC TICKER
+  let lastPrice = null;
+  async function btc(){
+    try{
+      const [p,s] = await Promise.all([
+        fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT').then(r=>r.json()),
+        fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT').then(r=>r.json())
+      ]);
+      const cur = parseFloat(p.price);
+      const chp = parseFloat(s.priceChangePercent);
+      const ch = parseFloat(s.priceChange);
+      const fmt = cur.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+      const trend = lastPrice===null ? 'var(--text)' : cur>lastPrice ? '#2ebd85' : cur<lastPrice ? '#f6465d' : 'var(--text)';
+      lastPrice = cur;
+      const chColor = chp>=0 ? '#2ebd85' : '#f6465d';
+      document.getElementById('crypto-prices').innerHTML = `
+        <h5><i class="fa-brands fa-bitcoin" style="color:#f7931a;margin-right:6px"></i>${p.symbol}</h5>
+        <div style="font-size:1.35rem;font-weight:600;font-family:var(--font-display);color:${trend}">$${fmt}</div>
+        <div style="font-size:.78rem;color:var(--text3);margin-top:6px">24h Change</div>
+        <div style="font-size:.85rem;color:${chColor};font-weight:500">${ch.toFixed(2)} (${chp.toFixed(2)}%)</div>`;
+    }catch(e){}
+  }
+  btc(); setInterval(btc, 5000);
+
+  // ============== VISITOR TRACKING (Google Apps Script) ==============
+  (function(){
+    const apiUrl = "https://script.google.com/macros/s/AKfycbxHYbCJNaLoVR3Q5mOruOA5lt15xoNwGWknsWbSlKzcwL_T-wtOJv6wnWzxWVCKAzxqEg/exec";
+    let visitorId = localStorage.getItem("visitor_id");
+    if (!visitorId) {
+      visitorId = Math.random().toString(36).substring(2) + Date.now().toString(36);
+      localStorage.setItem("visitor_id", visitorId);
+    }
+    function parseUserAgent() {
+      const ua = navigator.userAgent;
+      let browser = "Unknown", os = "Unknown";
+      if (/edg/i.test(ua)) browser = "Edge";
+      else if (/chrome|crios|crmo/i.test(ua)) browser = "Chrome";
+      else if (/firefox|fxios/i.test(ua)) browser = "Firefox";
+      else if (/safari/i.test(ua) && !/chrome/i.test(ua)) browser = "Safari";
+      if (/windows/i.test(ua)) os = "Windows";
+      else if (/android/i.test(ua)) os = "Android";
+      else if (/iphone|ipad|ipod/i.test(ua)) os = "iOS";
+      else if (/mac os/i.test(ua)) os = "MacOS";
+      else if (/linux/i.test(ua)) os = "Linux";
+      return { browser, os };
+    }
+    function sendEvent(eventName) {
+      const { browser, os } = parseUserAgent();
+      fetch(apiUrl, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify({
+          event: eventName,
+          visitorId: visitorId,
+          page: "profile_v2.html",
+          browser: browser,
+          os: os
+        }),
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+    window.addEventListener("load", () => sendEvent("Profile Page Viewed"));
+    let scrolled = false, bottomReached = false;
+    window.addEventListener("scroll", () => {
+      if (!scrolled) { scrolled = true; sendEvent("Profile Page Scrolled"); }
+      if (!bottomReached) {
+        if (window.scrollY + window.innerHeight >= document.body.offsetHeight - 50) {
+          bottomReached = true; sendEvent("Profile Page Bottom Reached");
+        }
       }
-    }
-  });
-    </script>
+    });
+  })();
+</script>
 </body>
-
 </html>
-
