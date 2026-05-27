@@ -37,11 +37,12 @@ html[data-theme="light"]{
   --noise-opacity:.2;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;font-size:15px}
+html{scroll-behavior:smooth;font-size:15px; overscroll-behavior-y:none}
 body{
   background:var(--bg); color:var(--text);
   font-family:var(--font-body); font-weight:400; line-height:1.65;
   overflow-x:hidden; -webkit-font-smoothing:antialiased;
+  overscroll-behavior-y:none;
   transition:background var(--transition), color var(--transition);
 }
 body::before{
@@ -94,9 +95,9 @@ ul{list-style:none}
   font-size:1.05rem; line-height:1; padding:0;
 }
 .theme-toggle:hover{border-color:var(--accent); color:var(--accent); transform:rotate(15deg)}
-.theme-toggle .tt-ic{display:none}
-html[data-theme="dark"] .theme-toggle .tt-sun{display:inline}
-html[data-theme="light"] .theme-toggle .tt-moon{display:inline}
+.theme-toggle .tt-ic{display:none; font-size:15px; line-height:1}
+html[data-theme="dark"] .theme-toggle .tt-moon{display:inline-flex}
+html[data-theme="light"] .theme-toggle .tt-sun{display:inline-flex}
 
 /* mobile sidebar toggle */
 .mobile-bar{
@@ -424,7 +425,7 @@ body.no-scroll{overflow:hidden}
   </div>
   <div style="display:flex; gap:8px">
     <button class="theme-toggle" id="themeToggleMobile" aria-label="Toggle theme">
-      <span class="tt-ic tt-sun">☀</span><span class="tt-ic tt-moon">☾</span>
+      <i class="tt-ic tt-moon fa-solid fa-moon"></i><i class="tt-ic tt-sun fa-solid fa-sun"></i>
     </button>
     <button class="menu-btn" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
@@ -453,7 +454,7 @@ body.no-scroll{overflow:hidden}
   <div class="sidebar-footer">
     <span class="sidebar-foot-meta">© 2025</span>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-      <span class="tt-ic tt-sun">☀</span><span class="tt-ic tt-moon">☾</span>
+      <i class="tt-ic tt-moon fa-solid fa-moon"></i><i class="tt-ic tt-sun fa-solid fa-sun"></i>
     </button>
   </div>
 </aside>
