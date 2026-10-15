@@ -102,3 +102,19 @@ test('mobile Bitcoin ticker handles blocked primary endpoints and uses labelled 
  const titles=await page.locator('#projects .proj-title').allTextContents();assert.match(titles[2],/Android/);assert.ok(titles.indexOf('AD Portal: Automated Onboarding & Offboarding')<titles.indexOf('Jaspal Rooms'));
  assert.equal(await page.locator('#project7 .gallery img').count(),12);await context.close();
 });
+test('confirmation follows downward drag, snaps back and animates dismissal',async()=>{
+ const {context,page}=await setup(390,844);await page.goto('http://127.0.0.1:4287/');
+ await page.locator('#viewProfileBtn').click();const dialog=page.getByRole('dialog');
+ await page.waitForFunction(()=>document.querySelector('.profile-sheet.open'));
+ const panel=page.locator('.profile-sheet-panel');await page.waitForTimeout(350);const box=await panel.boundingBox();
+ await page.mouse.move(140,box.y+60);await page.mouse.down();await page.mouse.move(140,box.y+80,{steps:5});await page.mouse.up();
+ assert.equal(await dialog.count(),1);await page.waitForTimeout(350);
+ await page.mouse.move(140,box.y+60);await page.mouse.down();await page.mouse.move(140,box.y+220,{steps:10});
+ assert.ok((await panel.boundingBox()).y>box.y+100);await page.mouse.up();
+ assert.equal(await dialog.getAttribute('class'),'profile-sheet closing');
+ await dialog.waitFor({state:'detached'});assert.equal(await page.locator('#viewProfileBtn').evaluate(el=>el===document.activeElement),true);
+ await page.locator('#viewProfileBtn').click();await page.waitForTimeout(350);
+ const handle=await page.locator('.sheet-handle').boundingBox();
+ await page.mouse.move(handle.x+handle.width/2,handle.y+2);await page.mouse.down();await page.mouse.move(handle.x+handle.width/2,handle.y+160,{steps:10});await page.mouse.up();await dialog.waitFor({state:'detached'});
+ await context.close();
+});

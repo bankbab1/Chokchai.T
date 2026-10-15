@@ -48,7 +48,7 @@ export function BtcTicker() {
             if (next) setQuote(next);
             setFailed(!next);
             setBusy(false);
-            timer = window.setTimeout(() => void refresh(), 30000);
+            timer = window.setTimeout(() => void refresh(), 15000);
         }
         const online = () => setRetry(value => value + 1);
         window.addEventListener('online', online);

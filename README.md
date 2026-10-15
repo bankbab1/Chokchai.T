@@ -30,7 +30,7 @@ The build generates `dist/` and synchronizes the two HTML entry points and bundl
 - One profile-view event per page mount; scroll and bottom-reached events fire once each. Requests use keepalive so the click event can survive page navigation.
 - Mobile sidebar, section navigation, active navigation, reveal animations and automatic age calculation.
 - All seven project galleries, including Jaspal Rooms' 13 screenshots; image overlay with previous/next, keyboard arrows, Escape and backdrop dismissal.
-- Bitcoin ticker refreshes every 30 seconds with Binance BTC/USDT data, a labelled Coinbase BTC/USD spot fallback, loading/error states and manual retry.
+- Bitcoin ticker refreshes every 15 seconds with Binance BTC/USDT data, a labelled Coinbase BTC/USD spot fallback, loading/error states and manual retry.
 - Existing font and icon CDN references remain. The landing confirmation uses a custom accessible dialog; SweetAlert has been removed.
 
 There was no encoding or encryption logic in the original pages to migrate. The AES text describes the Centric PLM project, not a feature of this portfolio.

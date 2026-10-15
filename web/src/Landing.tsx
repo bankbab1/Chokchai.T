@@ -14,7 +14,7 @@ export default function Landing() {
     <p className="role">Senior Digital Solution</p>
     <p className="summary">Welcome. Explore my CV, skills, and selected projects on the full profile.</p>
     <button className="landing-btn" id="viewProfileBtn" onClick={() => setConfirm(true)}>
-      View Profile <i className="fa-solid fa-arrow-right"></i>
+      View Profile <i className="fa-solid fa-chevron-right"></i>
     </button>
     <div className="foot">Bangkok · Available for opportunities</div>
     </main>
