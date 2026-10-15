@@ -6,11 +6,11 @@ import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 const baseline=JSON.parse(await readFile(new URL('./baseline.json',import.meta.url),'utf8'));
 let browser,server;
-before(async()=>{server=spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--port','4173'],{stdio:'ignore'});for(let i=0;i<100;i++){try{if((await fetch('http://localhost:4173')).ok)break;}catch{}await new Promise(r=>setTimeout(r,100));}browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_EXECUTABLE_PATH,args:['--no-sandbox']});});
+before(async()=>{server=spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--port','4287','--strictPort','--host','127.0.0.1'],{stdio:'ignore'});for(let i=0;i<100;i++){try{if((await fetch('http://127.0.0.1:4287')).ok)break;}catch{}await new Promise(r=>setTimeout(r,100));}browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_EXECUTABLE_PATH,args:['--no-sandbox']});});
 after(async()=>{await browser?.close();server?.kill();});
 async function setup(width=1365,height=900){const context=await browser.newContext({viewport:{width,height}});const page=await context.newPage();const events=[],errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('https://script.google.com/**',async route=>{events.push(JSON.parse(route.request().postData()));await route.fulfill({status:200,body:'ok'});});await page.route(/^https:\/\/(api\.binance\.com|data-api\.binance\.vision)\//,route=>route.fulfill({json:route.request().url().includes('24hr')?{lastPrice:'102500',priceChangePercent:'2.50',priceChange:'2500'}:{symbol:'BTCUSDT',price:'102500'}}));return {context,page,events,errors};}
 for(const name of ['index','profile'])test(`${name}: content, image URLs and responsive widths preserved`,async()=>{
- const {context,page,errors}=await setup();await page.goto(`http://localhost:4173/${name}.html`);await page.locator(name==='index'?'.landing-card':'#projects').waitFor();
+ const {context,page,errors}=await setup();await page.goto(`http://127.0.0.1:4287/${name}.html`);await page.locator(name==='index'?'.landing-card':'#projects').waitFor();
  const text=await page.locator('body').evaluate(el=>{const clone=el.cloneNode(true);clone.querySelectorAll('#ageVal,#crypto-prices,script').forEach(n=>n.remove());return clone.textContent.replace(/\s+/g,' ').trim();});
  // Whitespace between inline JSX nodes may differ from HTML formatting; compare words.
  const compact=s=>s.replace(/\s+/g,'');assert.equal(compact(text),compact(baseline[name].text));
@@ -19,12 +19,12 @@ for(const name of ['index','profile'])test(`${name}: content, image URLs and res
  assert.deepEqual(errors,[]);await context.close();
 });
 test('all original image files remain byte-identical',async()=>{for(const [file,hash]of Object.entries(baseline.assets))assert.equal(createHash('sha256').update(await readFile(file)).digest('hex'),hash,file);});
-test('welcome confirmation, theme persistence and Google Sheets payload',async()=>{const {context,page,events}=await setup();await page.goto('http://localhost:4173/');await page.locator('#viewProfileBtn').waitFor();await page.locator('#themeToggle').click();assert.equal(await page.evaluate(()=>localStorage.getItem('theme')),'light');await page.locator('#viewProfileBtn').click();await page.getByRole('button',{name:'Yes, View Profile'}).click();await page.waitForURL('**/profile.html');await page.locator('#projects').waitFor();await page.waitForTimeout(150);assert.equal(await page.locator('html').getAttribute('data-theme'),'light');assert.deepEqual(events.slice(0,3).map(e=>e.event),['Landing Page Viewed','View Profile Clicked','Profile Page Viewed']);assert.equal(events[2].page,'profile_v2.html');assert.ok(events[0].visitorId);assert.equal(events[0].visitorId,events[2].visitorId);for(const e of events)assert.deepEqual(Object.keys(e).sort(),['browser','event','os','page','visitorId']);await context.close();});
-test('mobile menu, project gallery keyboard controls, ticker and one-time scroll events',async()=>{const {context,page,events,errors}=await setup(375);await page.goto('http://localhost:4173/profile.html');await page.locator('#menuBtn').click();assert.ok(await page.locator('#sidebar').evaluate(el=>el.classList.contains('open')));await page.locator('.sidebar a[href="#projects"]').click();await page.waitForTimeout(500);assert.equal(await page.locator('#sidebar').evaluate(el=>el.classList.contains('open')),false);await page.locator('#project5 .gallery img').first().click();assert.equal(await page.locator('#lbCounter').textContent(),'1 / 13');await page.keyboard.press('ArrowRight');assert.equal(await page.locator('#lbCounter').textContent(),'2 / 13');await page.keyboard.press('ArrowLeft');assert.equal(await page.locator('#lbCounter').textContent(),'1 / 13');await page.keyboard.press('Escape');assert.equal(await page.locator('#lightbox').evaluate(el=>el.classList.contains('open')),false);await page.evaluate(()=>scrollTo(0,document.body.scrollHeight));await page.waitForTimeout(300);await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(300);await page.evaluate(()=>scrollTo(0,document.body.scrollHeight));await page.waitForTimeout(300);assert.equal(events.filter(e=>e.event==='Profile Page Scrolled').length,1);assert.equal(events.filter(e=>e.event==='Profile Page Bottom Reached').length,1);assert.match(await page.locator('#crypto-prices').textContent(),/102,500.00/);assert.deepEqual(errors,[]);await context.close();});
+test('welcome confirmation, theme persistence and Google Sheets payload',async()=>{const {context,page,events}=await setup();await page.goto('http://127.0.0.1:4287/');await page.locator('#viewProfileBtn').waitFor();await page.locator('#themeToggle').click();assert.equal(await page.evaluate(()=>localStorage.getItem('theme')),'light');await page.locator('#viewProfileBtn').click();await page.getByRole('button',{name:'Yes, View Profile'}).click();await page.waitForURL('**/profile.html');await page.locator('#projects').waitFor();await page.waitForTimeout(150);assert.equal(await page.locator('html').getAttribute('data-theme'),'light');assert.deepEqual(events.slice(0,3).map(e=>e.event),['Landing Page Viewed','View Profile Clicked','Profile Page Viewed']);assert.equal(events[2].page,'profile_v2.html');assert.ok(events[0].visitorId);assert.equal(events[0].visitorId,events[2].visitorId);for(const e of events)assert.deepEqual(Object.keys(e).sort(),['browser','event','os','page','visitorId']);await context.close();});
+test('mobile menu, project gallery keyboard controls, ticker and one-time scroll events',async()=>{const {context,page,events,errors}=await setup(375);await page.goto('http://127.0.0.1:4287/profile.html');await page.locator('#menuBtn').click();assert.ok(await page.locator('#sidebar').evaluate(el=>el.classList.contains('open')));await page.locator('.sidebar a[href="#projects"]').click();await page.waitForTimeout(500);assert.equal(await page.locator('#sidebar').evaluate(el=>el.classList.contains('open')),false);await page.locator('#project5 .gallery img').first().click();assert.equal(await page.locator('#lbCounter').textContent(),'1 / 13');await page.keyboard.press('ArrowRight');assert.equal(await page.locator('#lbCounter').textContent(),'2 / 13');await page.keyboard.press('ArrowLeft');assert.equal(await page.locator('#lbCounter').textContent(),'1 / 13');await page.keyboard.press('Escape');assert.equal(await page.locator('#lightbox').evaluate(el=>el.classList.contains('open')),false);await page.evaluate(()=>scrollTo(0,document.body.scrollHeight));await page.waitForTimeout(300);await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(300);await page.evaluate(()=>scrollTo(0,document.body.scrollHeight));await page.waitForTimeout(300);assert.equal(events.filter(e=>e.event==='Profile Page Scrolled').length,1);assert.equal(events.filter(e=>e.event==='Profile Page Bottom Reached').length,1);assert.match(await page.locator('#crypto-prices').textContent(),/102,500.00/);assert.deepEqual(errors,[]);await context.close();});
 test('scroll-to-top clears deep anchors and keeps the entire portrait below the mobile header',async()=>{
  const {context,page,errors}=await setup(390,844);
  await page.emulateMedia({reducedMotion:'reduce'});
- await page.goto('http://localhost:4173/profile.html#home');
+ await page.goto('http://127.0.0.1:4287/profile.html#home');
  await page.locator('.avatar img').waitFor();
  assert.equal(await page.evaluate(()=>scrollY),0);
  const checkPortrait=async()=>{
@@ -42,7 +42,7 @@ test('scroll-to-top clears deep anchors and keeps the entire portrait below the 
 });
 test('every mobile menu destination stays visible and portrait thumbnails fill their cards',async()=>{
  const {context,page,errors}=await setup(390,844);
- await page.goto('http://localhost:4173/profile.html');
+ await page.goto('http://127.0.0.1:4287/profile.html');
  for(const id of ['experience','skills','projects','personal','key-skills','education','contact','home']){
   await page.locator('#menuBtn').click();
   await page.locator(`.sidebar .nav-link[href="#${id}"]`).click();
@@ -61,7 +61,7 @@ test('every mobile menu destination stays visible and portrait thumbnails fill t
 test('both pages show a brief skeleton and the brand links return to top',async()=>{
  const {context,page}=await setup(390,844);
  for(const path of ['index.html','profile.html']){
-  await page.goto('http://localhost:4173/'+path,{waitUntil:'commit'});
+  await page.goto('http://127.0.0.1:4287/'+path,{waitUntil:'commit'});
   const skeleton=page.getByRole('status',{name:'Loading page'});await skeleton.waitFor({state:'visible'});
   assert.equal(await skeleton.getAttribute('aria-busy'),'true');
   await skeleton.waitFor({state:'hidden'});
@@ -77,7 +77,7 @@ test('both pages show a brief skeleton and the brand links return to top',async(
 test('Bitcoin ticker reports errors, retries and falls back without an empty card',async()=>{
  const {context,page}=await setup();let offline=true;const requests=[];
  await page.route(/^https:\/\/(api\.binance\.com|data-api\.binance\.vision)\//,async route=>{requests.push(route.request().url());if(offline||route.request().url().includes('data-api'))await route.fulfill({status:503,json:{message:'Unavailable'}});else await route.fulfill({json:{lastPrice:'102500',priceChange:'2500',priceChangePercent:'2.50'}});});
- await page.goto('http://localhost:4173/profile.html');
+ await page.goto('http://127.0.0.1:4287/profile.html');
  await page.getByText('Live price unavailable. Please try again.',{exact:true}).waitFor();
  assert.match(await page.locator('#crypto-prices').textContent(),/BTC \/ USDT/);
  offline=false;await page.getByRole('button',{name:'Retry',exact:true}).click();
