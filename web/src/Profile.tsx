@@ -7,6 +7,7 @@ import { ProjectsSection } from "./components/ProjectsSection";
 import { PersonalSection } from "./components/PersonalSection";
 import { useProfile } from "./hooks/useProfile";
 import "./profile.css";
+import { HobbiesSection } from "./components/HobbiesSection";
 import { ScrollToTop } from "./components/ScrollToTop";
 export default function Profile() {
     useProfile();
@@ -15,7 +16,7 @@ export default function Profile() {
 
     <div className="mobile-bar">
     <div>
-    <span className="logo-name">Chokchai.T</span>
+    <a className="logo-name brand-home" href="#home" aria-label="Chokchai.T — scroll to top">Chokchai.T</a>
     </div>
     <div style={{ "display": "flex", "gap": "8px" }}>
     <button className="theme-toggle" id="themeToggleMobile" aria-label="Toggle theme">
@@ -27,7 +28,7 @@ export default function Profile() {
 
     <aside className="sidebar" id="sidebar">
     <div className="sidebar-logo">
-    <span className="logo-name">Chokchai.T</span>
+    <a className="logo-name brand-home" href="#home" aria-label="Chokchai.T — scroll to top">Chokchai.T</a>
     <span className="logo-title">Senior Digital Solution</span>
     </div>
     <nav className="nav-section">
@@ -69,6 +70,7 @@ export default function Profile() {
     <ProjectsSection />
 
     <PersonalSection />
+    <HobbiesSection />
     <footer>
     <div id="crypto-prices" className="btc-card"></div>
     <div style={{ "marginTop": "18px" }}>© 2025 Chokchai Thawatcharaporn. All rights reserved.</div>

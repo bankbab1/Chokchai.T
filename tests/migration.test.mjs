@@ -37,7 +37,7 @@ test('scroll-to-top clears deep anchors and keeps the entire portrait below the 
  const top=page.getByRole('button',{name:'Scroll to top',exact:true});await top.waitFor({state:'visible'});
  const box=await top.boundingBox();assert.equal(box.width,48);assert.equal(box.height,48);assert.ok(390-box.x-box.width>=18);assert.ok(844-box.y-box.height>=20);
  await top.click();await page.waitForFunction(()=>scrollY===0);await checkPortrait();assert.equal(new URL(page.url()).hash,'');
- await page.evaluate(()=>scrollTo({top:1800,behavior:'instant'}));await page.locator('#menuBtn').click();await page.locator('.sidebar a[href="#home"]').click();await page.waitForFunction(()=>scrollY===0);await checkPortrait();
+ await page.evaluate(()=>scrollTo({top:1800,behavior:'instant'}));await page.locator('#menuBtn').click();await page.locator('.sidebar .nav-link[href="#home"]').click();await page.waitForFunction(()=>scrollY===0);await checkPortrait();
  assert.deepEqual(errors,[]);await context.close();
 });
 test('every mobile menu destination stays visible and portrait thumbnails fill their cards',async()=>{
@@ -57,4 +57,20 @@ test('every mobile menu destination stays visible and portrait thumbnails fill t
  }
  assert.match(await page.locator('#personal').textContent(),/Updated: 2026/);
  assert.deepEqual(errors,[]);await context.close();
+});
+test('both pages show a brief skeleton and the brand links return to top',async()=>{
+ const {context,page}=await setup(390,844);
+ for(const path of ['index.html','profile.html']){
+  await page.goto('http://localhost:4173/'+path,{waitUntil:'commit'});
+  const skeleton=page.getByRole('status',{name:'Loading page'});await skeleton.waitFor({state:'visible'});
+  assert.equal(await skeleton.getAttribute('aria-busy'),'true');
+  await skeleton.waitFor({state:'hidden'});
+ }
+ await page.evaluate(()=>scrollTo({top:1800,behavior:'instant'}));
+ await page.locator('.mobile-bar .brand-home').click();await page.waitForFunction(()=>scrollY===0);
+ await page.setViewportSize({width:1365,height:900});
+ await page.evaluate(()=>scrollTo({top:1800,behavior:'instant'}));
+ await page.locator('.sidebar .brand-home').click();await page.waitForFunction(()=>scrollY===0);
+ assert.equal(await page.locator('#hobbies .card').count(),3);
+ await context.close();
 });

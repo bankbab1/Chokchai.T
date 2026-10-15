@@ -39,7 +39,7 @@ export function useProfile() {
         });
         events.on(backdrop, 'click', closeSidebar);
         let navigationFrame = 0;
-        document.querySelectorAll<HTMLAnchorElement>('.nav-link[href^="#"]').forEach(link => events.on(link, 'click', e => {
+        document.querySelectorAll<HTMLAnchorElement>('.nav-link[href^="#"], .brand-home[href="#home"]').forEach(link => events.on(link, 'click', e => {
             const id = link.hash.slice(1), target = byId(id);
             if (!target) return;
             e.preventDefault();

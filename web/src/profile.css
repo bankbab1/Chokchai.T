@@ -461,3 +461,5 @@ body.no-scroll .scroll-to-top{visibility:hidden;pointer-events:none}
   .js .reveal,.js .reveal:not(.show){opacity:1!important;transform:none!important;transition:none!important}
   .sidebar{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 }
+.brand-home{display:inline-block;border-radius:6px}
+.brand-home:focus-visible{outline:2px solid var(--accent);outline-offset:5px}
