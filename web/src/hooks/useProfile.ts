@@ -21,7 +21,7 @@ export function useProfile() {
         events.on(backdrop, 'click', closeSidebar);
         const timeouts: number[] = [];
         document.querySelectorAll<HTMLAnchorElement>('.nav-link[href^="#"]').forEach(link => events.on(link, 'click', e => { const id = link.hash.slice(1), target = byId(id); if (!target)
-            return; e.preventDefault(); closeSidebar(); timeouts.push(window.setTimeout(() => { const offset = id === 'home' ? 0 : window.innerWidth <= 960 ? 72 : 24; window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' }); }, 60)); }));
+            return; e.preventDefault(); closeSidebar(); timeouts.push(window.setTimeout(() => { const offset = window.innerWidth <= 960 ? (document.querySelector('.mobile-bar')?.getBoundingClientRect().height ?? 60) + 16 : 24; window.scrollTo({ top: id === 'home' ? 0 : target.getBoundingClientRect().top + window.scrollY - offset, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' }); }, 60)); }));
         const sections = document.querySelectorAll<HTMLElement>('section[id],header[id]');
         const nav = document.querySelectorAll<HTMLAnchorElement>('.sidebar .nav-link[href^="#"]');
         const active = () => { let cur = ''; sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200)
@@ -99,7 +99,8 @@ export function useProfile() {
         if (location.hash) {
             const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
             if (target) {
-                target.scrollIntoView();
+                if (target.id === 'home') window.scrollTo({ top: 0, behavior: 'instant' });
+                else target.scrollIntoView();
                 reveal();
             }
         }

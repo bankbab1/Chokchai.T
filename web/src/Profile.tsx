@@ -7,9 +7,11 @@ import { ProjectsSection } from "./components/ProjectsSection";
 import { PersonalSection } from "./components/PersonalSection";
 import { useProfile } from "./hooks/useProfile";
 import "./profile.css";
+import { ScrollToTop } from "./components/ScrollToTop";
 export default function Profile() {
     useProfile();
     return (<>
+    <ScrollToTop />
 
     <div className="mobile-bar">
     <div>

@@ -21,3 +21,22 @@ for(const name of ['index','profile'])test(`${name}: content, image URLs and res
 test('all original image files remain byte-identical',async()=>{for(const [file,hash]of Object.entries(baseline.assets))assert.equal(createHash('sha256').update(await readFile(file)).digest('hex'),hash,file);});
 test('welcome confirmation, theme persistence and Google Sheets payload',async()=>{const {context,page,events}=await setup();await page.goto('http://localhost:4173/');await page.locator('#viewProfileBtn').waitFor();await page.locator('#themeToggle').click();assert.equal(await page.evaluate(()=>localStorage.getItem('theme')),'light');await page.locator('#viewProfileBtn').click();await page.getByRole('button',{name:'Yes, View Profile'}).click();await page.waitForURL('**/profile.html');await page.locator('#projects').waitFor();await page.waitForTimeout(150);assert.equal(await page.locator('html').getAttribute('data-theme'),'light');assert.deepEqual(events.slice(0,3).map(e=>e.event),['Landing Page Viewed','View Profile Clicked','Profile Page Viewed']);assert.equal(events[2].page,'profile_v2.html');assert.ok(events[0].visitorId);assert.equal(events[0].visitorId,events[2].visitorId);for(const e of events)assert.deepEqual(Object.keys(e).sort(),['browser','event','os','page','visitorId']);await context.close();});
 test('mobile menu, project gallery keyboard controls, ticker and one-time scroll events',async()=>{const {context,page,events,errors}=await setup(375);await page.goto('http://localhost:4173/profile.html');await page.locator('#menuBtn').click();assert.ok(await page.locator('#sidebar').evaluate(el=>el.classList.contains('open')));await page.locator('.sidebar a[href="#projects"]').click();await page.waitForTimeout(500);assert.equal(await page.locator('#sidebar').evaluate(el=>el.classList.contains('open')),false);await page.locator('#project5 .gallery img').first().click();assert.equal(await page.locator('#lbCounter').textContent(),'1 / 13');await page.keyboard.press('ArrowRight');assert.equal(await page.locator('#lbCounter').textContent(),'2 / 13');await page.keyboard.press('ArrowLeft');assert.equal(await page.locator('#lbCounter').textContent(),'1 / 13');await page.keyboard.press('Escape');assert.equal(await page.locator('#lightbox').evaluate(el=>el.classList.contains('open')),false);await page.evaluate(()=>scrollTo(0,document.body.scrollHeight));await page.waitForTimeout(300);await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(300);await page.evaluate(()=>scrollTo(0,document.body.scrollHeight));await page.waitForTimeout(300);assert.equal(events.filter(e=>e.event==='Profile Page Scrolled').length,1);assert.equal(events.filter(e=>e.event==='Profile Page Bottom Reached').length,1);assert.match(await page.locator('#crypto-prices').textContent(),/102,500.00/);assert.deepEqual(errors,[]);await context.close();});
+test('scroll-to-top clears deep anchors and keeps the entire portrait below the mobile header',async()=>{
+ const {context,page,errors}=await setup(390,844);
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.goto('http://localhost:4173/profile.html#home');
+ await page.locator('.avatar img').waitFor();
+ assert.equal(await page.evaluate(()=>scrollY),0);
+ const checkPortrait=async()=>{
+  const avatar=await page.locator('.avatar').boundingBox(),bar=await page.locator('.mobile-bar').boundingBox();
+  assert.ok(avatar.y>=bar.y+bar.height+24,'portrait needs breathing room below fixed header');
+  assert.ok(avatar.y+avatar.height<844,'entire portrait visible');
+ };
+ await checkPortrait();
+ await page.evaluate(()=>scrollTo({top:1800,behavior:'instant'}));
+ const top=page.getByRole('button',{name:'Scroll to top',exact:true});await top.waitFor({state:'visible'});
+ const box=await top.boundingBox();assert.equal(box.width,48);assert.equal(box.height,48);assert.ok(390-box.x-box.width>=18);assert.ok(844-box.y-box.height>=20);
+ await top.click();await page.waitForFunction(()=>scrollY===0);await checkPortrait();assert.equal(new URL(page.url()).hash,'');
+ await page.evaluate(()=>scrollTo({top:1800,behavior:'instant'}));await page.locator('#menuBtn').click();await page.locator('.sidebar a[href="#home"]').click();await page.waitForFunction(()=>scrollY===0);await checkPortrait();
+ assert.deepEqual(errors,[]);await context.close();
+});
