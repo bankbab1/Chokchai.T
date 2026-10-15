@@ -114,22 +114,6 @@ export function useProfile() {
             bottom = true;
             track('Profile Page Bottom Reached', 'profile_v2.html');
         } });
-        const abort = new AbortController();
-        let lastPrice: number | null = null;
-        const btc = async () => { try {
-            const [p, s] = await Promise.all([fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT', { signal: abort.signal }).then(r => r.json()), fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT', { signal: abort.signal }).then(r => r.json())]);
-            if (abort.signal.aborted)
-                return;
-            const cur = Number(p.price), chp = Number(s.priceChangePercent), ch = Number(s.priceChange);
-            if (!Number.isFinite(cur) || !Number.isFinite(chp) || !Number.isFinite(ch))
-                return;
-            const trend = lastPrice === null ? 'var(--text)' : cur > lastPrice ? '#2ebd85' : cur < lastPrice ? '#f6465d' : 'var(--text)';
-            lastPrice = cur;
-            byId('crypto-prices').innerHTML = `<h5><i class="fa-brands fa-bitcoin" style="color:#f7931a;margin-right:6px"></i>BTCUSDT</h5><div style="font-size:1.35rem;font-weight:600;font-family:var(--font-display);color:${trend}">$${cur.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div><div style="font-size:.78rem;color:var(--text3);margin-top:6px">24h Change</div><div style="font-size:.85rem;color:${chp >= 0 ? '#2ebd85' : '#f6465d'};font-weight:500">${ch.toFixed(2)} (${chp.toFixed(2)}%)</div>`;
-        }
-        catch { } };
-        void btc();
-        const timer = window.setInterval(() => void btc(), 5000);
         // Hash navigation happens after React has mounted the target section.
         if (location.hash) {
             const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
@@ -139,6 +123,6 @@ export function useProfile() {
                 reveal();
             }
         }
-        return () => { events.cleanup(); observer?.disconnect(); clearInterval(timer); abort.abort(); cancelAnimationFrame(navigationFrame); closeSidebar(); document.body.classList.remove('no-scroll'); document.documentElement.classList.remove('js'); };
+        return () => { events.cleanup(); observer?.disconnect(); cancelAnimationFrame(navigationFrame); closeSidebar(); document.body.classList.remove('no-scroll'); document.documentElement.classList.remove('js'); };
     }, []);
 }

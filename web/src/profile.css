@@ -463,3 +463,10 @@ body.no-scroll .scroll-to-top{visibility:hidden;pointer-events:none}
 }
 .brand-home{display:inline-block;border-radius:6px}
 .brand-home:focus-visible{outline:2px solid var(--accent);outline-offset:5px}
+.btc-price{font-size:1.35rem;font-weight:600;font-family:var(--font-display);margin-top:4px}
+.btc-label{font-size:.78rem;color:var(--text3);margin-top:6px}
+.btc-change{font-size:.85rem;font-weight:500}
+.btc-status{font-size:.75rem;line-height:1.5;color:var(--text2);margin-top:10px;max-width:280px}
+.btc-retry{margin-top:10px;padding:7px 14px;border-radius:8px;border:1px solid var(--border2);background:var(--bg2);color:var(--text);cursor:pointer;font:inherit;font-size:.8rem}
+.btc-retry:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.btc-retry:disabled{opacity:.6;cursor:wait}

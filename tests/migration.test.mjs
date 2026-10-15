@@ -8,7 +8,7 @@ const baseline=JSON.parse(await readFile(new URL('./baseline.json',import.meta.u
 let browser,server;
 before(async()=>{server=spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--port','4173'],{stdio:'ignore'});for(let i=0;i<100;i++){try{if((await fetch('http://localhost:4173')).ok)break;}catch{}await new Promise(r=>setTimeout(r,100));}browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_EXECUTABLE_PATH,args:['--no-sandbox']});});
 after(async()=>{await browser?.close();server?.kill();});
-async function setup(width=1365,height=900){const context=await browser.newContext({viewport:{width,height}});const page=await context.newPage();const events=[],errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('https://script.google.com/**',async route=>{events.push(JSON.parse(route.request().postData()));await route.fulfill({status:200,body:'ok'});});await page.route('https://api.binance.com/**',route=>route.fulfill({json:route.request().url().includes('24hr')?{priceChangePercent:'2.50',priceChange:'2500'}:{symbol:'BTCUSDT',price:'102500'}}));return {context,page,events,errors};}
+async function setup(width=1365,height=900){const context=await browser.newContext({viewport:{width,height}});const page=await context.newPage();const events=[],errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('https://script.google.com/**',async route=>{events.push(JSON.parse(route.request().postData()));await route.fulfill({status:200,body:'ok'});});await page.route(/^https:\/\/(api\.binance\.com|data-api\.binance\.vision)\//,route=>route.fulfill({json:route.request().url().includes('24hr')?{lastPrice:'102500',priceChangePercent:'2.50',priceChange:'2500'}:{symbol:'BTCUSDT',price:'102500'}}));return {context,page,events,errors};}
 for(const name of ['index','profile'])test(`${name}: content, image URLs and responsive widths preserved`,async()=>{
  const {context,page,errors}=await setup();await page.goto(`http://localhost:4173/${name}.html`);await page.locator(name==='index'?'.landing-card':'#projects').waitFor();
  const text=await page.locator('body').evaluate(el=>{const clone=el.cloneNode(true);clone.querySelectorAll('#ageVal,#crypto-prices,script').forEach(n=>n.remove());return clone.textContent.replace(/\s+/g,' ').trim();});
@@ -73,4 +73,14 @@ test('both pages show a brief skeleton and the brand links return to top',async(
  await page.locator('.sidebar .brand-home').click();await page.waitForFunction(()=>scrollY===0);
  assert.equal(await page.locator('#hobbies .card').count(),3);
  await context.close();
+});
+test('Bitcoin ticker reports errors, retries and falls back without an empty card',async()=>{
+ const {context,page}=await setup();let offline=true;const requests=[];
+ await page.route(/^https:\/\/(api\.binance\.com|data-api\.binance\.vision)\//,async route=>{requests.push(route.request().url());if(offline||route.request().url().includes('data-api'))await route.fulfill({status:503,json:{message:'Unavailable'}});else await route.fulfill({json:{lastPrice:'102500',priceChange:'2500',priceChangePercent:'2.50'}});});
+ await page.goto('http://localhost:4173/profile.html');
+ await page.getByText('Live price unavailable. Please try again.',{exact:true}).waitFor();
+ assert.match(await page.locator('#crypto-prices').textContent(),/BTC \/ USDT/);
+ offline=false;await page.getByRole('button',{name:'Retry',exact:true}).click();
+ await page.locator('.btc-price').filter({hasText:'102,500.00'}).waitFor();assert.ok(requests.some(url=>url.includes('data-api')));assert.ok(requests.some(url=>url.includes('api.binance.com')));
+ assert.match(await page.locator('.btc-status').textContent(),/updated/);await context.close();
 });

@@ -7,6 +7,7 @@ import { ProjectsSection } from "./components/ProjectsSection";
 import { PersonalSection } from "./components/PersonalSection";
 import { useProfile } from "./hooks/useProfile";
 import "./profile.css";
+import { BtcTicker } from "./components/BtcTicker";
 import { HobbiesSection } from "./components/HobbiesSection";
 import { ScrollToTop } from "./components/ScrollToTop";
 export default function Profile() {
@@ -72,7 +73,7 @@ export default function Profile() {
     <PersonalSection />
     <HobbiesSection />
     <footer>
-    <div id="crypto-prices" className="btc-card"></div>
+    <BtcTicker />
     <div style={{ "marginTop": "18px" }}>© 2025 Chokchai Thawatcharaporn. All rights reserved.</div>
     </footer>
     </div>
