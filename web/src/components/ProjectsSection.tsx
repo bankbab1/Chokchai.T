@@ -42,6 +42,28 @@ export function ProjectsSection() {
     <img src="project2_img6.jpg" alt=""/><img src="project2_img7.jpg" alt=""/><img src="project2_img8.jpg" alt=""/>
     </div>
     </article>
+    <article className="proj" id="project7">
+    <div className="proj-head">
+    <div className="proj-thumb"><img src="project7_thumbnail_img.jpg" alt="QR Payment Generator Android app" loading="lazy"/></div>
+    <div className="proj-body min-w-0">
+    <h3 className="proj-title">QR Payment Generator — Android App</h3>
+    <span className="proj-year">React Native · Android · FinTech</span>
+    <p className="proj-desc">Rebuilt the QR payment generator as a React Native mobile app, compiled for Android. Brings the QR payment workflow from the web project to a new device and codebase with a mobile-focused interface.</p>
+    </div></div>
+    <div className="gallery">
+    <img src="project7_img1.jpg" alt="QR Payment Generator Android — screenshot 1" loading="lazy"/>
+    <img src="project7_img2.jpg" alt="QR Payment Generator Android — screenshot 2" loading="lazy"/>
+    <img src="project7_img3.jpg" alt="QR Payment Generator Android — screenshot 3" loading="lazy"/>
+    <img src="project7_img4.jpg" alt="QR Payment Generator Android — screenshot 4" loading="lazy"/>
+    <img src="project7_img5.jpg" alt="QR Payment Generator Android — screenshot 5" loading="lazy"/>
+    <img src="project7_img6.jpg" alt="QR Payment Generator Android — screenshot 6" loading="lazy"/>
+    <img src="project7_img7.jpg" alt="QR Payment Generator Android — screenshot 7" loading="lazy"/>
+    <img src="project7_img8.jpg" alt="QR Payment Generator Android — screenshot 8" loading="lazy"/>
+    <img src="project7_img9.jpg" alt="QR Payment Generator Android — screenshot 9" loading="lazy"/>
+    <img src="project7_img10.jpg" alt="QR Payment Generator Android — screenshot 10" loading="lazy"/>
+    <img src="project7_img11.jpg" alt="QR Payment Generator Android — screenshot 11" loading="lazy"/>
+    <img src="project7_img12.jpg" alt="QR Payment Generator Android — screenshot 12" loading="lazy"/>
+    </div></article>
     <article className="proj">
     <div className="proj-head">
     <div className="proj-thumb"><img src="project3_thumbnail_img.jpg" alt=""/></div>
@@ -77,31 +99,6 @@ export function ProjectsSection() {
     <img src="project4_img21.png" alt=""/><img src="project4_img22.png" alt=""/>
     </div>
     </article>
-    <article className="proj" id="project5">
-    <div className="proj-head">
-    <div className="proj-thumb"><img src="project5_thumbnail_img.png" alt="Jaspal Rooms meeting-room availability dashboard" loading="lazy"/></div>
-    <div className="proj-body min-w-0">
-    <h3 className="proj-title">Jaspal Rooms</h3>
-    <span className="proj-year">2026 — React · TypeScript · Node.js · Microsoft 365</span>
-    <p className="proj-desc">Designed and built an internal dashboard giving staff one live view of 21 meeting rooms through Microsoft Graph. Timeline and card views, room finder, interactive building map, staff directory and org chart simplify everyday workplace tasks. Prepares meeting invitations and opens Outlook to complete booking. Deployed as two Docker containers with no database, with TOTP-protected admin settings.</p>
-    </div>
-    </div>
-    <div className="gallery">
-    <img src="project5_img1.png" alt="Jaspal Rooms — screenshot 1" loading="lazy"/>
-    <img src="project5_img2.png" alt="Jaspal Rooms — screenshot 2" loading="lazy"/>
-    <img src="project5_img3.png" alt="Jaspal Rooms — screenshot 3" loading="lazy"/>
-    <img src="project5_img4.png" alt="Jaspal Rooms — screenshot 4" loading="lazy"/>
-    <img src="project5_img5.png" alt="Jaspal Rooms — screenshot 5" loading="lazy"/>
-    <img src="project5_img6.png" alt="Jaspal Rooms — screenshot 6" loading="lazy"/>
-    <img src="project5_img7.png" alt="Jaspal Rooms — screenshot 7" loading="lazy"/>
-    <img src="project5_img8.png" alt="Jaspal Rooms — screenshot 8" loading="lazy"/>
-    <img src="project5_img9.png" alt="Jaspal Rooms — screenshot 9" loading="lazy"/>
-    <img src="project5_img10.png" alt="Jaspal Rooms — screenshot 10" loading="lazy"/>
-    <img src="project5_img11.png" alt="Jaspal Rooms — screenshot 11" loading="lazy"/>
-    <img src="project5_img12.png" alt="Jaspal Rooms — screenshot 12" loading="lazy"/>
-    <img src="project5_img13.png" alt="Jaspal Rooms — screenshot 13" loading="lazy"/>
-    </div>
-    </article>
     <article className="proj" id="project6">
     <div className="proj-head">
     <div className="proj-thumb"><img src="project6_thumbnail_img.png" alt="AD Portal automated onboarding and offboarding" loading="lazy"/></div>
@@ -126,6 +123,31 @@ export function ProjectsSection() {
     <img src="project6_img12.png" alt="AD Portal — screenshot 12 (fictional sample data)" loading="lazy"/>
     <img src="project6_img13.png" alt="AD Portal — screenshot 13 (fictional sample data)" loading="lazy"/>
     <img src="project6_img14.png" alt="AD Portal — screenshot 14 (fictional sample data)" loading="lazy"/>
+    </div>
+    </article>
+    <article className="proj" id="project5">
+    <div className="proj-head">
+    <div className="proj-thumb"><img src="project5_thumbnail_img.png" alt="Jaspal Rooms meeting-room availability dashboard" loading="lazy"/></div>
+    <div className="proj-body min-w-0">
+    <h3 className="proj-title">Jaspal Rooms</h3>
+    <span className="proj-year">2026 — React · TypeScript · Node.js · Microsoft 365</span>
+    <p className="proj-desc">Designed and built an internal dashboard giving staff one live view of 21 meeting rooms through Microsoft Graph. Timeline and card views, room finder, interactive building map, staff directory and org chart simplify everyday workplace tasks. Prepares meeting invitations and opens Outlook to complete booking. Deployed as two Docker containers with no database, with TOTP-protected admin settings.</p>
+    </div>
+    </div>
+    <div className="gallery">
+    <img src="project5_img1.png" alt="Jaspal Rooms — screenshot 1" loading="lazy"/>
+    <img src="project5_img2.png" alt="Jaspal Rooms — screenshot 2" loading="lazy"/>
+    <img src="project5_img3.png" alt="Jaspal Rooms — screenshot 3" loading="lazy"/>
+    <img src="project5_img4.png" alt="Jaspal Rooms — screenshot 4" loading="lazy"/>
+    <img src="project5_img5.png" alt="Jaspal Rooms — screenshot 5" loading="lazy"/>
+    <img src="project5_img6.png" alt="Jaspal Rooms — screenshot 6" loading="lazy"/>
+    <img src="project5_img7.png" alt="Jaspal Rooms — screenshot 7" loading="lazy"/>
+    <img src="project5_img8.png" alt="Jaspal Rooms — screenshot 8" loading="lazy"/>
+    <img src="project5_img9.png" alt="Jaspal Rooms — screenshot 9" loading="lazy"/>
+    <img src="project5_img10.png" alt="Jaspal Rooms — screenshot 10" loading="lazy"/>
+    <img src="project5_img11.png" alt="Jaspal Rooms — screenshot 11" loading="lazy"/>
+    <img src="project5_img12.png" alt="Jaspal Rooms — screenshot 12" loading="lazy"/>
+    <img src="project5_img13.png" alt="Jaspal Rooms — screenshot 13" loading="lazy"/>
     </div>
     </article>
     </section>);

@@ -128,3 +128,24 @@ body #root{display:flex;justify-content:center}
 @media(max-width:480px){.proj-body{min-width:0}.proj-thumb{flex-basis:100%;max-width:180px}.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}}
 /* Keep the original layout while allowing the long surname on narrow phones. */
 .landing-card h1{overflow-wrap:anywhere}
+body.landing-dialog-open{overflow:hidden}
+.profile-sheet{position:fixed;inset:auto 0 0;margin:0 auto;width:min(100%,560px);max-width:100%;max-height:calc(100dvh - 24px);padding:0;border:0;background:transparent;color:var(--text);overflow:visible}
+.profile-sheet::backdrop{background:rgba(5,7,12,.58);animation:sheet-dim .24s ease}
+.profile-sheet-panel{position:relative;border:1px solid var(--border2);border-bottom:0;border-radius:28px 28px 0 0;background:var(--bg2);padding:12px 28px calc(18px + env(safe-area-inset-bottom,0px));text-align:left;box-shadow:0 -12px 60px rgba(0,0,0,.18);animation:sheet-up .32s cubic-bezier(.2,.8,.2,1);max-height:calc(100dvh - 24px);overflow-y:auto}
+.sheet-handle{width:38px;height:4px;border-radius:999px;background:var(--border2);margin:0 auto 26px}
+.sheet-close{position:absolute;right:18px;top:24px;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);background:var(--surface2);color:var(--text2);cursor:pointer}
+.sheet-person{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.sheet-person img{width:48px;height:56px;object-fit:cover;border-radius:12px;object-position:center top}
+.sheet-person strong{display:block;font-family:var(--font-display);font-size:1rem}
+.sheet-person span{display:block;font-size:.75rem;color:var(--text2);margin-top:4px}
+.profile-sheet h2{font-family:var(--font-display);font-size:clamp(1.5rem,6vw,1.9rem);line-height:1.15;letter-spacing:-.035em;max-width:360px;margin-bottom:12px}
+.profile-sheet p{color:var(--text2);font-size:.9rem;line-height:1.65;margin-bottom:20px}
+.sheet-topics{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
+.sheet-topics span{padding:6px 11px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:.74rem;color:var(--text2)}
+.sheet-continue{width:100%;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border:0;border-radius:14px;background:linear-gradient(120deg,var(--accent),var(--accent2));color:white;font:600 .95rem var(--font-display);cursor:pointer}
+.sheet-cancel{display:block;margin:8px auto 0;padding:12px 24px;border:0;background:none;color:var(--text2);font:inherit;font-size:.85rem;cursor:pointer}
+.profile-sheet button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@keyframes sheet-up{from{transform:translateY(100%);opacity:.5}to{transform:none;opacity:1}}
+@keyframes sheet-dim{from{opacity:0}to{opacity:1}}
+@media(min-width:600px){.profile-sheet{bottom:24px;width:520px}.profile-sheet-panel{border-bottom:1px solid var(--border2);border-radius:28px}}
+@media(prefers-reduced-motion:reduce){.profile-sheet-panel,.profile-sheet::backdrop{animation:none}}

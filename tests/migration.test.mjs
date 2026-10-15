@@ -19,7 +19,7 @@ for(const name of ['index','profile'])test(`${name}: content, image URLs and res
  assert.deepEqual(errors,[]);await context.close();
 });
 test('all original image files remain byte-identical',async()=>{for(const [file,hash]of Object.entries(baseline.assets))assert.equal(createHash('sha256').update(await readFile(file)).digest('hex'),hash,file);});
-test('welcome confirmation, theme persistence and Google Sheets payload',async()=>{const {context,page,events}=await setup();await page.goto('http://127.0.0.1:4287/');await page.locator('#viewProfileBtn').waitFor();await page.locator('#themeToggle').click();assert.equal(await page.evaluate(()=>localStorage.getItem('theme')),'light');await page.locator('#viewProfileBtn').click();await page.getByRole('button',{name:'Yes, View Profile'}).click();await page.waitForURL('**/profile.html');await page.locator('#projects').waitFor();await page.waitForTimeout(150);assert.equal(await page.locator('html').getAttribute('data-theme'),'light');assert.deepEqual(events.slice(0,3).map(e=>e.event),['Landing Page Viewed','View Profile Clicked','Profile Page Viewed']);assert.equal(events[2].page,'profile_v2.html');assert.ok(events[0].visitorId);assert.equal(events[0].visitorId,events[2].visitorId);for(const e of events)assert.deepEqual(Object.keys(e).sort(),['browser','event','os','page','visitorId']);await context.close();});
+test('welcome confirmation, theme persistence and Google Sheets payload',async()=>{const {context,page,events}=await setup();await page.goto('http://127.0.0.1:4287/');await page.locator('#viewProfileBtn').waitFor();await page.locator('#themeToggle').click();assert.equal(await page.evaluate(()=>localStorage.getItem('theme')),'light');await page.locator('#viewProfileBtn').click();await page.getByRole('button',{name:'Continue to profile'}).click();await page.waitForURL('**/profile.html');await page.locator('#projects').waitFor();await page.waitForTimeout(150);assert.equal(await page.locator('html').getAttribute('data-theme'),'light');assert.deepEqual(events.slice(0,3).map(e=>e.event),['Landing Page Viewed','View Profile Clicked','Profile Page Viewed']);assert.equal(events[2].page,'profile_v2.html');assert.ok(events[0].visitorId);assert.equal(events[0].visitorId,events[2].visitorId);for(const e of events)assert.deepEqual(Object.keys(e).sort(),['browser','event','os','page','visitorId']);await context.close();});
 test('mobile menu, project gallery keyboard controls, ticker and one-time scroll events',async()=>{const {context,page,events,errors}=await setup(375);await page.goto('http://127.0.0.1:4287/profile.html');await page.locator('#menuBtn').click();assert.ok(await page.locator('#sidebar').evaluate(el=>el.classList.contains('open')));await page.locator('.sidebar a[href="#projects"]').click();await page.waitForTimeout(500);assert.equal(await page.locator('#sidebar').evaluate(el=>el.classList.contains('open')),false);await page.locator('#project5 .gallery img').first().click();assert.equal(await page.locator('#lbCounter').textContent(),'1 / 13');await page.keyboard.press('ArrowRight');assert.equal(await page.locator('#lbCounter').textContent(),'2 / 13');await page.keyboard.press('ArrowLeft');assert.equal(await page.locator('#lbCounter').textContent(),'1 / 13');await page.keyboard.press('Escape');assert.equal(await page.locator('#lightbox').evaluate(el=>el.classList.contains('open')),false);await page.evaluate(()=>scrollTo(0,document.body.scrollHeight));await page.waitForTimeout(300);await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(300);await page.evaluate(()=>scrollTo(0,document.body.scrollHeight));await page.waitForTimeout(300);assert.equal(events.filter(e=>e.event==='Profile Page Scrolled').length,1);assert.equal(events.filter(e=>e.event==='Profile Page Bottom Reached').length,1);assert.match(await page.locator('#crypto-prices').textContent(),/102,500.00/);assert.deepEqual(errors,[]);await context.close();});
 test('scroll-to-top clears deep anchors and keeps the entire portrait below the mobile header',async()=>{
  const {context,page,errors}=await setup(390,844);
@@ -76,6 +76,7 @@ test('both pages show a brief skeleton and the brand links return to top',async(
 });
 test('Bitcoin ticker reports errors, retries and falls back without an empty card',async()=>{
  const {context,page}=await setup();let offline=true;const requests=[];
+ await page.route('https://api.coinbase.com/**',route=>route.fulfill({status:503,json:{message:'Unavailable'}}));
  await page.route(/^https:\/\/(api\.binance\.com|data-api\.binance\.vision)\//,async route=>{requests.push(route.request().url());if(offline||route.request().url().includes('data-api'))await route.fulfill({status:503,json:{message:'Unavailable'}});else await route.fulfill({json:{lastPrice:'102500',priceChange:'2500',priceChangePercent:'2.50'}});});
  await page.goto('http://127.0.0.1:4287/profile.html');
  await page.getByText('Live price unavailable. Please try again.',{exact:true}).waitFor();
@@ -83,4 +84,21 @@ test('Bitcoin ticker reports errors, retries and falls back without an empty car
  offline=false;await page.getByRole('button',{name:'Retry',exact:true}).click();
  await page.locator('.btc-price').filter({hasText:'102,500.00'}).waitFor();assert.ok(requests.some(url=>url.includes('data-api')));assert.ok(requests.some(url=>url.includes('api.binance.com')));
  assert.match(await page.locator('.btc-status').textContent(),/updated/);await context.close();
+});
+test('custom confirmation sheet supports cancel, Escape and mobile sizing',async()=>{
+ const {context,page}=await setup(390,844);await page.goto('http://127.0.0.1:4287/');
+ await page.locator('#viewProfileBtn').click();const dialog=page.getByRole('dialog');await dialog.waitFor();
+ const box=await dialog.boundingBox();assert.ok(box.x>=0&&box.x+box.width<=390);assert.ok(Math.abs(box.y+box.height-844)<2);
+ await page.getByRole('button',{name:'Stay here',exact:true}).click();await dialog.waitFor({state:'detached'});assert.ok(page.url().endsWith('/'));
+ await page.locator('#viewProfileBtn').click();await page.keyboard.press('Escape');await dialog.waitFor({state:'detached'});assert.equal(await page.locator('#viewProfileBtn').evaluate(el=>el===document.activeElement),true);await context.close();
+});
+test('mobile Bitcoin ticker handles blocked primary endpoints and uses labelled USD fallback',async()=>{
+ const {context,page}=await setup(320,844);
+ await page.route(/^https:\/\/(api\.binance\.com|data-api\.binance\.vision)\//,route=>route.fulfill({status:503,json:{}}));
+ await page.route('https://api.coinbase.com/**',route=>route.fulfill({json:{data:{amount:'80000.25',currency:'USD'}}}));
+ await page.goto('http://127.0.0.1:4287/profile.html');await page.locator('.btc-price').filter({hasText:'80,000.25'}).waitFor();
+ assert.match(await page.locator('#crypto-prices').textContent(),/BTC \/ USD/);assert.match(await page.locator('.btc-status').textContent(),/Coinbase/);
+ const box=await page.locator('#crypto-prices').boundingBox();assert.ok(box.x>=0&&box.x+box.width<=320);
+ const titles=await page.locator('#projects .proj-title').allTextContents();assert.match(titles[2],/Android/);assert.ok(titles.indexOf('AD Portal: Automated Onboarding & Offboarding')<titles.indexOf('Jaspal Rooms'));
+ assert.equal(await page.locator('#project7 .gallery img').count(),12);await context.close();
 });

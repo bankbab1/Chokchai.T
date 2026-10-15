@@ -470,3 +470,6 @@ body.no-scroll .scroll-to-top{visibility:hidden;pointer-events:none}
 .btc-retry{margin-top:10px;padding:7px 14px;border-radius:8px;border:1px solid var(--border2);background:var(--bg2);color:var(--text);cursor:pointer;font:inherit;font-size:.8rem}
 .btc-retry:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .btc-retry:disabled{opacity:.6;cursor:wait}
+.btc-card{width:min(100%,360px);min-width:0;max-width:100%;box-sizing:border-box;overflow-wrap:anywhere}
+.btc-status{max-width:none;min-height:2.25em}
+@media(max-width:600px){footer .btc-card{display:block;margin:0 auto;padding:20px}.btc-price{font-size:1.5rem}}
