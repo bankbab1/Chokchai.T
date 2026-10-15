@@ -79,7 +79,7 @@ export function ProjectsSection() {
     </article>
     <article className="proj" id="project5">
     <div className="proj-head">
-    <div className="proj-thumb"><img src="project5_img1.png" alt="Jaspal Rooms meeting-room availability dashboard" loading="lazy"/></div>
+    <div className="proj-thumb"><img src="project5_thumbnail_img.png" alt="Jaspal Rooms meeting-room availability dashboard" loading="lazy"/></div>
     <div className="proj-body min-w-0">
     <h3 className="proj-title">Jaspal Rooms</h3>
     <span className="proj-year">2026 — React · TypeScript · Node.js · Microsoft 365</span>
@@ -100,6 +100,32 @@ export function ProjectsSection() {
     <img src="project5_img11.png" alt="Jaspal Rooms — screenshot 11" loading="lazy"/>
     <img src="project5_img12.png" alt="Jaspal Rooms — screenshot 12" loading="lazy"/>
     <img src="project5_img13.png" alt="Jaspal Rooms — screenshot 13" loading="lazy"/>
+    </div>
+    </article>
+    <article className="proj" id="project6">
+    <div className="proj-head">
+    <div className="proj-thumb"><img src="project6_thumbnail_img.png" alt="AD Portal automated onboarding and offboarding" loading="lazy"/></div>
+    <div className="proj-body min-w-0">
+    <h3 className="proj-title">AD Portal: Automated Onboarding &amp; Offboarding</h3>
+    <span className="proj-year">2025–2026 — React · n8n · PostgreSQL · Active Directory</span>
+    <p className="proj-desc">Built an HR-driven portal and n8n automation for Active Directory account creation, updates and offboarding, with automatic IT ticket creation. Field-level change detection, configurable HRM-to-AD attribute mapping, per-attribute audit logs and retry tracking support reliable operations. Secured with Microsoft Entra ID SSO and granular role-based permissions; deployed with Docker/nginx.</p>
+    </div>
+    </div>
+    <div className="gallery">
+    <img src="project6_img1.png" alt="AD Portal — screenshot 1 (fictional sample data)" loading="lazy"/>
+    <img src="project6_img2.png" alt="AD Portal — screenshot 2 (fictional sample data)" loading="lazy"/>
+    <img src="project6_img3.png" alt="AD Portal — screenshot 3 (fictional sample data)" loading="lazy"/>
+    <img src="project6_img4.png" alt="AD Portal — screenshot 4 (fictional sample data)" loading="lazy"/>
+    <img src="project6_img5.png" alt="AD Portal — screenshot 5 (fictional sample data)" loading="lazy"/>
+    <img src="project6_img6.png" alt="AD Portal — screenshot 6 (fictional sample data)" loading="lazy"/>
+    <img src="project6_img7.png" alt="AD Portal — screenshot 7 (fictional sample data)" loading="lazy"/>
+    <img src="project6_img8.png" alt="AD Portal — screenshot 8 (fictional sample data)" loading="lazy"/>
+    <img src="project6_img9.png" alt="AD Portal — screenshot 9 (fictional sample data)" loading="lazy"/>
+    <img src="project6_img10.png" alt="AD Portal — screenshot 10 (fictional sample data)" loading="lazy"/>
+    <img src="project6_img11.png" alt="AD Portal — screenshot 11 (fictional sample data)" loading="lazy"/>
+    <img src="project6_img12.png" alt="AD Portal — screenshot 12 (fictional sample data)" loading="lazy"/>
+    <img src="project6_img13.png" alt="AD Portal — screenshot 13 (fictional sample data)" loading="lazy"/>
+    <img src="project6_img14.png" alt="AD Portal — screenshot 14 (fictional sample data)" loading="lazy"/>
     </div>
     </article>
     </section>);

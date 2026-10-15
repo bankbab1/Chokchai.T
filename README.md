@@ -29,7 +29,7 @@ The build generates `dist/` and synchronizes the two HTML entry points and bundl
 - Google Apps Script / Google Sheets tracking: same endpoint, `visitor_id` key, payload fields, event names and historical `profile_v2.html` label.
 - One profile-view event per page mount; scroll and bottom-reached events fire once each. Requests use keepalive so the click event can survive page navigation.
 - Mobile sidebar, section navigation, active navigation, reveal animations and automatic age calculation.
-- All five project galleries, including Jaspal Rooms' 13 screenshots; image overlay with previous/next, keyboard arrows, Escape and backdrop dismissal.
+- All six project galleries, including Jaspal Rooms' 13 screenshots; image overlay with previous/next, keyboard arrows, Escape and backdrop dismissal.
 - Binance BTCUSDT ticker refreshes every five seconds with the same price/change display.
 - Existing font and icon CDN references remain. SweetAlert is now bundled by npm.
 
