@@ -8,20 +8,55 @@ export function useProfile() {
         events.on(byId('themeToggle'), 'click', toggleTheme);
         events.on(byId('themeToggleMobile'), 'click', toggleTheme);
         const sidebar = byId('sidebar'), backdrop = byId('sidebarBackdrop'), menu = byId('menuBtn');
-        const closeSidebar = () => { sidebar.classList.remove('open'); backdrop.classList.remove('show'); menu.classList.remove('open'); document.body.classList.remove('no-scroll'); menu.setAttribute('aria-expanded', 'false'); };
-        events.on(menu, 'click', () => { if (sidebar.classList.contains('open'))
-            closeSidebar();
-        else {
+        let lockedScrollY: number | null = null;
+        const closeSidebar = () => {
+            sidebar.classList.remove('open');
+            backdrop.classList.remove('show');
+            menu.classList.remove('open');
+            menu.setAttribute('aria-expanded', 'false');
+            if (lockedScrollY !== null) {
+                const y = lockedScrollY;
+                lockedScrollY = null;
+                document.body.classList.remove('no-scroll');
+                document.body.style.removeProperty('position');
+                document.body.style.removeProperty('top');
+                document.body.style.removeProperty('width');
+                window.scrollTo({ top: y, behavior: 'instant' });
+            }
+        };
+        events.on(menu, 'click', () => {
+            if (sidebar.classList.contains('open')) { closeSidebar(); return; }
+            lockedScrollY = window.scrollY;
+            window.scrollTo({ top: lockedScrollY, behavior: 'instant' });
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${lockedScrollY}px`;
+            document.body.style.width = '100%';
+            document.body.classList.add('no-scroll');
             sidebar.classList.add('open');
             backdrop.classList.add('show');
             menu.classList.add('open');
-            document.body.classList.add('no-scroll');
             menu.setAttribute('aria-expanded', 'true');
-        } });
+        });
         events.on(backdrop, 'click', closeSidebar);
-        const timeouts: number[] = [];
-        document.querySelectorAll<HTMLAnchorElement>('.nav-link[href^="#"]').forEach(link => events.on(link, 'click', e => { const id = link.hash.slice(1), target = byId(id); if (!target)
-            return; e.preventDefault(); closeSidebar(); timeouts.push(window.setTimeout(() => { const offset = window.innerWidth <= 960 ? (document.querySelector('.mobile-bar')?.getBoundingClientRect().height ?? 60) + 16 : 24; window.scrollTo({ top: id === 'home' ? 0 : target.getBoundingClientRect().top + window.scrollY - offset, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' }); }, 60)); }));
+        let navigationFrame = 0;
+        document.querySelectorAll<HTMLAnchorElement>('.nav-link[href^="#"]').forEach(link => events.on(link, 'click', e => {
+            const id = link.hash.slice(1), target = byId(id);
+            if (!target) return;
+            e.preventDefault();
+            closeSidebar();
+            // Reveal before moving and let Safari restore body layout before measuring.
+            target.closest('.reveal')?.classList.add('show');
+            cancelAnimationFrame(navigationFrame);
+            navigationFrame = requestAnimationFrame(() => {
+                navigationFrame = requestAnimationFrame(() => {
+                    const mobile = window.innerWidth <= 960;
+                    const offset = mobile ? (document.querySelector('.mobile-bar')?.getBoundingClientRect().height ?? 60) + 16 : 24;
+                    window.scrollTo({ top: id === 'home' ? 0 : target.getBoundingClientRect().top + window.scrollY - offset,
+                        behavior: mobile || matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+                    history.replaceState(null, '', '#' + id);
+                });
+            });
+        }));
         const sections = document.querySelectorAll<HTMLElement>('section[id],header[id]');
         const nav = document.querySelectorAll<HTMLAnchorElement>('.sidebar .nav-link[href^="#"]');
         const active = () => { let cur = ''; sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200)
@@ -104,6 +139,6 @@ export function useProfile() {
                 reveal();
             }
         }
-        return () => { events.cleanup(); observer?.disconnect(); clearInterval(timer); abort.abort(); timeouts.forEach(clearTimeout); document.body.classList.remove('no-scroll'); document.documentElement.classList.remove('js'); };
+        return () => { events.cleanup(); observer?.disconnect(); clearInterval(timer); abort.abort(); cancelAnimationFrame(navigationFrame); closeSidebar(); document.body.classList.remove('no-scroll'); document.documentElement.classList.remove('js'); };
     }, []);
 }

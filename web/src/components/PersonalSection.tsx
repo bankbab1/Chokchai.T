@@ -13,6 +13,7 @@ export function PersonalSection() {
     <img src="infp_img.jpg" alt="INFP-T" style={{ "width": "110px", "borderRadius": "10px", "border": "1px solid var(--border)" }}/>
     <div>
     <p style={{ "marginBottom": "8px" }}><strong>Type:</strong> Mediator (INFP-T)</p>
+    <p className="personality-updated">Updated: 2026</p>
     <a href="https://www.16personalities.com/infp-personality" target="_blank" rel="noopener" style={{ "color": "var(--accent)", "fontWeight": "500" }}>Learn more →</a>
     </div>
     </div>

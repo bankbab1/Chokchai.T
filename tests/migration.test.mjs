@@ -40,3 +40,21 @@ test('scroll-to-top clears deep anchors and keeps the entire portrait below the 
  await page.evaluate(()=>scrollTo({top:1800,behavior:'instant'}));await page.locator('#menuBtn').click();await page.locator('.sidebar a[href="#home"]').click();await page.waitForFunction(()=>scrollY===0);await checkPortrait();
  assert.deepEqual(errors,[]);await context.close();
 });
+test('every mobile menu destination stays visible and portrait thumbnails fill their cards',async()=>{
+ const {context,page,errors}=await setup(390,844);
+ await page.goto('http://localhost:4173/profile.html');
+ for(const id of ['experience','skills','projects','personal','key-skills','education','contact','home']){
+  await page.locator('#menuBtn').click();
+  await page.locator(`.sidebar .nav-link[href="#${id}"]`).click();
+  await page.waitForFunction(id=>location.hash==='#'+id,id);
+  const result=await page.locator('#'+id).evaluate(el=>({top:el.getBoundingClientRect().top,bottom:el.getBoundingClientRect().bottom,opacity:getComputedStyle(el.closest('.reveal')||el).opacity,locked:document.body.style.position==='fixed',overlay:document.querySelector('#sidebarBackdrop').classList.contains('show')}));
+  assert.ok(result.top<844&&result.bottom>76,`${id} needs to be in view`);assert.equal(result.opacity,'1');assert.equal(result.locked,false);assert.equal(result.overlay,false);
+ }
+ for(const width of [320,390,600]){
+  await page.setViewportSize({width,height:900});
+  const widths=await page.locator('.proj').evaluateAll(cards=>cards.map(c=>({head:c.querySelector('.proj-head').getBoundingClientRect().width,thumb:c.querySelector('.proj-thumb').getBoundingClientRect().width})));
+  for(const {head,thumb}of widths)assert.ok(Math.abs(head-thumb)<2,`thumbnail must fill card at ${width}`);
+ }
+ assert.match(await page.locator('#personal').textContent(),/Updated: 2026/);
+ assert.deepEqual(errors,[]);await context.close();
+});
