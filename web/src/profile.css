@@ -193,6 +193,18 @@ html[data-theme="light"] .theme-toggle .tt-sun{display:inline-flex}
 
 /* ============== KEY SKILLS GRID ============== */
 .grid{display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.skill-picker{padding:20px;border:1px solid var(--border);border-radius:22px;background:var(--surface)}
+.skill-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.skill-option{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:104px;padding:14px 10px;border:1px solid var(--border2);border-radius:14px;background:var(--bg2);color:var(--text2);font:500 .8rem/1.4 var(--font-body);cursor:pointer;transition:background-color .2s,border-color .2s,color .2s}
+.skill-option i{font-size:1.2rem}
+.skill-option.selected{border-color:var(--accent);background:var(--accent-dim);color:var(--accent)}
+.skill-option:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.skill-detail{margin-top:20px;padding:24px;border-radius:16px;background:var(--accent-dim);min-height:170px}
+.skill-detail h3{font:600 1.1rem/1.4 var(--font-display);margin-bottom:12px;color:var(--text)}
+.skill-detail p{color:var(--text2);line-height:1.7}
+.skill-print-list{display:none}
+@media(max-width:600px){.skill-picker{padding:16px}.skill-options{grid-template-columns:repeat(2,minmax(0,1fr))}.skill-detail{padding:20px;min-height:210px}}
+@media print{.skill-options,.skill-detail{display:none}.skill-print-list{display:block}.skill-print-list>div{margin-bottom:12px}}
 .card{
   position:relative; padding:20px;
   background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
@@ -355,7 +367,7 @@ footer{margin-top:48px; padding:32px 0; border-top:1px solid var(--border); text
 
 /* ============== REVEAL ============== */
 .reveal{opacity:1; transform:none; transition:opacity .7s ease, transform .7s ease}
-.js .reveal:not(.show){opacity:0; transform:translateY(20px)}
+.js .reveal:not(.show){opacity:1; transform:none}
 .reveal.show{opacity:1; transform:translateY(0)}
 /* Mobile browsers can delay IntersectionObserver for deep sections until pinch-zoom/reflow.
    Keep reveal animations fail-open on touch/mobile so Projects never stays blank. */
