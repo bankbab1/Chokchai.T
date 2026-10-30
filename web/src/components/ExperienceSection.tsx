@@ -16,6 +16,14 @@ export function ExperienceSection() {
     <div className="tl-role">Digital Solution, Automation and Transformation</div>
     <p className="tl-intro">Lead enterprise-wide digital initiatives in workflow automation, system integration, and digital transformation.</p>
     <div className="tl-content"><ul>
+    <li>Key Digital Initiatives:</li>
+    <li className="dot">Initiated and developed HR-driven employee lifecycle automation using React, n8n and PostgreSQL, connecting HRM data with Active Directory account creation, employee data updates and offboarding operations.</li>
+    <li className="dot">Automated IT onboarding task assignment, including software installation tasks, while supporting standardized hardware and software provisioning throughout the employee lifecycle.</li>
+    <li className="dot">Drive the rollout of a digital Delegation of Authority (DOA) platform, replacing fragmented Excel-based matrices with a single, reliable source of approval authority.</li>
+    <li className="dot">Enable business teams to replace paper-based approvals with digital workflows, leveraging DOA roles and authority rules to automate approval routing.</li>
+    <li className="dot">Initiated and built a single meeting-room availability portal as an alternative to a paid platform, integrating Microsoft Graph calendars with the company campus map to improve room visibility and wayfinding — without a database.</li>
+    <li className="dot">Improve IT support operations through Zoho ITSM customization, business rules and proactive monitoring, standardizing how staff handle requests and automating repeatable operational tasks.</li>
+    <li className="dot">Continuously explore practical digital solutions across business functions, translating operational needs into integrated tools and more efficient ways of working.</li>
     <li>Enterprise Integration &amp; Automation:</li>
     <li className="dot">End-to-end integration workflows connecting enterprise systems with reliable data synchronization across platforms.</li>
     <li className="dot">Automation workflows: file monitoring, data validation, transformation logic, scheduled execution.</li>
