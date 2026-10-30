@@ -3,10 +3,23 @@ import { useEffect, useState } from 'react';
 export function ScrollToTop() {
     const [visible, setVisible] = useState(false);
     useEffect(() => {
-        const update = () => setVisible(window.scrollY > 320);
+        let nearBottom = false;
+        const update = () => {
+            const remaining = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+            // Separate hide/show thresholds prevent flickering around the footer.
+            nearBottom = nearBottom ? remaining < 200 : remaining < 120;
+            setVisible(window.scrollY > 320 && !nearBottom);
+        };
         update();
         window.addEventListener('scroll', update, { passive: true });
-        return () => window.removeEventListener('scroll', update);
+        window.addEventListener('resize', update);
+        const observer = new ResizeObserver(update);
+        observer.observe(document.body);
+        return () => {
+            window.removeEventListener('scroll', update);
+            window.removeEventListener('resize', update);
+            observer.disconnect();
+        };
     }, []);
     function goToTop() {
         // Clear a deep section anchor so a refresh also opens at the profile top.
