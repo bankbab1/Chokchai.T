@@ -111,10 +111,6 @@
   .landing-btn:hover{transform:translateY(-2px); box-shadow:0 16px 32px -10px color-mix(in oklab, var(--accent) 70%, transparent)}
   .landing-btn i{transition:transform .2s}
   .landing-btn:hover i{transform:translateX(4px)}
-  .foot{
-    margin-top:24px; font-size:.72rem; color:var(--text3);
-    letter-spacing:.14em; text-transform:uppercase; font-family:var(--font-display);
-  }
   @keyframes fadeIn{from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:translateY(0)}}
   @media (max-width:480px){
     .landing-card{padding:36px 24px 30px}
@@ -158,3 +154,9 @@ body.landing-dialog-open{overflow:hidden}
 /* Plain arrow cursor everywhere: no hand pointer on hover. */
 a,button,summary,label,[role="button"],.nav-link,.chip,.card,.skill-option,.skill-step,.theme-toggle,.menu-btn,
 .scroll-to-top,.gallery img,.landing-btn,.sheet-continue,.sheet-cancel,.sheet-close,.btc-retry,.lb-btn,.brand-home{cursor:default!important}
+
+/* Name typing effect (same as the profile page) */
+.sr-only{position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0}
+.typing-wait{color:transparent}
+.typing-anchor{position:relative}
+.typing-caret{position:absolute; left:.06em; top:.12em; width:.08em; height:1em; border-radius:999px; background:var(--accent)}
