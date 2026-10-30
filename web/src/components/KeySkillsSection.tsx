@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { t } from "../i18n";
+import { useEffect, useRef, useState } from 'react';
 const skills = [
   {
     "icon": "fa-search",
@@ -68,10 +69,14 @@ const skills = [
 ];
 export function KeySkillsSection() {
  const [selected,setSelected]=useState(0);
+ const options=useRef<HTMLDivElement>(null);
+ const step=(d:number)=>setSelected(i=>(i+d+skills.length)%skills.length);
+ // Keep the chosen badge centred in the row, so it follows the chevrons.
+ useEffect(()=>{const row=options.current,btn=row?.children[selected] as HTMLElement|undefined;if(!row||!btn||row.scrollWidth<=row.clientWidth)return;row.scrollTo({left:btn.offsetLeft-(row.clientWidth-btn.offsetWidth)/2,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});},[selected]);
  return <section id="key-skills" className="section">
- <div className="section-head"><span className="section-num">/ 01</span><h2 className="section-title">Key Skills</h2><div className="section-rule"></div></div>
- <div className="skill-picker"><div className="skill-options" role="group" aria-label="Choose a key skill">
- {skills.map((skill,index)=><button key={skill.title} type="button" className={selected===index?'skill-option selected':'skill-option'} aria-pressed={selected===index} aria-controls="key-skill-detail" onClick={()=>setSelected(index)}><i className={`fa-solid ${skill.icon}`} aria-hidden="true"></i><span>{skill.title}</span></button>)}
- </div><div id="key-skill-detail" className="skill-detail" aria-live="polite" aria-atomic="true"><h3>{skills[selected].title}</h3><p>{skills[selected].description}</p></div>
- <div className="skill-print-list">{skills.map(skill=><div key={skill.title}><h3>{skill.title}</h3><p>{skill.description}</p></div>)}</div></div></section>;
+ <div className="section-head"><span className="section-num">/ 01</span><h2 className="section-title">{t("Key Skills")}</h2><div className="section-rule"></div></div>
+ <div className="skill-picker"><div className="skill-options" ref={options} role="group" aria-label={t("Choose a key skill")}>
+ {skills.map((skill,index)=><button key={skill.title} type="button" className={selected===index?'skill-option selected':'skill-option'} aria-pressed={selected===index} aria-controls="key-skill-detail" onClick={()=>setSelected(index)}><i className={`fa-solid ${skill.icon}`} aria-hidden="true"></i><span>{t(skill.title)}</span></button>)}
+ </div><div id="key-skill-detail" className="skill-detail" aria-live="polite" aria-atomic="true"><div className="skill-detail-head"><h3>{t(skills[selected].title)}</h3><div className="skill-nav"><button type="button" className="skill-step" aria-label={t("Previous skill")} onClick={()=>step(-1)}><i className="fa-solid fa-chevron-left" aria-hidden="true"></i></button><button type="button" className="skill-step" aria-label={t("Next skill")} onClick={()=>step(1)}><i className="fa-solid fa-chevron-right" aria-hidden="true"></i></button></div></div><p>{t(skills[selected].description)}</p></div>
+ <div className="skill-print-list">{skills.map(skill=><div key={skill.title}><h3>{t(skill.title)}</h3><p>{t(skill.description)}</p></div>)}</div></div></section>;
 }

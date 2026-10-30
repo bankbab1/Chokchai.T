@@ -38,7 +38,30 @@ export function useProfile() {
             menu.setAttribute('aria-expanded', 'true');
         });
         events.on(backdrop, 'click', closeSidebar);
-        let navigationFrame = 0;
+        let navigationFrame = 0, navLock = '', scrollFrame = 0;
+        const animateScroll = (top: number, done: () => void) => {
+            cancelAnimationFrame(scrollFrame);
+            let from = window.scrollY, dist = top - from;
+            // A long jump would scroll past dozens of screenshots and make the browser load and paint all of them.
+            // Hop to just short of the target and glide the last stretch instead.
+            const reach = window.innerHeight * 1.1;
+            if (Math.abs(dist) > reach * 1.5) {
+                from = top - Math.sign(dist) * reach;
+                window.scrollTo({ top: from, behavior: 'instant' });
+                dist = top - from;
+            }
+            if (matchMedia('(prefers-reduced-motion: reduce)').matches || Math.abs(dist) < 2) { window.scrollTo({ top, behavior: 'instant' }); done(); return; }
+            // One eased glide whatever the distance: longer jumps take a little longer, capped so it never drags.
+            const duration = Math.min(700, 300 + Math.abs(dist) * 0.2), start = performance.now();
+            const step = (now: number) => {
+                const t = Math.min(1, (now - start) / duration), eased = 1 - Math.pow(1 - t, 3);
+                window.scrollTo({ top: from + dist * eased, behavior: 'instant' });
+                if (t < 1) scrollFrame = requestAnimationFrame(step); else done();
+            };
+            scrollFrame = requestAnimationFrame(step);
+        };
+        // A wheel or touch gesture takes over from the glide.
+        ['wheel', 'touchstart'].forEach(ev => events.on(window, ev, () => { cancelAnimationFrame(scrollFrame); navLock = ''; }));
         document.querySelectorAll<HTMLAnchorElement>('.nav-link[href^="#"], .brand-home[href="#home"]').forEach(link => events.on(link, 'click', e => {
             const id = link.hash.slice(1), target = byId(id);
             if (!target) return;
@@ -50,16 +73,18 @@ export function useProfile() {
             navigationFrame = requestAnimationFrame(() => {
                 navigationFrame = requestAnimationFrame(() => {
                     const mobile = window.innerWidth <= 960;
-                    const offset = mobile ? (document.querySelector('.mobile-bar')?.getBoundingClientRect().height ?? 60) + 16 : 24;
-                    window.scrollTo({ top: id === 'home' ? 0 : target.getBoundingClientRect().top + window.scrollY - offset,
-                        behavior: mobile || matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
-                    history.replaceState(null, '', '#' + id);
+                    const offset = mobile ? (document.querySelector('.mobile-bar')?.getBoundingClientRect().height ?? 60) + 16 : (document.querySelector('.sidebar')?.getBoundingClientRect().height ?? 64) + 16;
+                    const top = id === 'home' ? 0 : target.getBoundingClientRect().top + window.scrollY - offset;
+                    // The menu highlights the clicked item at once instead of stepping through every section on the way.
+                    navLock = id;
+                    nav.forEach(l => l.classList.toggle('active', l.hash === '#' + id));
+                    animateScroll(top, () => { navLock = ''; history.replaceState(null, '', '#' + id); });
                 });
             });
         }));
         const sections = document.querySelectorAll<HTMLElement>('section[id],header[id]');
         const nav = document.querySelectorAll<HTMLAnchorElement>('.sidebar .nav-link[href^="#"]');
-        const active = () => { let cur = ''; sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200)
+        const active = () => { if (navLock) return; let cur = ''; sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200)
             cur = s.id; }); nav.forEach(l => l.classList.toggle('active', l.hash === '#' + cur)); };
         events.on(window, 'scroll', active);
         active();
@@ -79,11 +104,6 @@ export function useProfile() {
             events.on(window, 'resize', reveal);
             events.on(window, 'orientationchange', reveal);
         }
-        const now = new Date();
-        let age = now.getFullYear() - 1994;
-        if (now.getMonth() < 3 || (now.getMonth() === 3 && now.getDate() < 17))
-            age--;
-        byId('ageVal').textContent = age + ' yrs';
         const lb = byId('lightbox'), lbImg = byId('lbImg') as HTMLImageElement;
         let group: HTMLImageElement[] = [], idx = 0;
         const show = (i: number) => { if (!group.length)

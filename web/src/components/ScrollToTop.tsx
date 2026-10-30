@@ -1,3 +1,4 @@
+import { t } from "../i18n";
 import { useEffect, useState } from 'react';
 
 export function ScrollToTop() {
@@ -27,7 +28,7 @@ export function ScrollToTop() {
         window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
     }
     return <button type="button" className={`scroll-to-top${visible ? ' is-visible' : ''}`}
-        aria-label="Scroll to top" title="Scroll to top" tabIndex={visible ? 0 : -1}
+        aria-label={t("Scroll to top")} title={t("Scroll to top")} tabIndex={visible ? 0 : -1}
         aria-hidden={!visible} onClick={goToTop}>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="m6 15 6-6 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
