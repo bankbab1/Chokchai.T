@@ -26,16 +26,24 @@ export function ShareTab() {
     const ref = useRef<HTMLButtonElement>(null);
     const drag = useRef({ id: -1, startY: 0, startPos: 0, moved: false });
 
-    /** Maps the 0..1 position onto a pixel centre that keeps the whole tab on screen. */
-    const centreFor = (p: number) => {
-        const half = (ref.current?.offsetHeight ?? 120) / 2;
-        const lo = half + MARGIN, hi = window.innerHeight - half - MARGIN;
-        return lo + (hi - lo) * p;
+    /** Bottom edge of the fixed top bar (the desktop header or the mobile bar), so the tab can't slide underneath it. */
+    const barBottom = () => {
+        let bottom = 0;
+        for (const el of document.querySelectorAll<HTMLElement>('.sidebar, .mobile-bar')) {
+            const r = el.getBoundingClientRect();
+            if (r.width > 0 && r.top <= 1 && r.height < window.innerHeight / 2) bottom = Math.max(bottom, r.bottom);
+        }
+        return bottom;
     };
-    const free = () => {
+    /** Range of pixel centres that keeps the whole tab on screen and below the top bar. */
+    const range = () => {
         const half = (ref.current?.offsetHeight ?? 120) / 2;
-        return Math.max(1, window.innerHeight - 2 * (half + MARGIN));
+        const lo = barBottom() + half + MARGIN, hi = window.innerHeight - half - MARGIN;
+        return { lo, hi: Math.max(lo, hi) };
     };
+    /** Maps the 0..1 position onto that range. */
+    const centreFor = (p: number) => { const { lo, hi } = range(); return lo + (hi - lo) * p; };
+    const free = () => { const { lo, hi } = range(); return Math.max(1, hi - lo); };
     const save = (p: number) => { try { localStorage.setItem(POS_KEY, String(p)); } catch { /* ignore */ } };
     const clamp = (p: number) => Math.min(1, Math.max(0, p));
 
