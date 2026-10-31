@@ -244,7 +244,7 @@ function ShareSheet({ onClose }: { onClose: () => void }) {
         timer.current = window.setTimeout(() => setCopied(false), 1800);
     };
     // The device's own share sheet where the browser has one (phones, Windows/macOS Chrome and Edge on https or localhost);
-    // otherwise show direct links to the common apps instead.
+    // otherwise show direct links to LINE, WhatsApp and Email instead.
     const [targetsOpen, setTargetsOpen] = useState(false);
     const share = () => {
         if (typeof navigator.share === 'function') void navigator.share({ title: t('Chokchai Thawatcharaporn'), url }).catch(() => { /* cancelled */ });
@@ -254,7 +254,6 @@ function ShareSheet({ onClose }: { onClose: () => void }) {
     const u = encodeURIComponent(url);
     const targets = [
         { name: 'LINE', icon: 'fa-brands fa-line', href: `https://social-plugins.line.me/lineit/share?url=${u}` },
-        { name: 'Facebook', icon: 'fa-brands fa-facebook-f', href: `https://www.facebook.com/sharer/sharer.php?u=${u}` },
         { name: 'WhatsApp', icon: 'fa-brands fa-whatsapp', href: `https://wa.me/?text=${text}%20${u}` },
         { name: 'Email', icon: 'fa-solid fa-envelope', href: `mailto:?subject=${text}&body=${u}` },
     ];
