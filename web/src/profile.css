@@ -866,7 +866,9 @@ a,button,summary,label,[role="button"],.nav-link,.chip,.card,.skill-option,.skil
   display:flex; flex-direction:column; align-items:center; gap:8px; color:var(--text2);
   background:var(--bg2); border:1px solid var(--border2); border-left:0; border-radius:0 16px 16px 0; box-shadow:var(--shadow);
   transition:width .22s cubic-bezier(.2,.8,.2,1),background-color .2s,color .2s;
+  touch-action:none; user-select:none; -webkit-user-select:none; cursor:grab!important;
 }
+.share-tab.dragging{cursor:grabbing!important; transition:none; box-shadow:var(--shadow),0 8px 22px rgba(0,0,0,.18)}
 .share-tab:hover,.share-tab:focus-visible{width:54px; background:var(--accent-dim); color:var(--accent)}
 .share-tab:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 .share-tab-photo{width:32px; height:32px; border-radius:999px; object-fit:cover; object-position:center top; border:2px solid var(--accent)}
@@ -963,30 +965,125 @@ a,button,summary,label,[role="button"],.nav-link,.chip,.card,.skill-option,.skil
 /* ---- Age row ---- */
 .info-row{position:relative}
 
-/* Share sheet: save the QR as an image */
+/* Share sheet: close button, centred "CT" badge on the QR, Save image + Done row */
 .share-who{flex:1 1 auto; min-width:0}
-.share-save{
-  flex:0 0 auto; width:40px; height:40px; display:grid; place-items:center; border-radius:999px;
-  border:1px solid var(--border2); background:var(--surface); color:var(--text2); font-size:.95rem;
-  transition:background-color .2s,border-color .2s,color .2s,transform .15s;
+.share-x{
+  flex:0 0 auto; align-self:flex-start; width:36px; height:36px; display:grid; place-items:center; border-radius:999px;
+  border:0; background:var(--accent-dim); color:var(--text2); font-size:1rem;
+  transition:background-color .2s,color .2s,transform .15s;
 }
-.share-save:hover{border-color:var(--accent); background:var(--accent-dim); color:var(--accent)}
-.share-save:active{transform:scale(.94)}
-.share-save.done{border-color:var(--accent); background:var(--accent-dim); color:var(--accent)}
-.share-save:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.share-x:hover{color:var(--text)}
+.share-x:active{transform:scale(.94)}
+.share-x:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.share-qr{position:relative}
+.share-qr-art{position:relative}
+.share-qr-badge{
+  position:absolute; top:50%; left:50%; aspect-ratio:1; transform:translate(-50%,-50%);
+  display:grid; place-items:center; background:#fff; padding:3.2%; box-sizing:border-box;
+}
+.share-qr-badge b{
+  display:grid; place-items:center; width:100%; height:100%; border-radius:22%; background:#2563eb; color:#fff;
+  font:700 .95rem/1 var(--font-body); letter-spacing:.02em;
+}
+.share-actions{display:flex; gap:8px; margin-top:8px}
+.share-actions .exit-stay{flex:1 1 0; margin-top:0; width:auto}
+.share-actions .share-save.done{color:var(--accent)}
 
-/* ---- Keep the share tab clear of the content: reserve a left gutter wherever the page is narrow enough to reach it ---- */
-@media (min-width:961px) and (max-width:1180px){
-  .wrap{padding-left:68px}
-  .hero-grid{padding-left:68px}
-}
-@media (max-width:960px){
-  .wrap{padding-left:38px}
-  .hero-grid{padding-left:38px; padding-right:38px}
-}
+/* ============================================================================
+   Print / Save as PDF: restyle the page as a plain, dense one-column résumé
+   (black on white, no cards, no icons, no photo galleries) so it reads like a native CV.
+   ============================================================================ */
+@page{size:A4; margin:11mm 13mm}
+@media print{
+  :root,html[data-theme]{
+    --bg:#fff; --bg2:#fff; --surface:#fff; --text:#111; --text2:#2b2f38; --text3:#555b68;
+    --accent:#1d4ed8; --accent-dim:transparent; --border:#d5d9e0; --border2:#bfc5cf; --shadow:none;
+  }
+  *{-webkit-print-color-adjust:exact; print-color-adjust:exact; box-shadow:none!important; text-shadow:none!important; animation:none!important; transition:none!important}
+  html,body{background:#fff!important; color:#111!important; font-size:9pt!important; line-height:1.4!important}
+  body::before,.hero::before{display:none!important}
+  .sidebar,.mobile-bar,.sidebar-backdrop,.lightbox,footer,.btc-card,.scroll-to-top,.share-tab,.gallery,.lang-toggle,.eyebrow,
+  .section-num,.section-rule,.card-icon,.info-row>i,.tl-dot,.timeline::before,.tl-item::before,.proj-thumb,.copy-wrap,.skill-options,.skill-detail,.skill-nav{display:none!important}
+  .main{margin:0!important; padding:0!important; min-height:0!important}
+  .wrap{max-width:none!important; margin:0!important; padding:0!important}
+  a{color:inherit!important; text-decoration:none!important}
 
-/* ---- Full-bleed hero band stays flush with both screen edges, even though the column has an uneven gutter ---- */
-.wrap{--pl:32px; --pr:32px}
-.hero{margin-left:calc(-50vw - (var(--pl) - var(--pr)) / 2)}
-@media (min-width:961px) and (max-width:1180px){.wrap{--pl:68px}}
-@media (max-width:960px){.wrap{--pl:38px; --pr:20px}}
+  /* Header: portrait, name, role, summary and one contact line */
+  .hero{left:0!important; width:auto!important; margin:0 0 10pt!important; padding:0 0 8pt!important; background:none!important; border:0!important; border-bottom:1.5pt solid #111!important; border-radius:0!important}
+  .hero-grid{display:grid!important; max-width:none!important; margin:0!important; grid-template-columns:62pt 1fr!important; gap:14pt!important; padding:0!important; text-align:left!important; align-items:start!important}
+  .avatar{width:62pt!important; height:62pt!important; border-radius:50%!important; overflow:hidden; border:1pt solid var(--border2)!important; background:none!important; margin:0!important}
+  .avatar img{border-radius:50%!important; object-position:center top}
+  .hero h1{font-size:21pt!important; line-height:1.15!important; margin:0 0 2pt!important; font-weight:700!important; color:#111!important}
+  .hero .role{font-size:10.5pt!important; margin:0 0 5pt!important; color:var(--accent)!important; font-weight:600!important}
+  .hero .summary{font-size:8.8pt!important; line-height:1.45!important; max-width:none!important; color:var(--text2)!important}
+  .hero .summary p{margin:0 0 3pt!important}
+  .contact-row{display:flex!important; flex-wrap:wrap; gap:2pt 14pt!important; margin-top:6pt!important}
+  .chip{padding:0!important; border:0!important; background:none!important; font-size:8.5pt!important; color:#111!important; border-radius:0!important}
+  .chip i{color:var(--accent)!important; margin-right:2pt}
+
+  /* Section headings */
+  .section{margin:0 0 9pt!important}
+  .section-head{display:block!important; margin:0 0 5pt!important; padding-bottom:2pt; border-bottom:1pt solid #111; break-after:avoid}
+  .section-title{font-size:10.5pt!important; font-weight:700!important; text-transform:uppercase; letter-spacing:.09em!important; color:#111!important; margin:0!important}
+  .subhead{font-size:8pt!important; font-weight:700!important; letter-spacing:.07em!important; color:var(--accent)!important; margin:5pt 0 2pt!important; padding:0!important; border:0!important; background:none!important; break-after:avoid}
+  .sub-role{display:block!important; padding:0!important; margin:4pt 0 1pt!important; border:0!important; border-radius:0!important; background:none!important; color:#111!important; font-size:8.8pt!important; font-weight:700!important; break-after:avoid}
+
+  /* Cards become plain lines */
+  .card,.tl-item,.proj,.info-card,.skill-picker{background:none!important; border:0!important; border-radius:0!important; padding:0!important; margin:0!important; transform:none!important}
+  .skill-print-list{display:block!important; line-height:1.5}
+  .skill-print-list>div{display:inline!important; margin:0!important}
+  .skill-print-list>div p{display:none!important}
+  .skill-print-list h3,.grid .card h3{display:inline!important; font:700 8.6pt var(--font-body)!important; margin:0!important; color:#111!important}
+  .skill-print-list p,.grid .card p{display:inline!important; font-size:8.6pt!important; line-height:1.4!important; margin:0!important; color:var(--text2)!important}
+  .grid .card h3::after{content:" — "; font-weight:400}
+  .skill-print-list h3{font-weight:500!important}
+  .skill-print-list>div h3::after{content:"  ·  "; font-weight:400}
+  .skill-print-list>div:last-child h3::after{content:""}
+  .grid{display:grid!important; grid-template-columns:1fr 1fr!important; gap:2pt 16pt!important}
+  .grid .card{display:block!important; break-inside:avoid}
+
+  /* Background skills and hobbies: names only, run on in one line */
+  #skills .sub-role + .grid,#hobbies .grid{display:block!important}
+  #skills .sub-role + .grid .card,#hobbies .card{display:inline!important}
+  #skills .sub-role + .grid .card p,#hobbies .card p{display:none!important}
+  #skills .sub-role + .grid .card h3,#hobbies .card h3{font-weight:500!important}
+  #skills .sub-role + .grid .card h3::after,#hobbies .card h3::after{content:" · "}
+  #skills .sub-role + .grid .card:last-child h3::after,#hobbies .card:last-child h3::after{content:""}
+  .skills-note{font-size:8pt!important; padding:0!important; border:0!important; background:none!important; margin:2pt 0 3pt!important; color:var(--text3)!important}
+  .skills-note i{display:none!important}
+
+  /* Experience and education */
+  .timeline{padding:0!important}
+  .tl-item{margin:0 0 7pt!important; break-inside:auto}
+  .tl-date{display:block; font-size:8.2pt!important; font-weight:600; color:var(--accent)!important; letter-spacing:.03em!important; margin:0!important}
+  .tl-date::before{display:none!important}
+  .tl-title{font:700 10.5pt/1.25 var(--font-body)!important; margin:0!important; color:#111!important; break-after:avoid}
+  .tl-company{font-size:9.2pt!important; font-weight:600!important; margin:1pt 0 0!important; color:#111!important}
+  .tl-industry{font-size:8pt!important; margin:0 0 2pt!important; letter-spacing:0!important; color:var(--text3)!important}
+  .tl-role{font-size:8.4pt!important; font-weight:600!important; letter-spacing:0!important; margin:1pt 0 2pt!important; padding:0!important; color:var(--accent)!important; text-transform:none!important; background:none!important}
+  .tl-role::before{display:none!important}
+  .tl-intro{font-size:8.6pt!important; font-style:italic!important; margin:0 0 3pt!important; padding:0!important; border:0!important; color:var(--text2)!important}
+  .tl-content{gap:2pt!important}
+  .tl-content ul{gap:1.5pt!important}
+  .tl-content li{font-size:8.6pt!important; line-height:1.38!important; break-inside:avoid}
+  .tl-content li:not(.dot){margin:3pt 0 0!important; padding:0!important; border:0!important; background:none!important; font-weight:700!important; color:#111!important; break-after:avoid}
+  .tl-content li.dot{padding-left:10pt!important; color:var(--text2)!important}
+  .tl-content li.dot::before{content:"•"!important; width:auto!important; height:auto!important; left:1pt!important; top:0!important; background:none!important; border-radius:0!important; box-shadow:none!important; opacity:1!important; transform:none!important; color:#111; font-size:8.6pt; line-height:1.38}
+
+  /* Projects */
+  .proj{margin:0 0 5pt!important; break-inside:avoid}
+  .proj-head{display:block!important}
+  .proj-body{min-width:0!important}
+  .proj-title{font:700 9.6pt/1.25 var(--font-body)!important; margin:0!important; color:#111!important}
+  .proj-year{display:inline-block; padding:0!important; border:0!important; border-radius:0!important; background:none!important; font-size:8pt!important; letter-spacing:0!important; color:var(--text3)!important; margin:0 0 1pt!important}
+  .proj-desc{font-size:8.6pt!important; line-height:1.4!important; margin:0!important; color:var(--text2)!important}
+
+  /* Personal: plain two-column list, personality card left out */
+  .info-grid{display:block!important}
+  .info-grid>.info-card:first-child{display:none!important}
+  #contact{display:grid!important; grid-template-columns:1fr 1fr; gap:1pt 16pt}
+  #contact .tl-role{display:none!important}
+  .info-row{padding:0!important; font-size:8.6pt!important; gap:0!important; color:var(--text2)!important}
+  .info-row strong{color:#111!important; font-weight:600!important}
+  #hobbies{margin-bottom:0!important}
+}

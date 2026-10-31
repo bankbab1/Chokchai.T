@@ -1,18 +1,103 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
 import qrcode from 'qrcode-generator';
 import { t } from '../i18n';
 import { copyText } from './copyText';
+import { exportPdf } from './exportPdf';
 import { Sheet } from './Sheet';
 
+/** Odd number of QR modules cleared for the centre logo (about a quarter of the width, well inside what level-H error correction recovers). */
+const logoModules = (count: number) => { const n = Math.floor(count * 0.24); return n % 2 ? n : n + 1; };
+
+const POS_KEY = 'shareTabY';
+const MARGIN = 12;
+
+const readPos = () => {
+    try { const v = parseFloat(localStorage.getItem(POS_KEY) ?? ''); return Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 0.5; } catch { return 0.5; }
+};
+
 /**
- * A folder-style tab on the left edge, vertically centred, with the portrait on it.
- * Tapping it slides a sheet in from the left with a QR code for this profile.
+ * A folder-style tab on the left edge with the portrait on it. It stays glued to the left edge and can be dragged up and down
+ * (or moved with the arrow keys); the position is remembered. A tap, not a drag, slides a sheet in from the left with a QR code.
  */
 export function ShareTab() {
     const [open, setOpen] = useState(false);
+    const [pos, setPos] = useState(readPos); // vertical centre, 0..1 of the free range
+    const [dragging, setDragging] = useState(false);
+    const ref = useRef<HTMLButtonElement>(null);
+    const drag = useRef({ id: -1, startY: 0, startPos: 0, moved: false });
+
+    /** Maps the 0..1 position onto a pixel centre that keeps the whole tab on screen. */
+    const centreFor = (p: number) => {
+        const half = (ref.current?.offsetHeight ?? 120) / 2;
+        const lo = half + MARGIN, hi = window.innerHeight - half - MARGIN;
+        return lo + (hi - lo) * p;
+    };
+    const free = () => {
+        const half = (ref.current?.offsetHeight ?? 120) / 2;
+        return Math.max(1, window.innerHeight - 2 * (half + MARGIN));
+    };
+    const save = (p: number) => { try { localStorage.setItem(POS_KEY, String(p)); } catch { /* ignore */ } };
+    const clamp = (p: number) => Math.min(1, Math.max(0, p));
+
+    // Re-apply on resize so the tab never ends up off screen
+    const [, force] = useState(0);
+    useEffect(() => {
+        const onResize = () => force(n => n + 1);
+        window.addEventListener('resize', onResize);
+        return () => window.removeEventListener('resize', onResize);
+    }, []);
+
+    const onDown = (e: PointerEvent<HTMLButtonElement>) => {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        drag.current = { id: e.pointerId, startY: e.clientY, startPos: pos, moved: false };
+        e.currentTarget.setPointerCapture(e.pointerId);
+    };
+    const onMove = (e: PointerEvent<HTMLButtonElement>) => {
+        const d = drag.current;
+        if (d.id !== e.pointerId) return;
+        const dy = e.clientY - d.startY;
+        if (!d.moved && Math.abs(dy) < 6) return;
+        if (!d.moved) { d.moved = true; setDragging(true); }
+        setPos(clamp(d.startPos + dy / free()));
+    };
+    const onUp = (e: PointerEvent<HTMLButtonElement>) => {
+        const d = drag.current;
+        if (d.id !== e.pointerId) return;
+        d.id = -1;
+        setDragging(false);
+        if (d.moved) save(pos);
+    };
+    const onKey = (e: KeyboardEvent<HTMLButtonElement>) => {
+        const step = e.key === 'ArrowUp' ? -48 : e.key === 'ArrowDown' ? 48 : 0;
+        if (!step) return;
+        e.preventDefault();
+        const next = clamp(pos + step / free());
+        setPos(next);
+        save(next);
+    };
+    const onClick = () => {
+        if (drag.current.moved) { drag.current.moved = false; return; } // the release of a drag is not a tap
+        setOpen(true);
+    };
+
     return (<>
-        <button type="button" className="share-tab" aria-haspopup="dialog" aria-expanded={open} aria-label={t('Share this profile')} title={t('Share this profile')} onClick={() => setOpen(true)}>
-            <img className="share-tab-photo" src="chok.jpg" alt="" decoding="async" />
+        <button
+            ref={ref}
+            type="button"
+            className={`share-tab${dragging ? ' dragging' : ''}`}
+            style={{ top: centreFor(pos) }}
+            aria-haspopup="dialog"
+            aria-expanded={open}
+            aria-label={t('Share this profile')}
+            title={t('Share this profile')}
+            onPointerDown={onDown}
+            onPointerMove={onMove}
+            onPointerUp={onUp}
+            onPointerCancel={onUp}
+            onKeyDown={onKey}
+            onClick={onClick}
+        >
+            <img className="share-tab-photo" src="chok.jpg" alt="" decoding="async" draggable={false} />
             <i className="fa-solid fa-qrcode" aria-hidden="true"></i>
             <span className="share-tab-label" aria-hidden="true">{t('Share')}</span>
         </button>
@@ -24,7 +109,7 @@ function ShareSheet({ onClose }: { onClose: () => void }) {
     // The QR points at the site's first screen, so anyone who scans it arrives the same way you intended.
     const url = useMemo(() => new URL('./', window.location.href).href, []);
     const qr = useMemo(() => {
-        const code = qrcode(0, 'M');
+        const code = qrcode(0, 'H');
         code.addData(url);
         code.make();
         return { code, svg: code.createSvgTag({ cellSize: 4, margin: 0, scalable: true }) };
@@ -89,10 +174,10 @@ function ShareSheet({ onClose }: { onClose: () => void }) {
         ctx.textAlign = 'left';
         ctx.fillStyle = ink;
         ctx.font = `700 48px ${family}`;
-        ctx.fillText(t('Share this profile'), pad + photoSize + 32, cy - 6);
+        ctx.fillText(t('Chokchai Thawatcharaporn'), pad + photoSize + 32, cy - 6);
         ctx.fillStyle = muted;
         ctx.font = `500 34px ${family}`;
-        ctx.fillText(t('Chokchai Thawatcharaporn'), pad + photoSize + 32, cy + 42);
+        ctx.fillText(t('Senior Digital Solution'), pad + photoSize + 32, cy + 42);
 
         // Framed QR
         const qx = (W - qrCard) / 2;
@@ -108,6 +193,20 @@ function ShareSheet({ onClose }: { onClose: () => void }) {
         for (let row = 0; row < count; row++)
             for (let col = 0; col < count; col++)
                 if (code.isDark(row, col)) ctx.fillRect(ox + col * cell, oy + row * cell, cell, cell);
+
+        // "CT" badge: clears a module-aligned square in the middle (odd count, so it sits exactly on the grid) and sets the badge inside it
+        const clear = logoModules(count) * cell, cx0 = ox + (used - clear) / 2, cy0 = oy + (used - clear) / 2, inset = Math.round(cell * 0.7);
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(cx0, cy0, clear, clear);
+        ctx.fillStyle = accent;
+        rounded(cx0 + inset, cy0 + inset, clear - inset * 2, clear - inset * 2, Math.round(clear * 0.2));
+        ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.font = `700 ${Math.round(clear * 0.34)}px ${family}`;
+        ctx.fillText('CT', cx0 + clear / 2, cy0 + clear / 2 + Math.round(clear * 0.02));
+        ctx.textBaseline = 'alphabetic';
 
         // Scan text and link
         ctx.textAlign = 'center';
@@ -153,21 +252,34 @@ function ShareSheet({ onClose }: { onClose: () => void }) {
                 <div className="share-head">
                     <img className="share-photo" src="chok.jpg" alt="" decoding="async" />
                     <div className="share-who">
-                        <h2 id="shareTitle">{t('Share this profile')}</h2>
-                        <p>{t('Chokchai Thawatcharaporn')}</p>
+                        <h2 id="shareTitle">{t('Chokchai Thawatcharaporn')}</h2>
+                        <p>{t('Senior Digital Solution')}</p>
                     </div>
-                    <button type="button" className={`share-save${saved ? ' done' : ''}`} onClick={save} aria-label={t('Save QR as image')} title={saved ? t('Saved') : t('Save QR as image')}>
-                        <i className={`fa-solid ${saved ? 'fa-check' : 'fa-download'}`} aria-hidden="true"></i>
+                    <button type="button" className="share-x" onClick={close} aria-label={t('Close')} title={t('Close')}>
+                        <i className="fa-solid fa-xmark" aria-hidden="true"></i>
                     </button>
                 </div>
-                <div className="share-qr" role="img" aria-label={t('QR code for this profile')} dangerouslySetInnerHTML={{ __html: svg }} />
+                <div className="share-qr" role="img" aria-label={t('QR code for this profile')}>
+                    <div className="share-qr-art">
+                        <div dangerouslySetInnerHTML={{ __html: svg }} />
+                        <span className="share-qr-badge" aria-hidden="true" style={{ width: `${(logoModules(qr.code.getModuleCount()) / qr.code.getModuleCount()) * 100}%` }}><b>CT</b></span>
+                    </div>
+                </div>
                 <p className="share-hint">{t('Scan to open this profile')}</p>
                 <p className="share-url">{url}</p>
                 <button type="button" className="exit-go" onClick={copy}>
                     <i className={`fa-solid ${copied ? 'fa-check' : 'fa-link'}`} aria-hidden="true"></i>&nbsp;{copied ? t('Link copied') : t('Copy link')}
                 </button>
                 {canShare && <button type="button" className="share-native" onClick={share}><i className="fa-solid fa-arrow-up-from-bracket" aria-hidden="true"></i>&nbsp;{t('Share…')}</button>}
-                <button type="button" className="exit-stay" onClick={close}>{t('Done')}</button>
+                <button type="button" className="share-native" onClick={() => { close(); window.setTimeout(exportPdf, 320); }}>
+                    <i className="fa-solid fa-file-pdf" aria-hidden="true"></i>&nbsp;{t('Export as PDF')}
+                </button>
+                <div className="share-actions">
+                    <button type="button" className={`exit-stay share-save${saved ? ' done' : ''}`} onClick={save}>
+                        <i className={`fa-solid ${saved ? 'fa-check' : 'fa-download'}`} aria-hidden="true"></i>&nbsp;{saved ? t('Saved') : t('Save image')}
+                    </button>
+                    <button type="button" className="exit-stay" onClick={close}>{t('Done')}</button>
+                </div>
             </>)}
         </Sheet>
     );

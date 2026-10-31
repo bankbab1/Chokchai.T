@@ -350,5 +350,7 @@ export const TH: Record<string, string> = {
   "Link copied": "คัดลอกลิงก์แล้ว",
   "Share…": "แชร์…",
   "Save QR as image": "บันทึกคิวอาร์เป็นรูปภาพ",
-  "Saved": "บันทึกแล้ว"
+  "Saved": "บันทึกแล้ว",
+  "Save image": "บันทึกรูปภาพ",
+  "Export as PDF": "ส่งออกเป็น PDF"
 };
