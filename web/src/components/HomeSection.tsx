@@ -1,5 +1,6 @@
 import { t } from "../i18n";
 import { TypingText } from "./TypingText";
+import { PrintQr } from "./PrintQr";
 export function HomeSection() {
     return (<header id="home" className="hero reveal">
     <div className="hero-grid">
@@ -19,6 +20,7 @@ export function HomeSection() {
     <a className="chip" href="https://linkedin.com/in/chokchait" target="_blank" rel="noopener"><i className="fa-brands fa-linkedin"></i> {t("linkedin.com/in/chokchait")}</a>
     <span className="chip"><i className="fa-solid fa-location-dot"></i> {t("Bangkok, Thailand")}</span>
     </div>
+    <PrintQr />
     </div>
     </div>
     </header>);

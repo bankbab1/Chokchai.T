@@ -194,12 +194,12 @@ function ShareSheet({ onClose }: { onClose: () => void }) {
             for (let col = 0; col < count; col++)
                 if (code.isDark(row, col)) ctx.fillRect(ox + col * cell, oy + row * cell, cell, cell);
 
-        // "CT" badge: clears a module-aligned square in the middle (odd count, so it sits exactly on the grid) and sets the badge inside it
-        const clear = logoModules(count) * cell, cx0 = ox + (used - clear) / 2, cy0 = oy + (used - clear) / 2, inset = Math.round(cell * 0.7);
+        // "CT" badge: clears a module-aligned square in the middle (odd count, so it sits exactly on the grid) and fills it with the badge, no frame
+        const clear = logoModules(count) * cell, cx0 = ox + (used - clear) / 2, cy0 = oy + (used - clear) / 2, inset = 0;
         ctx.fillStyle = '#fff';
         ctx.fillRect(cx0, cy0, clear, clear);
         ctx.fillStyle = accent;
-        rounded(cx0 + inset, cy0 + inset, clear - inset * 2, clear - inset * 2, Math.round(clear * 0.2));
+        rounded(cx0 + inset, cy0 + inset, clear - inset * 2, clear - inset * 2, Math.round(clear * 0.14));
         ctx.fill();
         ctx.fillStyle = '#fff';
         ctx.textAlign = 'center';
@@ -236,7 +236,6 @@ function ShareSheet({ onClose }: { onClose: () => void }) {
     const [copied, setCopied] = useState(false);
     const timer = useRef<number>(0);
     useEffect(() => () => window.clearTimeout(timer.current), []);
-    const canShare = typeof navigator.share === 'function';
 
     const copy = async () => {
         await copyText(url);
@@ -244,7 +243,21 @@ function ShareSheet({ onClose }: { onClose: () => void }) {
         window.clearTimeout(timer.current);
         timer.current = window.setTimeout(() => setCopied(false), 1800);
     };
-    const share = () => { void navigator.share({ title: t('Chokchai Thawatcharaporn'), url }).catch(() => { /* cancelled */ }); };
+    // The device's own share sheet where the browser has one (phones, Windows/macOS Chrome and Edge on https or localhost);
+    // otherwise show direct links to the common apps instead.
+    const [targetsOpen, setTargetsOpen] = useState(false);
+    const share = () => {
+        if (typeof navigator.share === 'function') void navigator.share({ title: t('Chokchai Thawatcharaporn'), url }).catch(() => { /* cancelled */ });
+        else setTargetsOpen(true);
+    };
+    const text = encodeURIComponent(t('Chokchai Thawatcharaporn') + ' — ' + t('Senior Digital Solution'));
+    const u = encodeURIComponent(url);
+    const targets = [
+        { name: 'LINE', icon: 'fa-brands fa-line', href: `https://social-plugins.line.me/lineit/share?url=${u}` },
+        { name: 'Facebook', icon: 'fa-brands fa-facebook-f', href: `https://www.facebook.com/sharer/sharer.php?u=${u}` },
+        { name: 'WhatsApp', icon: 'fa-brands fa-whatsapp', href: `https://wa.me/?text=${text}%20${u}` },
+        { name: 'Email', icon: 'fa-solid fa-envelope', href: `mailto:?subject=${text}&body=${u}` },
+    ];
 
     return (
         <Sheet onClose={onClose} from="left" labelledBy="shareTitle">
@@ -266,20 +279,35 @@ function ShareSheet({ onClose }: { onClose: () => void }) {
                     </div>
                 </div>
                 <p className="share-hint">{t('Scan to open this profile')}</p>
-                <p className="share-url">{url}</p>
-                <button type="button" className="exit-go" onClick={copy}>
-                    <i className={`fa-solid ${copied ? 'fa-check' : 'fa-link'}`} aria-hidden="true"></i>&nbsp;{copied ? t('Link copied') : t('Copy link')}
-                </button>
-                {canShare && <button type="button" className="share-native" onClick={share}><i className="fa-solid fa-arrow-up-from-bracket" aria-hidden="true"></i>&nbsp;{t('Share…')}</button>}
-                <button type="button" className="share-native" onClick={() => { close(); window.setTimeout(exportPdf, 320); }}>
-                    <i className="fa-solid fa-file-pdf" aria-hidden="true"></i>&nbsp;{t('Export as PDF')}
-                </button>
-                <div className="share-actions">
-                    <button type="button" className={`exit-stay share-save${saved ? ' done' : ''}`} onClick={save}>
-                        <i className={`fa-solid ${saved ? 'fa-check' : 'fa-download'}`} aria-hidden="true"></i>&nbsp;{saved ? t('Saved') : t('Save image')}
+                <div className="share-link">
+                    <span className="share-url" title={url}>{url}</span>
+                    <button type="button" className={`share-copy${copied ? ' done' : ''}`} onClick={copy} aria-label={copied ? t('Link copied') : t('Copy link')} title={copied ? t('Link copied') : t('Copy link')}>
+                        <i className={`fa-solid ${copied ? 'fa-check' : 'fa-copy'}`} aria-hidden="true"></i>
                     </button>
-                    <button type="button" className="exit-stay" onClick={close}>{t('Done')}</button>
                 </div>
+                {targetsOpen ? (
+                    <div className="share-tiles">
+                        {targets.map(x => (
+                            <a key={x.name} className="share-tile" href={x.href} target="_blank" rel="noopener noreferrer">
+                                <i className={x.icon} aria-hidden="true"></i><span>{x.name}</span>
+                            </a>
+                        ))}
+                        <button type="button" className="share-tile share-back" onClick={() => setTargetsOpen(false)} aria-label={t('Back')} title={t('Back')}>
+                            <i className="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                ) : (
+                    <div className="share-tiles">
+                        <button type="button" className="share-tile" onClick={share}><i className="fa-solid fa-arrow-up-from-bracket" aria-hidden="true"></i><span>{t('Share…')}</span></button>
+                        <button type="button" className="share-tile" onClick={() => { close(); window.setTimeout(exportPdf, 320); }}>
+                            <i className="fa-solid fa-file-pdf" aria-hidden="true"></i><span>{t('Export as PDF')}</span>
+                        </button>
+                        <button type="button" className={`share-tile${saved ? ' done' : ''}`} onClick={save}>
+                            <i className={`fa-solid ${saved ? 'fa-check' : 'fa-download'}`} aria-hidden="true"></i><span>{saved ? t('Saved') : t('Save image')}</span>
+                        </button>
+                    </div>
+                )}
+                <button type="button" className="exit-stay share-done" onClick={close}>{t('Done')}</button>
             </>)}
         </Sheet>
     );

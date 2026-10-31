@@ -205,6 +205,7 @@ html[data-theme="light"] .theme-toggle .tt-sun{display:inline-flex}
 .skill-detail h3{font:600 1.1rem/1.4 var(--font-display);margin-bottom:12px;color:var(--text)}
 .skill-detail p{color:var(--text2);line-height:1.7}
 .skill-print-list{display:none}
+.print-qr{display:none}
 @media(max-width:600px){.skill-picker{padding:16px}.skill-options{grid-template-columns:repeat(2,minmax(0,1fr))}.skill-detail{padding:20px;min-height:210px}}
 @media print{.skill-options,.skill-detail{display:none}.skill-print-list{display:block}.skill-print-list>div{margin-bottom:12px}}
 .card{
@@ -826,7 +827,7 @@ a,button,summary,label,[role="button"],.nav-link,.chip,.card,.skill-option,.skil
 /* From the left edge: a card that slides in beside the share tab */
 .sheet-dialog.from-left{inset:0 auto 0 12px; margin:auto 0; width:min(calc(100vw - 24px),380px); height:fit-content}
 .sheet-dialog.from-left .sheet-panel{
-  padding:22px 22px 18px; border:1px solid var(--border2); border-radius:28px; box-shadow:0 20px 70px rgba(0,0,0,.28);
+  padding:18px 20px 12px; border:1px solid var(--border2); border-radius:28px; box-shadow:0 20px 70px rgba(0,0,0,.28);
   transform:none; animation:sheetLeft .36s cubic-bezier(.2,.8,.2,1) both; touch-action:auto;
 }
 .sheet-dialog.from-left.closing .sheet-panel{animation:sheetLeftOut .26s cubic-bezier(.4,0,1,1) both; transition:none}
@@ -884,14 +885,36 @@ a,button,summary,label,[role="button"],.nav-link,.chip,.card,.skill-option,.skil
 @media print{.share-tab{display:none}}
 
 /* Share sheet content */
-.share-head{display:flex; align-items:center; gap:12px; text-align:left; margin-bottom:16px}
+.share-head{display:flex; align-items:center; gap:12px; text-align:left; margin-bottom:12px}
 .share-photo{width:48px; height:48px; flex:0 0 auto; border-radius:999px; object-fit:cover; object-position:center top; border:2px solid var(--accent)}
 .share-who h2{font-size:1.1rem; margin:0}
 .sheet-panel .share-who p{margin:2px 0 0; font-size:.86rem}
-.share-qr{width:min(224px,100%); margin:0 auto 12px; padding:14px; line-height:0; background:#fff; border-radius:20px; border:1px solid var(--border)}
+.share-qr{width:min(200px,100%); margin:0 auto 10px; padding:14px; line-height:0; background:#fff; border-radius:20px; border:1px solid var(--border)}
 .share-qr svg{display:block; width:100%; height:auto}
 .sheet-panel .share-hint{margin:0 auto 4px; font-weight:600; color:var(--text)}
-.sheet-panel .share-url{margin:0 auto 16px; max-width:100%; font-size:.78rem; color:var(--text3); overflow-wrap:anywhere}
+.share-link{display:flex; align-items:center; gap:6px; margin:6px 0 12px; padding:4px 4px 4px 12px; border:1px solid var(--border2); border-radius:14px; background:var(--surface)}
+.share-link .share-url{flex:1 1 auto; min-width:0; margin:0; font-size:.78rem; color:var(--text3); text-align:left; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.share-copy{
+  flex:0 0 auto; width:34px; height:34px; display:grid; place-items:center; border:0; border-radius:10px;
+  background:var(--accent-dim); color:var(--accent); font-size:.9rem; transition:background-color .2s,color .2s,transform .15s;
+}
+.share-copy:hover{background:var(--accent); color:var(--on-accent)}
+.share-copy:active{transform:scale(.94)}
+.share-copy.done{background:var(--accent); color:var(--on-accent)}
+.share-copy:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.share-tiles{display:flex; gap:8px}
+.share-tile{
+  flex:1 1 0; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; padding:10px 4px;
+  border:1px solid var(--border2); border-radius:14px; background:var(--surface); color:var(--text); font:600 .74rem/1.2 var(--font-body);
+  transition:border-color .2s,background-color .2s,color .2s;
+}
+.share-tile{text-decoration:none}
+.share-back{flex:0 0 40px}
+.share-tile i{font-size:1.05rem; color:var(--accent)}
+.share-tile:hover{border-color:var(--accent); background:var(--accent-dim)}
+.share-tile.done{border-color:var(--accent); color:var(--accent)}
+.share-tile:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.share-done{height:44px; margin-top:6px}
 
 /* Back-to-top keeps its 48px touch size (colours follow Workfit). */
 .scroll-to-top{width:48px; height:48px}
@@ -979,15 +1002,12 @@ a,button,summary,label,[role="button"],.nav-link,.chip,.card,.skill-option,.skil
 .share-qr-art{position:relative}
 .share-qr-badge{
   position:absolute; top:50%; left:50%; aspect-ratio:1; transform:translate(-50%,-50%);
-  display:grid; place-items:center; background:#fff; padding:3.2%; box-sizing:border-box;
+  display:grid; place-items:center; background:#fff; padding:0; box-sizing:border-box;
 }
 .share-qr-badge b{
-  display:grid; place-items:center; width:100%; height:100%; border-radius:22%; background:#2563eb; color:#fff;
+  display:grid; place-items:center; width:100%; height:100%; border-radius:14%; background:#2563eb; color:#fff;
   font:700 .95rem/1 var(--font-body); letter-spacing:.02em;
 }
-.share-actions{display:flex; gap:8px; margin-top:8px}
-.share-actions .exit-stay{flex:1 1 0; margin-top:0; width:auto}
-.share-actions .share-save.done{color:var(--accent)}
 
 /* ============================================================================
    Print / Save as PDF: restyle the page as a plain, dense one-column résumé
@@ -1013,13 +1033,19 @@ a,button,summary,label,[role="button"],.nav-link,.chip,.card,.skill-option,.skil
   .hero-grid{display:grid!important; max-width:none!important; margin:0!important; grid-template-columns:62pt 1fr!important; gap:14pt!important; padding:0!important; text-align:left!important; align-items:start!important}
   .avatar{width:62pt!important; height:62pt!important; border-radius:50%!important; overflow:hidden; border:1pt solid var(--border2)!important; background:none!important; margin:0!important}
   .avatar img{border-radius:50%!important; object-position:center top}
+  .hero{position:relative!important}
+  .hero-grid>div:last-child{padding-right:74pt}
+  .print-qr{display:block!important; position:absolute; top:0; right:0; width:60pt; text-align:center; break-inside:avoid}
+  .print-qr svg{display:block; width:60pt; height:60pt}
+  .print-qr span{display:block; margin-top:2pt; font-size:6.5pt; line-height:1.2; color:var(--text3)}
   .hero h1{font-size:21pt!important; line-height:1.15!important; margin:0 0 2pt!important; font-weight:700!important; color:#111!important}
   .hero .role{font-size:10.5pt!important; margin:0 0 5pt!important; color:var(--accent)!important; font-weight:600!important}
   .hero .summary{font-size:8.8pt!important; line-height:1.45!important; max-width:none!important; color:var(--text2)!important}
   .hero .summary p{margin:0 0 3pt!important}
-  .contact-row{display:flex!important; flex-wrap:wrap; gap:2pt 14pt!important; margin-top:6pt!important}
-  .chip{padding:0!important; border:0!important; background:none!important; font-size:8.5pt!important; color:#111!important; border-radius:0!important}
-  .chip i{color:var(--accent)!important; margin-right:2pt}
+  /* One line: email, phone, LinkedIn, location. Beats the phone-width grid above, and runs under the QR column. */
+  .contact-row{display:flex!important; flex-wrap:nowrap!important; justify-content:flex-start!important; align-items:center; gap:0 13pt!important; max-width:none!important; margin:6pt -74pt 0 0!important}
+  .contact-row .chip,.chip{display:inline-flex!important; align-items:center; gap:3pt!important; order:0!important; grid-column:auto!important; min-width:0; min-height:0!important; padding:0!important; border:0!important; border-radius:0!important; background:none!important; font-size:8pt!important; line-height:1.3!important; color:#111!important; text-align:left!important; white-space:nowrap!important; overflow-wrap:normal!important; justify-content:flex-start!important}
+  .contact-row .chip i,.chip i{display:inline!important; width:auto!important; height:auto!important; background:none!important; border-radius:0!important; font-size:7.5pt!important; color:var(--accent)!important; margin:0!important}
 
   /* Section headings */
   .section{margin:0 0 9pt!important}
@@ -1030,15 +1056,12 @@ a,button,summary,label,[role="button"],.nav-link,.chip,.card,.skill-option,.skil
 
   /* Cards become plain lines */
   .card,.tl-item,.proj,.info-card,.skill-picker{background:none!important; border:0!important; border-radius:0!important; padding:0!important; margin:0!important; transform:none!important}
-  .skill-print-list{display:block!important; line-height:1.5}
-  .skill-print-list>div{display:inline!important; margin:0!important}
-  .skill-print-list>div p{display:none!important}
+  .skill-print-list{display:grid!important; grid-template-columns:1fr 1fr; gap:3pt 16pt}
+  .skill-print-list>div{margin:0!important; break-inside:avoid}
   .skill-print-list h3,.grid .card h3{display:inline!important; font:700 8.6pt var(--font-body)!important; margin:0!important; color:#111!important}
   .skill-print-list p,.grid .card p{display:inline!important; font-size:8.6pt!important; line-height:1.4!important; margin:0!important; color:var(--text2)!important}
   .grid .card h3::after{content:" — "; font-weight:400}
-  .skill-print-list h3{font-weight:500!important}
-  .skill-print-list>div h3::after{content:"  ·  "; font-weight:400}
-  .skill-print-list>div:last-child h3::after{content:""}
+  .skill-print-list h3::after{content:" — "; font-weight:400}
   .grid{display:grid!important; grid-template-columns:1fr 1fr!important; gap:2pt 16pt!important}
   .grid .card{display:block!important; break-inside:avoid}
 
@@ -1055,6 +1078,11 @@ a,button,summary,label,[role="button"],.nav-link,.chip,.card,.skill-option,.skil
   /* Experience and education */
   .timeline{padding:0!important}
   .tl-item{margin:0 0 7pt!important; break-inside:auto}
+  #education .tl-item{break-inside:avoid}
+  .tl-date,.tl-title,.tl-company,.tl-industry,.tl-role,.tl-intro,.subhead,.sub-role{break-after:avoid!important}
+  .tl-date{break-before:auto}
+  .tl-content li{orphans:3; widows:3}
+  .tl-content li:not(.dot) + li.dot{break-before:avoid}
   .tl-date{display:block; font-size:8.2pt!important; font-weight:600; color:var(--accent)!important; letter-spacing:.03em!important; margin:0!important}
   .tl-date::before{display:none!important}
   .tl-title{font:700 10.5pt/1.25 var(--font-body)!important; margin:0!important; color:#111!important; break-after:avoid}

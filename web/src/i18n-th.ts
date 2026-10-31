@@ -352,5 +352,7 @@ export const TH: Record<string, string> = {
   "Save QR as image": "บันทึกคิวอาร์เป็นรูปภาพ",
   "Saved": "บันทึกแล้ว",
   "Save image": "บันทึกรูปภาพ",
-  "Export as PDF": "ส่งออกเป็น PDF"
+  "Export as PDF": "ส่งออกเป็น PDF",
+  "Back": "กลับ",
+  "Scan to view online": "สแกนเพื่อดูออนไลน์"
 };
