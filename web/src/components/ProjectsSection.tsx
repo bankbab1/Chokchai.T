@@ -11,8 +11,8 @@ export function ProjectsSection() {
     <div className="proj-thumb"><img src="project1_thumbnail_img.jpg" alt="" decoding="async"/></div>
     <div className="proj-body min-w-0">
     <h3 className="proj-title">{t("Bitcoin & Crypto Ticker (ESP32)")}</h3>
-    <span className="proj-year">{t("2024 — Embedded · API")}</span>
-    <p className="proj-desc">{t("Real-time cryptocurrency prices via Binance API on a TFT display with color-coded indicators. ESP32-based and fully standalone — demonstrating API integration, embedded systems and real-time data visualization.")}</p>
+    <span className="proj-year">{t("2024 — Embedded · API · WebSocket")}</span>
+    <p className="proj-desc">{t("Real-time cryptocurrency prices via Binance API and WebSocket streams on a TFT display with color-coded indicators. ESP32-based and fully standalone — demonstrating API integration, WebSocket communication, embedded systems and real-time data visualization.")}</p>
     </div>
     </div>
     <div className="gallery">
