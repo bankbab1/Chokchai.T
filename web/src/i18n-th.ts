@@ -1,5 +1,8 @@
 /* Thai text for the profile, keyed by the exact English string. Missing keys fall back to English. */
 export const TH: Record<string, string> = {
+  "See you again": "แล้วพบกันใหม่",
+  "Thanks for stopping by": "ขอบคุณที่แวะมาชม",
+  "Returning to welcome": "กำลังกลับสู่หน้าต้อนรับ",
   "Available · Bangkok": "พร้อมรับงาน · กรุงเทพฯ",
   "Senior Digital Solution — automation, integration & transformation": "Senior Digital Solution — ระบบอัตโนมัติ การเชื่อมต่อระบบ และการเปลี่ยนผ่านสู่ดิจิทัล",
   "Senior Digital Solution professional specializing in workflow automation, system integration, and enterprise digital transformation.": "ผู้เชี่ยวชาญด้าน Senior Digital Solution ที่เน้นงาน workflow automation การเชื่อมต่อระบบ (system integration) และการเปลี่ยนผ่านสู่ดิจิทัลระดับองค์กร",
