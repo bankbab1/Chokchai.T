@@ -3,9 +3,11 @@ import "./index.css";
 import { useState } from "react";
 import { ProfileConfirmation } from "./components/ProfileConfirmation";
 import { TypingText } from "./components/TypingText";
+import { EnteringScreen } from "./components/EnteringScreen";
 export default function Landing() {
     useLanding();
     const [confirm, setConfirm] = useState(false);
+    const [entering, setEntering] = useState(false);
     return (<>
     <button className="theme-toggle" id="themeToggle" aria-label="Toggle theme"><i className="fa-solid fa-moon"></i></button>
     <main className="landing-card w-full">
@@ -20,6 +22,7 @@ export default function Landing() {
     </main>
 
 
-    {confirm && <ProfileConfirmation onClose={() => setConfirm(false)} />}
+    {confirm && <ProfileConfirmation onClose={() => setConfirm(false)} onEnter={() => setEntering(true)} />}
+    {entering && <EnteringScreen onDone={() => { window.location.href = 'profile.html'; }} />}
     </>);
 }

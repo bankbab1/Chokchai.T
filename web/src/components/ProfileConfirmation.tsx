@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { track } from '../hooks/shared';
 
-export function ProfileConfirmation({ onClose }: { onClose: () => void }) {
+export function ProfileConfirmation({ onClose, onEnter }: { onClose: () => void; onEnter: () => void }) {
     const dialog = useRef<HTMLDialogElement>(null);
     const [phase, setPhase] = useState('entering');
     const [offset, setOffset] = useState(0);
@@ -30,7 +30,7 @@ export function ProfileConfirmation({ onClose }: { onClose: () => void }) {
     function proceed() {
         dismiss(() => {
             track('View Profile Clicked', 'index.html');
-            window.location.href = 'profile.html';
+            onEnter();
         });
     }
     return <dialog ref={dialog} className={`profile-sheet ${phase}`} aria-labelledby="profile-sheet-title" onClose={onClose} onCancel={event => { event.preventDefault(); dismiss(); }}

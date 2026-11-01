@@ -160,3 +160,38 @@ a,button,summary,label,[role="button"],.nav-link,.chip,.card,.skill-option,.skil
 .typing-wait{color:transparent}
 .typing-anchor{position:relative}
 .typing-caret{position:absolute; left:.06em; top:.12em; width:.08em; height:1em; border-radius:999px; background:var(--accent)}
+
+/* ---- Entering: loading moment between "Continue to profile" and the profile page ---- */
+.splash{
+  position:fixed; inset:0; z-index:2000; display:grid; place-items:center; overflow:hidden;
+  background:var(--bg); animation:enterFade .35s ease both;
+}
+.splash-orb{position:absolute; width:60vmax; height:60vmax; border-radius:50%; filter:blur(90px); opacity:.2; pointer-events:none}
+.splash-orb.o1{background:var(--accent); top:-25vmax; left:-20vmax; animation:orbDrift 6s ease-in-out infinite alternate}
+.splash-orb.o2{background:var(--accent2); bottom:-28vmax; right:-22vmax; opacity:.14; animation:orbDrift 7s ease-in-out infinite alternate-reverse}
+.splash-core{position:relative; display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center}
+.splash-mark{position:relative; width:84px; height:84px; display:grid; place-items:center; margin-bottom:10px}
+.splash-logo{
+  position:relative; z-index:1; width:84px; height:84px; display:grid; place-items:center; border-radius:24px;
+  background:var(--btn); color:#fff; font:700 1.7rem/1 var(--font-display); letter-spacing:.02em;
+  box-shadow:0 14px 36px color-mix(in oklab,var(--accent) 45%,transparent);
+  animation:logoIn .6s cubic-bezier(.2,.9,.3,1.15) both, logoBreath 1.6s ease-in-out .6s infinite;
+}
+.splash-wave{position:absolute; inset:0; border-radius:24px; border:2px solid var(--accent); opacity:0; animation:enterWave 1.6s ease-out infinite}
+.splash-wave.w2{animation-delay:.8s}
+.splash-name{font:700 1.3rem var(--font-display); letter-spacing:-.01em; color:var(--text)}
+.splash-step{min-height:1.3em; font:500 .92rem var(--font-body); color:var(--text2); animation:stepIn .35s ease both}
+.splash-dots::after{content:"..."; display:inline-block; width:1.1em; text-align:left; animation:enterDots 1.2s steps(4,end) infinite; overflow:hidden; vertical-align:bottom}
+.splash-bar{width:min(220px,64vw); height:4px; margin-top:6px; border-radius:999px; background:var(--border2); overflow:hidden}
+.splash-bar span{display:block; height:100%; width:100%; border-radius:inherit; background:linear-gradient(90deg,var(--accent),var(--accent2)); transform-origin:left; animation:enterBar 1.5s cubic-bezier(.35,.1,.25,1) both}
+@keyframes enterFade{from{opacity:0}to{opacity:1}}
+@keyframes logoIn{from{opacity:0; transform:scale(.6) rotate(-8deg)}to{opacity:1; transform:none}}
+@keyframes logoBreath{50%{transform:scale(1.05)}}
+@keyframes enterWave{0%{opacity:.5; transform:scale(1)}100%{opacity:0; transform:scale(1.9)}}
+@keyframes stepIn{from{opacity:0; transform:translateY(6px)}to{opacity:1; transform:none}}
+@keyframes enterDots{from{width:0}to{width:1.1em}}
+@keyframes enterBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes orbDrift{to{transform:translate(6vmax,4vmax) scale(1.08)}}
+@media (prefers-reduced-motion:reduce){
+  .splash,.splash *{animation-duration:.01ms!important; animation-iteration-count:1!important}
+}
