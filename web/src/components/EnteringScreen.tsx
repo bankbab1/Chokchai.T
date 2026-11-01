@@ -1,3 +1,4 @@
+import './transition.css';
 import { useEffect, useState } from 'react';
 
 const STEPS = ['Loading experience', 'Loading skills', 'Loading projects', 'Almost there'];
